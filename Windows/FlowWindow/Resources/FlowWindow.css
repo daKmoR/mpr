@@ -1,0 +1,9 @@
+
+.ui-window { position: absolute; border: 1px solid #000; }
+
+.handle { background: orange; height: 3px; position: absolute; width: 3px; }
+.handle.corner { width: 10px; height: 10px; }
+
+
+
+.ui-draggable { cursor: move; }

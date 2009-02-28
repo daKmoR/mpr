@@ -1,0 +1,7 @@
+.ui-tab { color: #141414; background: url('img/tab.bg.gif') left -35px; float: left; height: 30px; font-size: 11px; padding: 0; cursor: pointer; }
+	.ui-tab span { padding: 6px 16px 5px 10px; background: url('img/tab.bg.gif') right -35px; display: block; margin-left: 8px;  }
+.ui-tab.act { font-weight: bold; background-position: left 0; }
+	.ui-tab.act span { background-position: right 0; }
+.ui-tabContent { background: #F8F8F8; margin-bottom: 10px; padding: 5px; border: 1px solid #B9B9B9; border-width: 0 1px 1px; }
+
+.ui-tabsContainer { background: url('img/tab.bg.gif') left -70px; }

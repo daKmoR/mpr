@@ -1,0 +1,4 @@
+
+.FlowTabs .Tab { float: left; padding: 5px 5px 2px; margin: 0 5px 0 0; cursor: pointer; }
+.FlowTabs .inlineTabTabs .act { padding-bottom: 3px; font-weight: bold; }
+.FlowTabs .TabContent { margin-top: -1px; }
