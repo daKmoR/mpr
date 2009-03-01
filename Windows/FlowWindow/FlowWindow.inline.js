@@ -20,7 +20,9 @@ FlowWindow.inline = new Class({
 		ui: {
 			window: { 'class': 'ui-window' },
 			title: { 'class': 'ui-windowTitle' },
-			draggable: { 'class': 'ui-draggable' }
+			draggable: { 'class': 'ui-draggable' },
+			handle: { 'class': 'ui-windowHandle' },
+			corner: { 'class': 'ui-windowHandle ui-windowCorner' }
 		},
 		resizable: true,
 		draggable: true
@@ -61,16 +63,16 @@ FlowWindow.inline = new Class({
 		
 		var windowSize = this.window.getSize();
 		
-		this.handles.nw = new Element('div', { 'class': 'handle corner', 'styles': { 'top': 0, 'left': 0, 'cursor': 'nw-resize' } }).inject(this.window);
-		this.handles.ne = new Element('div', { 'class': 'handle corner', 'styles': { 'top': 0, 'right': 0, 'cursor': 'ne-resize' } }).inject(this.window);
-		this.handles.sw = new Element('div', { 'class': 'handle corner', 'styles': { 'bottom': 0, 'left': 0, 'cursor': 'sw-resize' } }).inject(this.window);
-		this.handles.se = new Element('div', { 'class': 'handle corner', 'styles': { 'bottom': 0, 'right': 0, 'cursor': 'se-resize' } }).inject(this.window);
+		this.handles.nw = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'left':  0, 'cursor': 'nw-resize'} }) ).inject(this.window);
+		this.handles.ne = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'right': 0, 'cursor': 'ne-resize'} }) ).inject(this.window);
+		this.handles.sw = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'left':  0, 'cursor': 'sw-resize'} }) ).inject(this.window);
+		this.handles.se = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'right': 0, 'cursor': 'se-resize'} }) ).inject(this.window);
 		
-		this.y.s = new Element('div', { 'class': 'handle', 'styles': { 'bottom': 0, 'left': 10, 'cursor': 's-resize' } }).inject(this.window);
-		this.y.n = new Element('div', { 'class': 'handle', 'styles': { 'top': 0, 'left': 10, 'cursor': 'n-resize' } }).inject(this.window);
+		this.y.s = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'left': 10, 'cursor': 's-resize'} }) ).inject(this.window);
+		this.y.n = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'left': 10, 'cursor': 'n-resize'} }) ).inject(this.window);
 		
-		this.x.e = new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'right': 0, 'cursor': 'e-resize' } }).inject(this.window);
-		this.x.w = new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'left': 0, 'cursor': 'w-resize' } }).inject(this.window);
+		this.x.e = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'right': 0, 'cursor': 'e-resize'} }) ).inject(this.window);
+		this.x.w = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'left':  0, 'cursor': 'w-resize'} }) ).inject(this.window);
 		
 		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.updateX(); }.bind(this) });
 		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.updateY();	}.bind(this) });
