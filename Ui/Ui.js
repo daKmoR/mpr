@@ -11,7 +11,8 @@
 var Ui = new Class({
 	Implements: [Events, Options],
 	options: {
-		Tabs: { param: '.ui-tab' }
+		Tabs: { param: '.ui-tab' },
+		Window: { param: '.ui-window' }
 	},
 	
 	Uis: {},

@@ -86,8 +86,8 @@ FlowWindow.inline = new Class({
 		this.x.e = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'right': 0, 'cursor': 'e-resize'} }) ).inject(this.window);
 		this.x.w = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'left':  0, 'cursor': 'w-resize'} }) ).inject(this.window);
 		
-		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.updateX(); }.bind(this) });
-		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.updateY();	}.bind(this) });
+		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.update('x'); }.bind(this) });
+		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.update('y');	}.bind(this) });
 		
 		this.window.makeResizable({ 'handle': [this.y.n, this.handles.nw, this.handles.ne], 'modifiers': {x: false, y: 'top'},
 			'onStart': function(el) {
@@ -96,7 +96,7 @@ FlowWindow.inline = new Class({
 			},
 			'onDrag': function(el) {
 				el.setStyle('height', el.retrieve('FlowWindow:size').y - (el.getCoordinates().top - el.retrieve('FlowWindow:coordinates').top) );
-				this.updateX();
+				this.update('x');
 			}.bind(this)
 		});
 		
@@ -107,7 +107,7 @@ FlowWindow.inline = new Class({
 			},
 			'onDrag': function(el) {
 				el.setStyle('width', el.retrieve('FlowWindow:size').x - (el.getCoordinates().left - el.retrieve('FlowWindow:coordinates').left) );
-				this.updateY();
+				this.update('y');
 			}.bind(this) 
 		});
 		
@@ -115,20 +115,25 @@ FlowWindow.inline = new Class({
 	},
 	
 	updateX: function() {
+		var size = this.window.getSize();
 		$each( this.x, function(el) {
-			el.setStyle('height', this.window.getSize().y - 20);
+			el.setStyle('height', size.y - 20);
 		}, this);
 	},
 	
 	updateY: function() {
+		var size = this.window.getSize();
 		$each( this.y, function(el) {
-			el.setStyle('width', this.window.getSize().x - 20);
-		}, this);
+			el.setStyle('width', size.x - 20);
+		});
 	},
 	
-	update: function() {
-		this.updateX();
-		this.updateY();
+	update: function(what) {
+		if (what != 'y')
+			this.updateX();
+		if (what != 'x')
+			this.updateY();
+		this.fireEvent('onUpdate', this.window.getSize() );
 	},
 	
 	close: function() {
