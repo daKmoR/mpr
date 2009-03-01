@@ -1,7 +1,9 @@
 
-.ui-window { position: absolute; border: 1px solid #000; }
+.ui-window { position: absolute; border: 1px solid #000; padding: 8px; }
 
-.ui-windowHandle { position: absolute; width: 3px; height: 3px; }
-.ui-windowCorner { width: 10px; height: 10px; }
+	.ui-windowTitle { position: relative; }
+		.ui-windowClose { position: absolute; right: 0; top: 0; cursor: pointer; }
+	.ui-windowHandle { position: absolute; width: 3px; height: 3px; }
+	.ui-windowCorner { width: 10px; height: 10px; }
 
 .ui-draggable { cursor: move; }

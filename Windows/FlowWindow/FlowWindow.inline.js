@@ -22,10 +22,14 @@ FlowWindow.inline = new Class({
 			title: { 'class': 'ui-windowTitle' },
 			draggable: { 'class': 'ui-draggable' },
 			handle: { 'class': 'ui-windowHandle' },
-			corner: { 'class': 'ui-windowHandle ui-windowCorner' }
+			corner: { 'class': 'ui-windowHandle ui-windowCorner' },
+			minimize: { 'class': 'ui-windowMinimize', 'html': '_' },
+			maximize: { 'class': 'ui-windowMinimize', 'html': '^' },
+			close: { 'class': 'ui-windowClose', 'html': 'x' },
 		},
 		resizable: true,
-		draggable: true
+		draggable: true,
+		closeable: true
 	},
 	
 	window: $empty,
@@ -34,6 +38,7 @@ FlowWindow.inline = new Class({
 	x: {},
 	y: {},
 	handles: {},
+	controls: {},
 	
 	initialize: function(title, content, options) {
 		this.setOptions(options);
@@ -51,10 +56,17 @@ FlowWindow.inline = new Class({
 			this.makeResizable();
 		if (this.options.draggable)
 			this.makeDraggable();
+		this.makeControls();
+	},
+	
+	makeControls: function() {
+		this.controls.close = new Element('div', $extend( this.options.ui.close, { 'events': { 'click': function() { this.close() }.bind(this) } }) );
+		this.title.grab( this.controls.close );
 	},
 	
 	makeDraggable: function() {
-		this.title.set( this.options.ui.draggable );
+		this.title.addClass( this.options.ui.draggable['class'] );
+		//this.title.set( $merge( this.options.ui.title, this.options.ui.draggable ) );
 		this.window.makeDraggable( { 'handle': this.title } );
 	},
 	
@@ -63,10 +75,10 @@ FlowWindow.inline = new Class({
 		
 		var windowSize = this.window.getSize();
 		
-		this.handles.nw = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'left':  0, 'cursor': 'nw-resize'} }) ).inject(this.window);
-		this.handles.ne = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'right': 0, 'cursor': 'ne-resize'} }) ).inject(this.window);
-		this.handles.sw = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'left':  0, 'cursor': 'sw-resize'} }) ).inject(this.window);
-		this.handles.se = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'right': 0, 'cursor': 'se-resize'} }) ).inject(this.window);
+		this.handles.nw = new Element('div', $extend( this.options.ui.corner, { 'styles': {'top':    0, 'left':  0, 'cursor': 'nw-resize'} }) ).inject(this.window);
+		this.handles.ne = new Element('div', $extend( this.options.ui.corner, { 'styles': {'top':    0, 'right': 0, 'cursor': 'ne-resize'} }) ).inject(this.window);
+		this.handles.sw = new Element('div', $extend( this.options.ui.corner, { 'styles': {'bottom': 0, 'left':  0, 'cursor': 'sw-resize'} }) ).inject(this.window);
+		this.handles.se = new Element('div', $extend( this.options.ui.corner, { 'styles': {'bottom': 0, 'right': 0, 'cursor': 'se-resize'} }) ).inject(this.window);
 		
 		this.y.s = new Element('div', $extend( this.options.ui.handle, { 'styles': {'bottom': 0, 'left': 10, 'cursor': 's-resize'} }) ).inject(this.window);
 		this.y.n = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top':    0, 'left': 10, 'cursor': 'n-resize'} }) ).inject(this.window);
@@ -117,6 +129,10 @@ FlowWindow.inline = new Class({
 	update: function() {
 		this.updateX();
 		this.updateY();
+	},
+	
+	close: function() {
+		this.window.fade(0);
 	}
 
 });
