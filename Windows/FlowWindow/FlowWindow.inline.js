@@ -29,8 +29,8 @@ FlowWindow.inline = new Class({
 	window: $empty,
 	title: $empty,
 	content: $empty,
-	x: [],
-	y: [],
+	x: {},
+	y: {},
 	handles: {},
 	
 	initialize: function(title, content, options) {
@@ -56,7 +56,9 @@ FlowWindow.inline = new Class({
 		this.window.makeDraggable( { 'handle': this.title } );
 	},
 	
-	makeResizable: function() {
+	makeResizable: function(options) {
+		this.setOptions(options);
+		
 		var windowSize = this.window.getSize();
 		
 		this.handles.nw = new Element('div', { 'class': 'handle corner', 'styles': { 'top': 0, 'left': 0, 'cursor': 'nw-resize' } }).inject(this.window);
@@ -64,16 +66,16 @@ FlowWindow.inline = new Class({
 		this.handles.sw = new Element('div', { 'class': 'handle corner', 'styles': { 'bottom': 0, 'left': 0, 'cursor': 'sw-resize' } }).inject(this.window);
 		this.handles.se = new Element('div', { 'class': 'handle corner', 'styles': { 'bottom': 0, 'right': 0, 'cursor': 'se-resize' } }).inject(this.window);
 		
-		this.y.push( new Element('div', { 'class': 'handle', 'styles': { 'bottom': 0, 'left': 10, 'cursor': 's-resize' } }).inject(this.window) );
-		this.y.push( new Element('div', { 'class': 'handle', 'styles': { 'top': 0, 'left': 10, 'cursor': 'n-resize' } }).inject(this.window) );
+		this.y.s = new Element('div', { 'class': 'handle', 'styles': { 'bottom': 0, 'left': 10, 'cursor': 's-resize' } }).inject(this.window);
+		this.y.n = new Element('div', { 'class': 'handle', 'styles': { 'top': 0, 'left': 10, 'cursor': 'n-resize' } }).inject(this.window);
 		
-		this.x.push( new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'right': 0, 'cursor': 'e-resize' } }).inject(this.window) );
-		this.x.push( new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'left': 0, 'cursor': 'w-resize' } }).inject(this.window) );
+		this.x.e = new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'right': 0, 'cursor': 'e-resize' } }).inject(this.window);
+		this.x.w = new Element('div', { 'class': 'handle', 'styles': { 'top': 10, 'left': 0, 'cursor': 'w-resize' } }).inject(this.window);
 		
-		this.window.makeResizable({ 'handle': [this.y[0], this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.updateX(); }.bind(this) });
-		this.window.makeResizable({ 'handle': [this.x[0], this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.updateY();	}.bind(this) });
+		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.updateX(); }.bind(this) });
+		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.updateY();	}.bind(this) });
 		
-		this.window.makeResizable({ 'handle': [this.y[1], this.handles.nw, this.handles.ne], 'modifiers': {x: false, y: 'top'},
+		this.window.makeResizable({ 'handle': [this.y.n, this.handles.nw, this.handles.ne], 'modifiers': {x: false, y: 'top'},
 			'onStart': function(el) {
 				el.store('FlowWindow:coordinates', el.getCoordinates());
 				el.store('FlowWindow:size', el.getSize());
@@ -84,7 +86,7 @@ FlowWindow.inline = new Class({
 			}.bind(this)
 		});
 		
-		this.window.makeResizable({ 'handle': [this.x[1], this.handles.nw, this.handles.sw], 'modifiers': {x: 'left', y: false}, 
+		this.window.makeResizable({ 'handle': [this.x.w, this.handles.nw, this.handles.sw], 'modifiers': {x: 'left', y: false}, 
 			'onStart': function(el) {
 				el.store('FlowWindow:coordinates', el.getCoordinates());
 				el.store('FlowWindow:size', el.getSize());
@@ -99,13 +101,13 @@ FlowWindow.inline = new Class({
 	},
 	
 	updateX: function() {
-		this.x.each( function(el) {
+		$each( this.x, function(el) {
 			el.setStyle('height', this.window.getSize().y - 20);
 		}, this);
 	},
 	
 	updateY: function() {
-		this.y.each( function(el) {
+		$each( this.y, function(el) {
 			el.setStyle('width', this.window.getSize().x - 20);
 		}, this);
 	},
