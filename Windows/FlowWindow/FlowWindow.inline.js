@@ -28,6 +28,7 @@ FlowWindow.inline = new Class({
 			close: { 'class': 'ui-windowClose', 'html': 'x' },
 		},
 		resizable: true,
+		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
 		closeable: true
 	},
@@ -86,8 +87,8 @@ FlowWindow.inline = new Class({
 		this.x.e = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'right': 0, 'cursor': 'e-resize'} }) ).inject(this.window);
 		this.x.w = new Element('div', $extend( this.options.ui.handle, { 'styles': {'top': 10, 'left':  0, 'cursor': 'w-resize'} }) ).inject(this.window);
 		
-		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.update('x'); }.bind(this) });
-		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.update('y');	}.bind(this) });
+		this.window.makeResizable({ 'handle': [this.y.s, this.handles.sw, this.handles.se], 'modifiers': {x: false, y: 'height'}, 'onDrag': function(el) { this.update('x'); }.bind(this), 'limit': this.options.resizeLimit });
+		this.window.makeResizable({ 'handle': [this.x.e, this.handles.ne, this.handles.se], 'modifiers': {x: 'width', y: false}, 'onDrag': function(el) { this.update('y');	}.bind(this), 'limit': this.options.resizeLimit });
 		
 		this.window.makeResizable({ 'handle': [this.y.n, this.handles.nw, this.handles.ne], 'modifiers': {x: false, y: 'top'},
 			'onStart': function(el) {
@@ -97,7 +98,17 @@ FlowWindow.inline = new Class({
 			'onDrag': function(el) {
 				el.setStyle('height', el.retrieve('FlowWindow:size').y - (el.getCoordinates().top - el.retrieve('FlowWindow:coordinates').top) );
 				this.update('x');
-			}.bind(this)
+			}.bind(this),
+			'limit': {
+				y: [
+					function(){
+						return this.window.getCoordinates().y + this.window.getSize().y - this.options.resizeLimit.y[1];
+					}.bind(this),
+					function(){
+						return this.window.getStyle('top').toInt() + this.window.getStyle('height').toInt() - this.options.resizeLimit.y[0];
+					}.bind(this)
+				]
+			}
 		});
 		
 		this.window.makeResizable({ 'handle': [this.x.w, this.handles.nw, this.handles.sw], 'modifiers': {x: 'left', y: false}, 
