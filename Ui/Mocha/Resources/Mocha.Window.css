@@ -1,0 +1,11 @@
+
+
+.ui-window { padding: 0 3px 20px; }
+	.ui-windowTitle h3 { color: #141414; font-size: 12px; font-weight: bold; line-height: 15px; margin:5px 10px 4px 12px; padding:0; }
+	.ui-windowContent { border: 1px solid #DADADA; border-width: 1px 0; background: #fff; padding: 10px; }
+	
+	.ui-windowMinimize span, .ui-windowClose span { display: none; }
+	.ui-windowMinimize, .ui-windowClose { background: url('img/controls.png') no-repeat; width: 16px; height: 16px; }
+	.ui-windowMinimize { background-position: 0 -32px; }
+	
+	.ui-windowControlsWrap { margin-right: 5px; }

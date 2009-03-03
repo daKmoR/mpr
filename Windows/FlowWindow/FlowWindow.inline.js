@@ -20,19 +20,21 @@ FlowWindow.inline = new Class({
 		ui: {
 			window: { 'class': 'ui-window' },
 			title: { 'class': 'ui-windowTitle' },
+			content: { 'class': 'ui-windowContent' },
+			controlsWrap: { 'class': 'ui-windowControlsWrap' },
 			draggable: { 'class': 'ui-draggable' },
 			handle: { 'class': 'ui-windowHandle' },
 			corner: { 'class': 'ui-windowHandle ui-windowCorner' },
-			minimize: { 'class': 'ui-windowMinimize', 'html': '_' },
-			maximize: { 'class': 'ui-windowMinimize', 'html': '^' },
-			close: { 'class': 'ui-windowClose', 'html': 'x' },
+			minimize: { 'class': 'ui-windowMinimize', 'html': '<span>_</span>' },
+			maximize: { 'class': 'ui-windowMinimize', 'html': '<span>^</span>' },
+			close: { 'class': 'ui-windowClose', 'html': '<span>x</span>' },
 		},
+		container: document.body,
 		resizable: true,
 		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
-		closeable: true,
 		controls: ['minimize', 'close'],
-		controlsSize: 15
+		controlsSize: 18
 	},
 	
 	window: $empty,
@@ -52,8 +54,9 @@ FlowWindow.inline = new Class({
 	attach: function(title, content) {
 		this.window = new Element('div', this.options.ui.window);
 		this.title = new Element('div', this.options.ui.title).grab(title);
+		this.content = new Element('div', this.options.ui.content).grab(content);
 		
-		this.window.grab(this.title).grab(content).inject( document.body );
+		this.window.grab(this.title).grab(this.content).inject( this.options.container );
 		
 		if (this.options.resizable)
 			this.makeResizable();
@@ -63,12 +66,12 @@ FlowWindow.inline = new Class({
 	},
 	
 	makeControls: function() {
-		
-		this.options.controls.reverse().each( function(el, i) {
-			this.controls[el] = new Element('div', $extend( this.options.ui[el], { 'styles': { 'right': i*this.options.controlsSize }, 'events': { 'click': function() { this[el]() }.bind(this) } }) );
-			this.title.grab( this.controls[el] );
+		this.controlsWrap = new Element('div', this.options.ui.controlsWrap);
+		this.options.controls.each( function(el, i) {
+			this.controls[el] = new Element('div', $extend( this.options.ui[el], { 'events': { 'click': function() { this[el]() }.bind(this) } }) );
+			this.controlsWrap.grab( this.controls[el] );
 		}, this);
-		
+		this.title.grab(this.controlsWrap);
 	},
 	
 	makeDraggable: function() {
@@ -79,7 +82,6 @@ FlowWindow.inline = new Class({
 	
 	makeResizable: function(options) {
 		this.setOptions(options);
-		
 		var windowSize = this.window.getSize();
 		
 		this.handles.nw = new Element('div', $extend( this.options.ui.corner, { 'styles': {'top':    0, 'left':  0, 'cursor': 'nw-resize'} }) ).inject(this.window);
