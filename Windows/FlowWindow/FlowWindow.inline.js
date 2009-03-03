@@ -29,7 +29,7 @@ FlowWindow.inline = new Class({
 			maximize: { 'class': 'ui-windowMinimize', 'html': '<span>^</span>' },
 			close: { 'class': 'ui-windowClose', 'html': '<span>x</span>' },
 		},
-		container: document.body,
+		container: 'document.body',
 		resizable: true,
 		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
@@ -56,7 +56,7 @@ FlowWindow.inline = new Class({
 		this.title = new Element('div', this.options.ui.title).grab(title);
 		this.content = new Element('div', this.options.ui.content).grab(content);
 		
-		this.window.grab(this.title).grab(this.content).inject( this.options.container );
+		this.window.grab(this.title).grab(this.content).inject( document.body );
 		
 		if (this.options.resizable)
 			this.makeResizable();
