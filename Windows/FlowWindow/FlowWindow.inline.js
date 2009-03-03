@@ -102,10 +102,10 @@ FlowWindow.inline = new Class({
 			'limit': {
 				y: [
 					function(){
-						return this.window.getCoordinates().y + this.window.getSize().y - this.options.resizeLimit.y[1];
+						return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[1];
 					}.bind(this),
 					function(){
-						return this.window.getStyle('top').toInt() + this.window.getStyle('height').toInt() - this.options.resizeLimit.y[0];
+						return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[0];
 					}.bind(this)
 				]
 			}
