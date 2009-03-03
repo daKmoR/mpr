@@ -1,5 +1,5 @@
 /**
- * Allows to create Tabs with progressive Enhancement
+ * Creating Window Funktionality with Drag and Resize (heavily inspired by MochUI)
  *
  * @version		0.0.1
  *
@@ -30,7 +30,9 @@ FlowWindow.inline = new Class({
 		resizable: true,
 		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
-		closeable: true
+		closeable: true,
+		controls: ['minimize', 'close'],
+		controlsSize: 15
 	},
 	
 	window: $empty,
@@ -61,8 +63,12 @@ FlowWindow.inline = new Class({
 	},
 	
 	makeControls: function() {
-		this.controls.close = new Element('div', $extend( this.options.ui.close, { 'events': { 'click': function() { this.close() }.bind(this) } }) );
-		this.title.grab( this.controls.close );
+		
+		this.options.controls.reverse().each( function(el, i) {
+			this.controls[el] = new Element('div', $extend( this.options.ui[el], { 'styles': { 'right': i*this.options.controlsSize }, 'events': { 'click': function() { this[el]() }.bind(this) } }) );
+			this.title.grab( this.controls[el] );
+		}, this);
+		
 	},
 	
 	makeDraggable: function() {
@@ -101,13 +107,9 @@ FlowWindow.inline = new Class({
 			}.bind(this),
 			'limit': {
 				y: [
-					function(){
-						return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[1];
-					}.bind(this),
-					function(){
-						return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[0];
-					}.bind(this)
-				]
+					function(){ return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[1]; }.bind(this),
+					function(){ return this.window.getCoordinates().top + this.window.getSize().y - this.options.resizeLimit.y[0]; }.bind(this)
+				]			
 			}
 		});
 		
@@ -119,7 +121,13 @@ FlowWindow.inline = new Class({
 			'onDrag': function(el) {
 				el.setStyle('width', el.retrieve('FlowWindow:size').x - (el.getCoordinates().left - el.retrieve('FlowWindow:coordinates').left) );
 				this.update('y');
-			}.bind(this) 
+			}.bind(this),
+			'limit': {
+				x: [
+					function(){ return this.window.getCoordinates().left + this.window.getSize().x - this.options.resizeLimit.x[1]; }.bind(this),
+					function(){ return this.window.getCoordinates().left + this.window.getSize().x - this.options.resizeLimit.x[0]; }.bind(this)
+				]
+			}
 		});
 		
 		this.update();
@@ -149,6 +157,10 @@ FlowWindow.inline = new Class({
 	
 	close: function() {
 		this.window.fade(0);
+	},
+	
+	minimize: function() {
+		alert('minimize');
 	}
 
 });
