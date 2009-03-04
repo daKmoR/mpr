@@ -28,7 +28,7 @@ FlowWindow.inline = new Class({
 			corner: { 'class': 'ui-windowHandle ui-windowCorner' },
 			minimize: { 'class': 'ui-windowMinimize', 'html': '<span>_</span>' },
 			maximize: { 'class': 'ui-windowMinimize', 'html': '<span>^</span>' },
-			close: { 'class': 'ui-windowClose', 'html': '<span>x</span>' },
+			close: { 'class': 'ui-windowClose', 'html': '<span>x</span>' }
 		},
 		container: $empty,
 		resizable: true,
