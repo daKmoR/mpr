@@ -9,6 +9,8 @@ Script: Element.Position.js
 		Aaron Newton
 */
 
+$require(MPR.path + 'More/Element.Measure/Element.Measure.js');
+
 Element.implement({
 
 	position: function(options){

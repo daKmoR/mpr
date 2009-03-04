@@ -11,6 +11,7 @@
 $require(MPR.path + 'Windows/FlowWindow/Resources/FlowWindow.css');
 
 $require(MPR.path + 'More/Drag.Move/Drag.Move.js');
+$require(MPR.path + 'More/Element.Position/Element.Position.js');
 
 var FlowWindow = {};
 
@@ -58,7 +59,7 @@ FlowWindow.inline = new Class({
 		
 		this.window.grab(this.title).grab(this.content).inject( $(this.options.container) || document.body );
 		
-		//this.window.position();
+		this.window.position();
 		
 		if (this.options.resizable)
 			this.makeResizable();
