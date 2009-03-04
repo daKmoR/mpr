@@ -1,6 +1,7 @@
-.ui-window { position: absolute; padding: 10px; width: 50%; }
 
-	.ui-windowTitle { position: relative; }
+
+.ui-window { position: absolute; padding: 10px; width: 50%; border: 1px solid #000; }
+	.ui-windowTitle { position: relative; overflow: hidden; }
 		.ui-windowControlsWrap { position: absolute; right: 3px; top: 0; }	
 			.ui-windowClose, .ui-windowMinimize, .ui-windowMaximize { float: left; cursor: pointer; }
 

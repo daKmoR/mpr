@@ -58,8 +58,6 @@ Ui.Mocha.Window = new Class({
 		this.canvas[id].set({ 'width': width, 'height': height });
 		this.ctx[id].clearRect(0, 0, width, height);
 		this.drawBox(this.ctx[id], width, height, this.options.shadowBlur, this.options.shadowOffset, this.options.shadow);
-		
-		this.content[id].setStyle('height', height-70);
 	},
 	
 	drawBox: function(ctx, width, height, shadowBlur, shadowOffset, shadows) {

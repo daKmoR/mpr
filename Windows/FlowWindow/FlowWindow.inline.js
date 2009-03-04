@@ -138,25 +138,35 @@ FlowWindow.inline = new Class({
 		this.update();
 	},
 	
-	updateX: function() {
-		var size = this.window.getSize();
+	updateX: function(size, offset, contentOffset) {
 		$each( this.x, function(el) {
-			el.setStyle('height', size.y - 20);
+			el.setStyle('height', size.y - size['border-top-width'] - size['border-bottom-width']);
 		}, this);
+		//var pad = this.content.getStyle('padding-bottom').toInt() + this.content.getStyle('padding-top').toInt();
+		//console.log( ga.computedTop, ga.computedBottom );
+		//console.log( size.y, size['totalHeight'], offset['totalHeight'], size['computedTop'], size['computedBottom'] );
+		this.content.setStyle('height', size['totalHeight'] - (offset['totalHeight'] + size['computedTop'] + size['computedBottom'] + contentOffset.computedTop + contentOffset.computedBottom ) );
 	},
 	
-	updateY: function() {
-		var size = this.window.getSize();
+	updateY: function(size) {
 		$each( this.y, function(el) {
-			el.setStyle('width', size.x - 20);
+			el.setStyle('width', size.x - size['border-left-width'] - size['border-right-width']);
 		});
 	},
 	
 	update: function(what) {
-		if (what != 'y')
-			this.updateX();
-		if (what != 'x')
-			this.updateY();
+		var size = this.window.getDimensions({computeSize: true, styles: ['border','padding'] });
+		
+		if (what != 'y') {
+			var offset = this.title.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
+			var contentOffset = this.content.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
+			this.updateX(size, offset, contentOffset);
+		}
+		
+		if (what != 'x') {
+			this.updateY(size);
+		}
+		
 		this.fireEvent('onUpdate', this.window.getSize() );
 	},
 	
