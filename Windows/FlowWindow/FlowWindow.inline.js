@@ -34,8 +34,7 @@ FlowWindow.inline = new Class({
 		resizable: true,
 		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
-		controls: ['minimize', 'close'],
-		controlsSize: 18
+		controls: ['minimize', 'close']
 	},
 	
 	window: $empty,
@@ -50,7 +49,6 @@ FlowWindow.inline = new Class({
 		this.setOptions(options);
 		
 		this.attach(title, content);
-		this.registerUi();
 	},
 	
 	attach: function(title, content) {
@@ -178,10 +176,9 @@ FlowWindow.inline = new Class({
 	minimize: function() {
 		alert('minimize');
 	},
-	
-	registerUi: function() {
-		if ( $type(UI) == 'object' )
-			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'] } });
-	}
+
+	toElement: function(){
+		return this.window;
+	}	
 
 });

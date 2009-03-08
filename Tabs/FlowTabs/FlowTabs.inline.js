@@ -74,8 +74,10 @@ FlowTabs.inline = new Class({
 	},
 	
 	registerUi: function() {
-		if ( $type(UI) == 'object' )
+		if ( typeof(UI) !== 'undefined' )
 			UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'] } });
 	}
 
 });
+
+if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Tabs': { 'param': '.ui-tab' } });

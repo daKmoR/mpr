@@ -32,8 +32,11 @@ Ui.Mocha.Windows = new Class({
 	},
 	
 	attach: function(windows) {
-		$$(windows).each( function(el, i) {
-			this.windows.push(el);
+		if ( $type(windows) == 'string' ) windows = $$(windows);
+		if ( $type(windows) == 'element' ) windows = [windows];
+		
+		windows.each( function(el, i) {
+			var j = this.windows.push(el);
 			var size = el.getSize();
 			var canvas = new Element('canvas', {'width': size.x, 'height': size.y, 'style': 'position: absolute; top: 0; left: 0;'} ).inject(el, 'top');
 			
@@ -43,7 +46,7 @@ Ui.Mocha.Windows = new Class({
 			this.ctx.push( canvas.getContext('2d') );
 			
 			var size = el.getSize();
-			this.updateSingle(i, size.x, size.y);
+			this.updateSingle(j-1, size.x, size.y);
 		}, this);
 	},
 	

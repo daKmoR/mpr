@@ -24,7 +24,10 @@ Ui.Mocha.Tabs = new Class({
 	},
 	
 	attach: function(tabs) {
-		$$(tabs).each( function(el) {
+		if ( $type(tabs) == 'string' ) tabs = $$(tabs);
+		if ( $type(tabs) == 'element' ) tabs = [tabs];
+		
+		tabs.each( function(el) {
 			var inside = new Element('span', { html: el.get('html') } );
 			el.empty();
 			el.grab(inside);

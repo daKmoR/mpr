@@ -8,8 +8,6 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Mutators/Mutators.Singleton/Mutators.Singleton.js');
-
 var Ui = new Class({
 	Implements: [Events, Options],
 	options: {
