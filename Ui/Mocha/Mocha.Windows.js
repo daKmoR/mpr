@@ -10,9 +10,9 @@
 
 $require(MPR.path + 'Ui/Mocha/Mocha.js');
 
-$require(MPR.path + 'Ui/Mocha/Resources/Mocha.Window.css');
+$require(MPR.path + 'Ui/Mocha/Resources/Mocha.Windows.css');
 
-Ui.Mocha.Window = new Class({
+Ui.Mocha.Windows = new Class({
 	Implements: [Events, Options],
 	options: {
 		shadow: true,
@@ -26,13 +26,13 @@ Ui.Mocha.Window = new Class({
 	canvas: [],
 	ctx: [],
 	
-	initialize: function(window, options) {
+	initialize: function(windows, options) {
 		this.setOptions(options);
-		this.attach(window);
+		this.attach(windows);
 	},
 	
-	attach: function(window) {
-		$$(window).each( function(el, i) {
+	attach: function(windows) {
+		$$(windows).each( function(el, i) {
 			this.windows.push(el);
 			var size = el.getSize();
 			var canvas = new Element('canvas', {'width': size.x, 'height': size.y, 'style': 'position: absolute; top: 0; left: 0;'} ).inject(el, 'top');

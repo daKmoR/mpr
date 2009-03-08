@@ -50,6 +50,7 @@ FlowWindow.inline = new Class({
 		this.setOptions(options);
 		
 		this.attach(title, content);
+		this.registerUi();
 	},
 	
 	attach: function(title, content) {
@@ -176,6 +177,11 @@ FlowWindow.inline = new Class({
 	
 	minimize: function() {
 		alert('minimize');
+	},
+	
+	registerUi: function() {
+		if ( $type(UI) == 'object' )
+			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'] } });
 	}
 
 });

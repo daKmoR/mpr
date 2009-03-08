@@ -40,6 +40,7 @@ FlowTabs.inline = new Class({
 		this.attach(tabs, content);
 		
 		this.openTab( this.options.defaultTab );
+		this.registerUi();
 	},
 	
 	attach: function(tabs, content) {
@@ -70,6 +71,11 @@ FlowTabs.inline = new Class({
 	
 	closeTab: function(index) {
 		this.fireEvent('onClose', [ this.tabsContent[index], this.tabs[index] ] );
+	},
+	
+	registerUi: function() {
+		if ( $type(UI) == 'object' )
+			UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'] } });
 	}
 
 });
