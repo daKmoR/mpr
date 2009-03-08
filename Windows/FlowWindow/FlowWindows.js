@@ -17,6 +17,7 @@ var FlowWindows = new Class({
 			window: { 'class': 'ui-window' },
 		},
 		onAttach: function(el, i) {
+			console.log('no');
 			if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
 				UI.Uis.Windows.attach( $(el) );
 				
@@ -35,6 +36,7 @@ var FlowWindows = new Class({
 	
 	initialize: function(titles, contents, options) {
 		this.setOptions(options);
+		console.log(this);
 		
 		this.attach(titles, contents);
 		this.registerUi();
@@ -55,11 +57,11 @@ var FlowWindows = new Class({
 	},
 	
 	registerUi: function() {
-		if ( typeof(UI) !== 'undefined' )
-			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'] } });
+		// if ( typeof(UI) !== 'undefined' )
+			// UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'] } });
 	}
 	
 });
 
 // register default class for UI
-if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Windows': { 'param': '.ui-tab' } });
+if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Windows': { 'param': '.ui-tab', 'name': 'FlowWindows' } });

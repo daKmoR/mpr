@@ -18,7 +18,24 @@ Ui.Mocha.Windows = new Class({
 		shadow: true,
 		shadowBlur: 3,
 		shadowOffset: {'x': 0, 'y': 1},
-		cornerRadius: 10
+		cornerRadius: 10,
+		refactor: {
+			options: {
+				onAttach: function(el, i) {
+					console.log('yes');
+					if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
+						UI.Uis.Windows.attach( $(el) );
+						
+						this.windows[i].setOptions({
+							'onUpdate': function(size) {
+								UI.Uis.Windows.updateSingle(i, size.x, size.y );
+							}
+						});
+					}
+				}
+			}
+		}
+		
 	},
 	
 	windows: [],
