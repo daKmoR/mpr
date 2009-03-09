@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-var FlowTabs = {};
+$require(MPR.path + 'Tabs/FlowTabs/FlowTabs.js');
 
 FlowTabs.inline = new Class({
 	Implements: [Events, Options],
@@ -62,7 +62,7 @@ FlowTabs.inline = new Class({
 			}.bind(this) );
 			this.tabsContainer.grab( el );
 			
-			this.fireEvent('onUiAttach', [el, j-1]);
+			this.fireEvent('onUiAttach', [el, j-1, content[i], this.tabsContainer]);
 		}, this);
 	},
 	
@@ -82,7 +82,7 @@ FlowTabs.inline = new Class({
 	
 	registerUi: function() {
 		if ( typeof(UI) !== 'undefined' )
-			UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'], 'name': 'FlowTabs.inline' } });
+			UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'], 'name': 'FlowTabs.inline', 'class': this } });
 	}
 
 });

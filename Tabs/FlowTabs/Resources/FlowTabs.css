@@ -1,0 +1,3 @@
+.ui-tab { float: left; cursor: pointer; }
+.ui-tab.act { font-weight: bold; }
+.ui-tabContent { background: #eee; }
