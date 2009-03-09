@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Windows/FlowWindow/FlowWindow.inline.js');
+$require(MPR.path + 'Windows/FlowWindows/FlowWindow.inline.js');
  
 var FlowWindows = new Class({
 	Implements: [Events, Options],
@@ -45,7 +45,7 @@ var FlowWindows = new Class({
 	
 	registerUi: function() {
 		if ( typeof(UI) !== 'undefined' )
-			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'], 'name': 'FlowWindows' } });
+			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'], 'name': 'FlowWindows', 'class': this } });
 	}
 	
 });
