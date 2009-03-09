@@ -21,13 +21,12 @@ Ui.Mocha.Windows = new Class({
 		cornerRadius: 10,
 		refactor: {
 			options: {
-				onAttach: function(el, i) {
-					console.log('yes');
+				onUiAttach: function(el, i) {
 					if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
 						UI.Uis.Windows.attach( $(el) );
 						
 						this.windows[i].setOptions({
-							'onUpdate': function(size) {
+							'onUiUpdate': function(size) {
 								UI.Uis.Windows.updateSingle(i, size.x, size.y );
 							}
 						});

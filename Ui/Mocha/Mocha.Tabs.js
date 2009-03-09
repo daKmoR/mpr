@@ -14,8 +14,18 @@ $require(MPR.path + 'Snippets/Css/Resources/clearfix.css');
 $require(MPR.path + 'Ui/Mocha/Resources/Mocha.Tabs.css');
 
 Ui.Mocha.Tabs = new Class({
-	Implements: [Events, Options],
+	Implements: [Options],
 	options: {
+		refactor: {
+			options: {		
+				onUiAttach: function(el, i) {
+					if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
+						UI.Uis.Tabs.attach( $(el) );
+					}
+				}
+			}
+		}
+	
 	},
 	
 	initialize: function(tabs, options) {

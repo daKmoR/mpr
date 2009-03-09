@@ -15,18 +15,6 @@ var FlowWindows = new Class({
 	options: {
 		ui: {
 			window: { 'class': 'ui-window' },
-		},
-		onAttach: function(el, i) {
-			console.log('no');
-			if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
-				UI.Uis.Windows.attach( $(el) );
-				
-				this.windows[i].setOptions({
-					'onUpdate': function(size) {
-						UI.Uis.Windows.updateSingle(i, size.x, size.y );
-					}
-				});
-			}
 		}
 	},
 	
@@ -36,7 +24,6 @@ var FlowWindows = new Class({
 	
 	initialize: function(titles, contents, options) {
 		this.setOptions(options);
-		console.log(this);
 		
 		this.attach(titles, contents);
 		this.registerUi();
@@ -51,14 +38,14 @@ var FlowWindows = new Class({
 		titles.each( function(el, i) {
 			this.titles.push(el); this.contents.push( contents[i] );
 			var j = this.windows.push( new FlowWindow.inline(el, contents[i], this.options) );
-			this.fireEvent('onAttach', [this.windows[j-1], j-1]);
+			this.fireEvent('onUiAttach', [this.windows[j-1], j-1]);
 		}, this);
 		
 	},
 	
 	registerUi: function() {
-		// if ( typeof(UI) !== 'undefined' )
-			// UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'] } });
+		if ( typeof(UI) !== 'undefined' )
+			UI.registerClass({ 'Windows': { 'param': '.' + this.options.ui.window['class'], 'name': 'FlowWindows' } });
 	}
 	
 });

@@ -141,9 +141,6 @@ FlowWindow.inline = new Class({
 		$each( this.x, function(el) {
 			el.setStyle('height', size.y - size['border-top-width'] - size['border-bottom-width']);
 		}, this);
-		//var pad = this.content.getStyle('padding-bottom').toInt() + this.content.getStyle('padding-top').toInt();
-		//console.log( ga.computedTop, ga.computedBottom );
-		//console.log( size.y, size['totalHeight'], offset['totalHeight'], size['computedTop'], size['computedBottom'] );
 		this.content.setStyle('height', size['totalHeight'] - (offset['totalHeight'] + size['computedTop'] + size['computedBottom'] + contentOffset.computedTop + contentOffset.computedBottom ) );
 	},
 	
@@ -167,6 +164,7 @@ FlowWindow.inline = new Class({
 		}
 		
 		this.fireEvent('onUpdate', this.window.getSize() );
+		this.fireEvent('onUiUpdate', this.window.getSize() );
 	},
 	
 	close: function() {
