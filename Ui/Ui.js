@@ -38,8 +38,14 @@ var Ui = new Class({
 			if( $type(el) == 'class' ) {
 			  this.Uis[name] = new Ui[theme][name]( this.options[name].param, this.options[name].options );
 				
-				if(this.Uis[name].options.refactor)
-					eval(this.options[name].name).refactor( this.Uis[name].options.refactor );  //only works with eval?
+				if(this.Uis[name].options.refactor) {
+					//eval(this.options[name].name).refactor( this.Uis[name].options.refactor );  //only works with eval?
+					var tmp = window;
+					this.options[name].name.split('.').each( function(el) {
+						tmp = tmp[el];
+					});
+					tmp.refactor( this.Uis[name].options.refactor );
+				}
 			}
 		}, this);
 	},
