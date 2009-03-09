@@ -9,6 +9,5 @@
  */
 
 $require(MPR.path + 'Ui/Ui.js');
-$require(MPR.path + 'Ui/Plain/Plain.Tabs.js');
 
 Ui.Plain = {};

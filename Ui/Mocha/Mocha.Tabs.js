@@ -19,7 +19,7 @@ Ui.Mocha.Tabs = new Class({
 		refactor: {
 			options: {		
 				onUiAttach: function(el, i) {
-					if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Windows) !== 'undefined' ) ) {
+					if ( (typeof(UI) !== 'undefined') && ( typeof(UI.Uis.Tabs) !== 'undefined' ) ) {
 						UI.Uis.Tabs.attach( $(el) );
 					}
 				}
