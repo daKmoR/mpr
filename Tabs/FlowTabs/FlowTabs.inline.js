@@ -44,18 +44,25 @@ FlowTabs.inline = new Class({
 	},
 	
 	attach: function(tabs, content) {
-		this.tabs.extend( $$(tabs) );
-		this.tabsContent.extend( $$(content) );
+		if ( $type(tabs) == 'string' ) tabs = $$(tabs);
+		if ( $type(tabs) == 'element' ) tabs = [tabs];
+		if ( $type(content) == 'string' ) content = $$(content);
+		if ( $type(content) == 'element' ) content = [content];
 		
-		$$(content).set(this.options.ui.content);
+		if ( tabs.length != content.length ) return;
 		
-		$$(tabs).each( function(el, index) {
+		tabs.each( function(el, i) {
+			var j = this.tabs.push(el); this.tabsContent.push( content[i] );
 			el.set(this.options.ui.tab);
+			content[i].set(this.options.ui.content);
+			
 			el.addEvent('click', function(e) { 
 				e.stop(); 
-				this.openTab(index);
+				this.openTab(i);
 			}.bind(this) );
 			this.tabsContainer.grab( el );
+			
+			this.fireEvent('onUiAttach', [el, j-1]);
 		}, this);
 	},
 	
@@ -74,10 +81,10 @@ FlowTabs.inline = new Class({
 	},
 	
 	registerUi: function() {
-		// if ( typeof(UI) !== 'undefined' )
-			// UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'] } });
+		if ( typeof(UI) !== 'undefined' )
+			UI.registerClass({ 'Tabs': { 'param': '.' + this.options.ui.tab['class'], 'name': 'FlowTabs.inline' } });
 	}
 
 });
 
-if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Tabs': { 'param': '.ui-tab' } });
+if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Tabs': { 'param': '.ui-tab', 'name': 'FlowTabs.inline' } });
