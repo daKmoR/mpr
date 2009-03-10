@@ -144,24 +144,22 @@ FlowWindow.inline = new Class({
 		this.content.setStyle('height', size['totalHeight'] - (offset['totalHeight'] + size['computedTop'] + size['computedBottom'] + contentOffset.computedTop + contentOffset.computedBottom ) );
 	},
 	
-	updateY: function(size) {
+	updateY: function(size, offset, contentOffset) {
 		$each( this.y, function(el) {
-			el.setStyle('width', size.x - size['border-left-width'] - size['border-right-width']);
+			el.setStyle('width', size.x - size['computedLeft'] - size['computedRight'] - offset.computedLeft - offset.computedRight);
 		});
 	},
 	
 	update: function(what) {
 		var size = this.window.getDimensions({computeSize: true, styles: ['border','padding'] });
+		var offset = this.title.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
+		var contentOffset = this.content.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
 		
-		if (what != 'y') {
-			var offset = this.title.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
-			var contentOffset = this.content.getDimensions({computeSize: true, styles: ['border','padding','margin'] });
+		if (what != 'y')
 			this.updateX(size, offset, contentOffset);
-		}
 		
-		if (what != 'x') {
-			this.updateY(size);
-		}
+		if (what != 'x')
+			this.updateY(size, offset);
 		
 		this.fireEvent('onUpdate', this.window.getSize() );
 		this.fireEvent('onUiUpdate', this.window.getSize() );
