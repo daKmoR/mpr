@@ -19,18 +19,20 @@ var Ui = new Class({
 	Uis: {},
 	
 	initialize: function(options) {
+	},
+	
+	render: function(theme, options) {
+		if( $type(theme) == 'object' )
+			this.setOptions(theme);
+			
+		if( $type(theme) == 'string' )
+			this.options.theme = theme;
+			
 		if( $type(options) == 'object' )
 			this.setOptions(options);
-			
-		if( $type(options) == 'string' )
-			this.options.theme = options;
 		
 		if(this.options.theme != '')
 			this.renderTheme(this.options.theme);
-	},
-	
-	render: function(options) {
-		this.initialize(options);
 	},
 	
 	renderTheme: function(theme) {
@@ -42,7 +44,7 @@ var Ui = new Class({
 					if( typeof( this.options[name]['class'] ) !== 'undefined' ) {
 						this.options[name]['class'].setOptions( this.Uis[name].options.refactor.options );
 						this.options[name]['class'].fireEvent('onUiInit');
-					} else {
+					} else if( this.options[name].name ) {
 						//eval(this.options[name].name).refactor( this.Uis[name].options.refactor );  //only works with eval?
 						var tmp = window;
 						this.options[name].name.split('.').each( function(el) {
