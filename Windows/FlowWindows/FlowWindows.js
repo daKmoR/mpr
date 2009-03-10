@@ -51,4 +51,4 @@ var FlowWindows = new Class({
 });
 
 // register default class for UI
-if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Windows': { 'param': '.ui-tab', 'name': 'FlowWindows' } });
+if ( typeof(UI) !== 'undefined' ) UI.registerClass({ 'Windows': { 'param': '.ui-window', 'name': 'FlowWindows' } });
