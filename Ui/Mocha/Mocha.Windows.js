@@ -31,6 +31,16 @@ Ui.Mocha.Windows = new Class({
 							}
 						});
 					}
+				},
+				onUiInit: function() {
+					this.windows.each( function(el, i) {
+						//ok this doesn't work and I have no clue why, the option get's set but the event never gets fired
+						el.setOptions({
+							'onUiUpdate': function(size) {
+								UI.Uis.Windows.updateSingle(i, size.x, size.y );
+							}
+						});
+					});
 				}
 			}
 		}
