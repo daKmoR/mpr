@@ -34,7 +34,13 @@ FlowWindow.inline = new Class({
 		resizable: true,
 		resizeLimit: {'x': [250, 2500], 'y': [125, 2000]},
 		draggable: true,
-		controls: ['minimize', 'close']
+		controls: ['minimize', 'close'],
+		onMinimize: function() {
+			alert('minimize');
+		},
+		onClose: function() {
+			this.window.fade(0);
+		}
 	},
 	
 	window: $empty,
@@ -70,7 +76,7 @@ FlowWindow.inline = new Class({
 	makeControls: function() {
 		this.controlsWrap = new Element('div', this.options.ui.controlsWrap);
 		this.options.controls.each( function(el, i) {
-			this.controls[el] = new Element('div', $extend( this.options.ui[el], { 'events': { 'click': function() { this[el]() }.bind(this) } }) );
+			this.controls[el] = new Element('div', $extend( this.options.ui[el], { 'events': { 'click': function() { this.fireEvent(el); }.bind(this) } }) );
 			this.controlsWrap.grab( this.controls[el] );
 		}, this);
 		this.title.grab(this.controlsWrap);
@@ -165,14 +171,6 @@ FlowWindow.inline = new Class({
 		this.fireEvent('onUiUpdate', this.window.getSize() );
 	},
 	
-	close: function() {
-		this.window.fade(0);
-	},
-	
-	minimize: function() {
-		alert('minimize');
-	},
-
 	toElement: function(){
 		return this.window;
 	}	
