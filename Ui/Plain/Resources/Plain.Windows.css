@@ -1,0 +1,13 @@
+
+.ui-window { padding: 0 0 10px 0; }
+	.ui-windowTitle, .ui-windowContent { padding: 10px; }
+	.ui-windowTitle { background: url('img/tab.bg.gif'); padding: 5px 10px; }
+		.ui-windowTitle h3 { font-size: 12px; margin: 0; padding: 0; color: #fff; }
+		
+		.ui-windowMinimize span, .ui-windowClose span { display: none; }
+		.ui-windowMinimize, .ui-windowClose { background: url('img/controls.png') no-repeat 0 -40px; width: 44px; height: 18px; }
+		.ui-windowMinimize { background-position: 0 0px; width: 26px; }
+		
+	.ui-windowContent { background: #fff; }
+	.ui-windowControlsWrap { right: 5px; }	
+

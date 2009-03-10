@@ -15,7 +15,6 @@ $require(MPR.path + 'Ui/Plain/Resources/Plain.Windows.css');
 Ui.Plain.Windows = new Class({
 	Implements: [Options],
 	options: {
-
 		
 	}
 
