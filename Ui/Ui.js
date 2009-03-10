@@ -40,9 +40,8 @@ var Ui = new Class({
 				
 				if( this.Uis[name].options.refactor ) {
 					if( typeof( this.options[name]['class'] ) !== 'undefined' ) {
-						this.options[name]['class'].setOptions( this.Uis[name].options.refactor );
-					}
-					else {
+						this.options[name]['class'].setOptions( this.Uis[name].options.refactor.options );
+					} else {
 						//eval(this.options[name].name).refactor( this.Uis[name].options.refactor );  //only works with eval?
 						var tmp = window;
 						this.options[name].name.split('.').each( function(el) {
