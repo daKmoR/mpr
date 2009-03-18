@@ -209,28 +209,4 @@ class MPR {
 	
 }
 
-	$url = $_SERVER['HTTP_REFERER'];
-	//$url = 'http://localhost/mootools/blog/general-mootools-ui/mootools-ui-tabs.html';
-	$localMPR = new MPR();
-	
-	if ( !isset($_REQUEST['css']) ) {
-		header('Content-Type: text/javascript');
-		
-		echo file_get_contents('Core/Core.js');
-		echo file_get_contents('Mpr/MprCore.js');
-		
-		// prevent already loaded css files from reload
-		// $files = $localMPR->getFileList($url);
-		// $cssFiles = $files['css'];
-		// foreach($cssFiles as $cssFile) {
-			// echo 'MPR.files[MPR.path + \'' . $cssFile . '\'] = 1;' . PHP_EOL;
-		// }
-
-		echo $localMPR->getScript($url);
-		
-	} else if ( $_REQUEST['css'] ) {
-		header('Content-Type: text/css');
-		echo $localMPR->getCss($url);
-	}
-
 ?>
