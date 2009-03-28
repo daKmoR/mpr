@@ -19,46 +19,48 @@ FlowGallery = new Class({
 		mode: 'continious',
 		increase: 1,
 		onShow: function(image, title, container) { 
-			this.options.effects[this.options.usefx.getRandom()]( image, 'in' );
+			this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
 		},
 		onHide: function(image, title, container) { 
-			this.options.effects[this.options.usefx.getRandom()]( image, 'hide' );
+			this.options.effects[this.options.effect.active.getRandom()]( image, 'hide' );
 			
-			//this.options.effects[this.options.usefx.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
+			//this.options.effects[this.options.effect.active.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
 		},
 		effect: {
 			active: ['slide'],
 			duration: 2000,
 		},
-		usefx: ['slide'],
 		effects: {
 			fade: function(el, state) {
 				el.set('tween', { 'duration': 2000 } );
 				el.fade( state == 'in' ? 1 : 0 );
 			},
 			slide: function(el, state) {
-				el.set('slide', { 'duration': 2000 } );
+				el.set('slide', { 'duration': 2000, link: 'chain' } );
 				el.slide( state );
 			}
 		}
 	},
 	
+	
+	container: $empty,
 	containers: [],
 	images: [],
 	titles: [],
 	description: [],
-	current: 0,
+	current: -1,
 	autotimer: $empty,
 	
-	initialize: function(container, options) {
+	initialize: function(containers, options) {
 		this.setOptions(options);
 		
-		this.containers = $$(container);
+		this.container = $$('.pics')[0];
+		this.containers = $$(containers);
 		this.images = this.containers.getElement('img');
 		
 		this.images.each( function(el, i) {
-			el.setStyle('z-index', i);
-			this.options.effects[this.options.usefx.getRandom()]( el, 'hide' );
+			//el.setStyle('z-index', i);
+			this.options.effects[this.options.effect.active.getRandom()]( el, 'hide' );
 		}, this);
 		
 		this.images.setStyle('position', 'relative');
@@ -76,26 +78,38 @@ FlowGallery = new Class({
 	},
 	
 	show: function(id) {
-		this.titles[id].addClass('active');
-		this.images[id].setStyle('z-index', this.images.length + 1 );
-		
 		if( id != this.current) {
-			this.hide(this.current);
+			this.titles[id].addClass('active');
+			
+			if( this.current >= 0 ) {
+				//this.images[id].setStyle('z-index', this.images[this.current].getStyle('z-index').toInt() + 1 );
+				
+				this.hide(id);
+			
+			// if( this.hidefxtimer ) {
+				//$clear( this.hidefxtimer );
+				// this.hidefx( this.current );
+			// }	else
+				//this.hidefxtimer = this.hidefx.delay(this.options.effect.duration, this, this.current);
+			}
+			
 			this.current = id;
+			
+			this.container.grab( this.containers[id] );
+			
+			this.fireEvent('onShow', [ this.images[id], this.titles[id], this.containers[id] ]);
+			if( this.options.auto ) this.auto();
 		}
-		this.fireEvent('onShow', [ this.images[id], this.titles[id], this.containers[id] ]);
-		if( this.options.auto ) this.auto();
 	},
 	
 	hide: function(id) {
 		this.titles[id].removeClass('active');
-		this.images[id].setStyle('z-index', id);
-		$clear(this.hidefxtimer);
-		this.hidefxtimer = this.hidefx.delay(this.options.effect.duration, this, this.current);
+		this.fireEvent('onHide', [ this.images[id], this.titles[id], this.containers[id] ]);
 	},
 	
 	hidefx: function(id) {
 		this.fireEvent('onHide', [ this.images[id], this.titles[id], this.containers[id] ]);
+		//delete this.hidefxtimer;
 	},
 	
 	auto: function() {
