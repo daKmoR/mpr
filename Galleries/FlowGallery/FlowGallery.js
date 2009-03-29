@@ -18,22 +18,27 @@ FlowGallery = new Class({
 		duration: 4000,
 		mode: 'continious',
 		increase: 1,
+		onDeselect: function(image, title, container) {
+			title.removeClass('active');
+		},
+		onDisplay: function(image, title, container) {
+			this.options.effects[this.options.effect.active.getRandom()]( image, 'show' );
+		},
 		onShow: function(image, title, container) { 
 			this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
 		},
 		onHide: function(image, title, container) { 
 			this.options.effects[this.options.effect.active.getRandom()]( image, 'hide' );
-			
 			//this.options.effects[this.options.effect.active.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
 		},
 		effect: {
-			active: ['slide'],
+			active: ['fade'],
 			duration: 2000,
 		},
 		effects: {
 			fade: function(el, state) {
 				el.set('tween', { 'duration': 2000 } );
-				el.fade( state == 'in' ? 1 : 0 );
+				el.fade( state );
 			},
 			slide: function(el, state) {
 				el.set('slide', { 'duration': 2000, link: 'chain' } );
@@ -58,10 +63,10 @@ FlowGallery = new Class({
 		this.containers = $$(containers);
 		this.images = this.containers.getElement('img');
 		
-		this.images.each( function(el, i) {
-			//el.setStyle('z-index', i);
-			this.options.effects[this.options.effect.active.getRandom()]( el, 'hide' );
-		}, this);
+		// this.images.each( function(el, i) {
+			// //el.setStyle('z-index', i);
+			// this.options.effects[this.options.effect.active.getRandom()]( el, 'hide' );
+		// }, this);
 		
 		this.images.setStyle('position', 'relative');
 		
@@ -74,42 +79,37 @@ FlowGallery = new Class({
 			}.bind(this) );
 		}, this);
 		
-		this.show( this.options.start );
+		this.display( this.options.start );
 	},
 	
-	show: function(id) {
+	show: function(id, event) {
+		var event = event || 'onShow';
 		if( id != this.current) {
-			this.titles[id].addClass('active');
 			
 			if( this.current >= 0 ) {
-				//this.images[id].setStyle('z-index', this.images[this.current].getStyle('z-index').toInt() + 1 );
-				
-				this.hide(id);
-			
-			// if( this.hidefxtimer ) {
-				//$clear( this.hidefxtimer );
-				// this.hidefx( this.current );
-			// }	else
-				//this.hidefxtimer = this.hidefx.delay(this.options.effect.duration, this, this.current);
+				this.deselect( this.current );
 			}
 			
+			this.titles[id].addClass('active');
+			this.hide(id);
 			this.current = id;
-			
 			this.container.grab( this.containers[id] );
 			
-			this.fireEvent('onShow', [ this.images[id], this.titles[id], this.containers[id] ]);
+			this.fireEvent(event, [ this.images[id], this.titles[id], this.containers[id] ]);
 			if( this.options.auto ) this.auto();
 		}
 	},
 	
-	hide: function(id) {
-		this.titles[id].removeClass('active');
-		this.fireEvent('onHide', [ this.images[id], this.titles[id], this.containers[id] ]);
+	display: function(id) {
+		this.show(id, 'onDisplay');
 	},
 	
-	hidefx: function(id) {
+	deselect: function(id) {
+		this.fireEvent('onDeselect', [ this.images[id], this.titles[id], this.containers[id] ]);
+	},
+	
+	hide: function(id) {
 		this.fireEvent('onHide', [ this.images[id], this.titles[id], this.containers[id] ]);
-		//delete this.hidefxtimer;
 	},
 	
 	auto: function() {
@@ -130,6 +130,10 @@ FlowGallery = new Class({
 		}
 		
 		this.show(next);
+	},
+	
+	previous: function(increase) {
+		this.next( increase * -1 );
 	}
 	
 });
