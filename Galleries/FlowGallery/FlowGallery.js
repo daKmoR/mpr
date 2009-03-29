@@ -13,40 +13,47 @@ $require(MPR.path + 'More/Fx.Slide/Fx.Slide.js');
 FlowGallery = new Class({
 	Implements: [Options, Events],
 	options: {
+		ui: {
+			container: { 'class': 'ui-GalleryPics' },
+			menu: { 'class': 'ui-GalleryMenu clearfix' }
+		},
 		start: 0,
-		auto: false,
+		auto: true,
 		duration: 4000,
-		mode: 'continious',
-		increase: 1,
+		mode: 'continuous', /* [continuous, reverse, random] */
+		step: 1,
 		onDeselect: function(image, title, container) {
 			title.removeClass('active');
 		},
 		onDisplay: function(image, title, container) {
-			this.options.effects[this.options.effect.active.getRandom()]( image, 'show' );
+			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'show' );
 		},
-		onShow: function(image, title, container) { 
-			this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
+		onShow: function(image, title, container) {
+			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'in' );
+			//this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
 		},
 		onHide: function(image, title, container) { 
-			this.options.effects[this.options.effect.active.getRandom()]( image, 'hide' );
+			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'hide' );
 			//this.options.effects[this.options.effect.active.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
 		},
 		effect: {
 			active: ['fade'],
-			duration: 2000,
+			options: {
+				fade: { duration: 600 },
+				slide: { duration: 600 }
+			}
 		},
 		effects: {
 			fade: function(el, state) {
-				el.set('tween', { 'duration': 2000 } );
+				el.set('tween', this.options.effect.options.fade );
 				el.fade( state );
 			},
 			slide: function(el, state) {
-				el.set('slide', { 'duration': 2000, link: 'chain' } );
+				el.set('slide', this.options.effect.options.slide );
 				el.slide( state );
 			}
 		}
 	},
-	
 	
 	container: $empty,
 	containers: [],
@@ -56,21 +63,17 @@ FlowGallery = new Class({
 	current: -1,
 	autotimer: $empty,
 	
-	initialize: function(containers, options) {
+	initialize: function(wrap, containers, options) {
 		this.setOptions(options);
-		
-		this.container = $$('.pics')[0];
+
+		this.wrap = $(wrap);
 		this.containers = $$(containers);
 		this.images = this.containers.getElement('img');
-		
-		// this.images.each( function(el, i) {
-			// //el.setStyle('z-index', i);
-			// this.options.effects[this.options.effect.active.getRandom()]( el, 'hide' );
-		// }, this);
-		
+		this.titles = this.containers.getElement('h3');
+
 		this.images.setStyle('position', 'relative');
 		
-		this.titles = $$('.menu h3');
+		this.build();
 
 		this.titles.each( function(el, i) {
 			el.addEvent('click', function(e) {
@@ -80,6 +83,14 @@ FlowGallery = new Class({
 		}, this);
 		
 		this.display( this.options.start );
+	},
+	
+	build: function() {
+		this.container = new Element('div', this.options.ui.container).inject( this.wrap );
+		this.containers.each( function(el) { this.container.grab(el); }, this );
+		
+		this.menu = new Element('div', this.options.ui.menu).inject( this.wrap, 'top' );
+		this.titles.each( function(el) { this.menu.grab(el); }, this );
 	},
 	
 	show: function(id, event) {
@@ -117,23 +128,25 @@ FlowGallery = new Class({
 		this.autotimer = this.next.delay(this.options.duration, this);
 	},
 	
-	next: function(increase) {
-		var increase = increase || this.options.increase;
+	next: function(step) {
+		var step = step || this.options.step;
 		var next = 0;
-		if ( this.options.mode === 'reverse' ) increase *= -1;
+		if ( this.options.mode === 'reverse' ) step *= -1;
 			
 		if ( this.options.mode === 'random' ) {
-			next = $random(0, this.containers.length-1 );
+			do 
+				next = $random(0, this.containers.length-1 );
+			while ( next == this.current )
 		} else {
-			if ( this.current + increase < this.containers.length ) next = this.current + increase;
-			if ( this.current + increase < 0 )	next = this.containers.length-1;
+			if ( this.current + step < this.containers.length ) next = this.current + step;
+			if ( this.current + step < 0 )	next = this.containers.length-1;
 		}
 		
 		this.show(next);
 	},
 	
-	previous: function(increase) {
-		this.next( increase * -1 );
+	previous: function(step) {
+		this.next( step * -1 );
 	}
 	
 });
