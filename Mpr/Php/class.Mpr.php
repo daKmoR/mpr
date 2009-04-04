@@ -136,7 +136,7 @@ class MPR {
 		preg_match_all($regularExpressionScriptTags, $text, $results, PREG_SET_ORDER);
 		
 		foreach($results as $result) {
-		  if ( ($result[1] !== '') && (strpos($result[1], basename(__FILE__)) === false) )
+		  if ( ($result[1] !== '') && (strpos($result[1], 'MprJs') === false) )
 				$scripts .= $this->getUrlContent( $this->base . $result[1] ) . PHP_EOL;
 			if ( ($result[1] === '') && ($result[0] !== '') )
 				$scripts .= $result[0] . PHP_EOL;

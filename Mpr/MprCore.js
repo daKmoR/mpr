@@ -95,7 +95,8 @@ var Asset = new Hash({
 });
 
 var MPR = MPR || {};
-MPR.path = MPR.path || 'MPR/';
+if ( typeof(MPR.path) === 'undefined' )
+	MPR.path = 'MPR/';
 
 Asset.extend({
 	js: function(source, properties) {
