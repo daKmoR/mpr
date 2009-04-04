@@ -2,8 +2,8 @@
 	require_once('Mpr/Php/FirePHPCore/fb.php');
 	require_once('Mpr/Php/class.MprAdmin.php');
 	
-	$MPR = new MprAdmin();
-	$left = $MPR->render();
+	$MprAdmin = new MprAdmin();
+	$left = $MprAdmin->render();
 	
 	$dir = dirname( realpath(__FILE__) );
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
@@ -43,7 +43,6 @@
 			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
 			<script src="Mpr/Resources/js/JSSpec.js" type="text/javascript"></script>
 			<script src="Mpr/Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
-			<script src="MprJs.php" type="text/javascript"></script>
 			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
 		';
 		$center = '<div id="jsspec_container"></div>';
@@ -71,10 +70,16 @@
 		
 		<title>Webteam Default Template</title>
 		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '';
+		</script>
+		
 		<script src="MprJs.php" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />
 		
 		<?php echo $header; ?>
+		
 		
 		<script type="text/javascript">
 		
