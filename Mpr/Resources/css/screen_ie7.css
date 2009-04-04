@@ -1,0 +1,6 @@
+
+	/* Clearing floats without extra markup
+	   Based on How To Clear Floats Without Structural Markup by PiE
+	   [http://www.positioniseverything.net/easyclearing.html] */
+	.clearfix {	display: inline-block;	}
+	

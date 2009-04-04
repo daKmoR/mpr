@@ -400,8 +400,3 @@ Element.implement({
         return new Animation(this, options);
     }
 });
-
-
-
-window.addEvent('domready', function(){
-});
