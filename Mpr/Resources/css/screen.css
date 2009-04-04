@@ -70,10 +70,14 @@
 ----------------------------------------------------------------------------------------------------------------- */
 	.p33x33x33 .col2, .p25x50x25 .col2  { border-right: 1px solid #dcdcdc; }
 	
+	a { color: #000099; text-decoration: underline; }
+		a:focus, a:hover { color: #000; }
+	blockquote { color: #666; font-style: italic; margin: 10px; }	
+	
 	#header, #footer { background: #eee; text-align: center; border-bottom: 1 solid #aaa; margin: 5px 0; padding: 8px; }
 	#footer  { border-width: 0 0 1px 0; }
 	
-	.px210x750 ul { padding-left: 7px; margin-left: 7px; }
+	#contentMain { margin: 0 20px; }
 	
 	#menu {}
 		#menu h4 { position: relative; cursor: pointer; height: 25px; padding: 5px 0 0 8px; background: #F9F9F9; border: 1px solid #ddd; margin: 0; }
@@ -82,5 +86,11 @@
 			#menu div.accordionContent div { background: #F9F9F9; border: 1px solid #ddd; padding: 10px 10px 25px 10px; border-width: 0 1px 1px; position: relative; }
 			#menu div.accordionContent span.leftBottom { position: absolute; width: 25px; height: 25px; background: url('img/menu.png') -50px; left: -1px; bottom: -1px; }
 	
+	a.doc { background: url('img/documentinfo.png') no-repeat 0 2px; line-height: 16px; padding-left: 16px; margin-left: 5px; }
+		a.doc span { display: none; }
+	a.spec { background: url('img/runprog.png') no-repeat 0 2px; line-height: 16px; padding-left: 16px; margin-left: 5px; }
+		a.spec span { display: none; }
+		
+	#jsspec_container { position: relative; }
 	
 	

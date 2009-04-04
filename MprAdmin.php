@@ -1,10 +1,13 @@
 <?php
 	require_once('Mpr/Php/FirePHPCore/fb.php');
-	
 	require_once('Mpr/Php/class.MprAdmin.php');
-
+	
 	$MPR = new MprAdmin();
 	$left = $MPR->render();
+	
+	$dir = dirname( realpath(__FILE__) );
+	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
+		die('you can only use files within MPR');
 
 	if ($_REQUEST['mode'] === 'doc') {
 
@@ -35,7 +38,15 @@
 		$doc = $geshi->parse_codeblocks($doc);	
 
 		$center = $doc;
-	} else {
+	} elseif ($_REQUEST['mode'] === 'spec')  {
+		$header = '
+			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
+			<script src="Mpr/Resources/js/JSSpec.js" type="text/javascript"></script>
+			<script src="Mpr/Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
+			<script src="MprJs.php" type="text/javascript"></script>
+			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
+		';
+		$center = '<div id="jsspec_container"></div>';
 	}
 
 
@@ -48,6 +59,7 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />
 
 		<!--[if IE 7]> 
 			<link rel="stylesheet" href="Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
@@ -60,16 +72,19 @@
 		<title>Webteam Default Template</title>
 		
 		<script src="MprJs.php" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />		
+		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />
+		
+		<?php echo $header; ?>
 		
 		<script type="text/javascript">
 		
-			$require(MPR.path + 'more/Fx.Accordion/Fx.Accordion.js');
+			$require(MPR.path + 'More/Fx.Accordion/Fx.Accordion.js');
 			
 			window.addEvent('domready', function() {
 		
 				var accordionStruc = new Fx.Accordion( $$('#menu h4'), $$('div.accordionContent'), {
 					alwaysHide: true,
+					show: 2,
 					onActive: function(toggler, element){
 						toggler.setStyle('color', '#FD5C01');
 						toggler.setStyles( { 'border-width' : '1px 1px 0' } );
@@ -102,7 +117,7 @@
 					</div>
 				</div>
 				<div class="col2">
-					<div class="content">
+					<div class="content" id="contentMain">
 						<?php echo $center; ?>
 					</div>
 				</div>
@@ -116,7 +131,6 @@
 		
 	</body>
 </html>
-
 
 
 

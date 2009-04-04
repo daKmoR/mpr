@@ -19,7 +19,7 @@ class Plugin extends Options {
 		'name' => '',
 		'doc' => '',
 		'demo' => '',
-		'display' => array('name', 'doc', 'demo'),
+		'display' => array('name', 'doc', 'spec'),
 		'stdWrap' => '<div>|</div>',
 		'itemWrap' => '',
 		'version' => '0'
@@ -49,14 +49,16 @@ class Plugin extends Options {
 		$metaPath = $this->options->path . '/Meta/Plugin.xml';
 		$demoPath = $this->options->path . '/Demos/index.html';
 		$docPath  = $this->options->path . '/Doc/index.md';
+		$specPath = $this->options->path . '/Spec/index.js';
 		
 		// right now I'm skipping to read the xml file
 		// if( is_file($metaPath) )
 			// fb( file_get_contents( $metaPath ) );
-			
-		$this->options->demo = is_file($demoPath) ? '<a href="' . $demoPath . '"><span>demo</span></a>' : '';
-		$this->options->doc = is_file($docPath) ? '<a href="?mode=doc&amp;file=' . $docPath . '"><span>doc</span></a>' : '';
 		
+		//$this->options->demo = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>demo</span></a>' : '';
+		$this->options->doc = is_file($docPath) ? '<a class="doc" href="?mode=doc&amp;file=' . $docPath . '"><span>doc</span></a>' : '';
+		$this->options->name = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>' . $this->options->name . '</span></a>' : $this->options->name;
+		$this->options->spec = is_file($specPath) ? '<a class="spec" href="?mode=spec&amp;file=' . $specPath . '"><span>spec</span></a>' : '';
 	}
 	
 	/**
