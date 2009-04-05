@@ -11,9 +11,15 @@ Script: Element.Position.js
 
 $require(MPR.path + 'More/Element.Measure/Element.Measure.js');
 
+(function(){
+
+//Tom wants to rename the old .position to .setPosition; until he does, we need this.
+var oldPosition = Element.prototype.position;
+
 Element.implement({
 
 	position: function(options){
+		if (options && ($defined(options.x) || $defined(options.y))) return oldPosition ? oldPosition.apply(this, arguments) : this;
 		$each(options||{}, function(v, k){ if (!$defined(v)) delete options[k]; });
 		options = $merge({
 			relativeTo: document.body,
@@ -155,17 +161,4 @@ Element.implement({
 
 });
 
-(function(){
-
-	var oldSetPosition = Element.prototype.setPosition;
-
-	Element.implement({
-
-		setPosition: function(obj){
-			if ($defined(obj.x) || $defined(obj.y)) return oldSetPosition.apply(this, arguments);
-			return this.position.apply(this, arguments);
-		}
-
-	});
-
-});
+})();

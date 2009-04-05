@@ -5,20 +5,32 @@
  *
  * @license		MIT-style license
  * @author		david walsh
+ * @author		Thomas Allmer <at@delusionworld.com>
  * @copyright Copyright belongs to the respective authors
  */
- 
+
 var Typewriter = new Class({
 	Implements: [Options],
 	options: {
-		container: $$('body')[0],
 		message: '',
 		delay: 150,
 		cursor: 0
 	},
 	
-	initialize: function(options) {
+	container: $empty,
+	
+	initialize: function(element, options) {
+		this.container = $(element);
+		this.options.message = this.container.get('html');
+		
 		this.setOptions(options);
+		this.reset();
+	},
+	
+	reset: function() {
+		this.container.set('html', '');
+		this.options.cursor = 0;
+		this.start();
 	},
 	
 	start: function() {
@@ -30,7 +42,8 @@ var Typewriter = new Class({
 	
 	//place the newest letter in the container
 	setLetter: function() {
-		this.options.container.set('html',this.options.container.get('html') + '' + this.options.message.charAt(this.options.cursor));
+		this.container.set('html', this.container.get('html') + '' + this.options.message.charAt(this.options.cursor) );
 		this.options.cursor++;
 	}
+	
 });
