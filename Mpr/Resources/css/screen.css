@@ -94,11 +94,12 @@
 			#menu h4 span {	position: absolute; width: 25px; height: 25px; background: url('img/menu.png'); right: -1px; top: -1px; }
 		#menu div.accordionContent { margin-bottom: 10px; }
 			#menu div.accordionContent div { background: #F9F9F9; border: 1px solid #ddd; padding: 10px 10px 25px 10px; border-width: 0 1px 1px; position: relative; }
+			#menu div.accordionContent p { position: relative; border-bottom: 1px solid #eee; }
 			#menu div.accordionContent span.leftBottom { position: absolute; width: 25px; height: 25px; background: url('img/menu.png') -50px; left: -1px; bottom: -1px; }
 	
-	a.doc { background: url('img/documentinfo.png') no-repeat 0 2px; line-height: 16px; padding-left: 16px; margin-left: 5px; }
+	a.doc { background: url('img/documentinfo.png') no-repeat 0 2px; width: 18px; height: 18px; position: absolute; right: 0; }
 		a.doc span { display: none; }
-	a.spec { background: url('img/runprog.png') no-repeat 0 2px; line-height: 16px; padding-left: 16px; margin-left: 5px; }
+	a.spec { background: url('img/runprog.png') no-repeat 0 2px; width: 18px; height: 18px; position: absolute; right: 20px; }
 		a.spec span { display: none; }
 		
 	#jsspec_container { position: relative; }
