@@ -29,13 +29,13 @@
 		
 		// Initialize GeSHi (Syntax Highlighting)
 		$geshi = new GeSHi_mDocs();
-		$geshi->default_language = 'javascript';	
+		$geshi->default_language = 'javascript';
 		
 		// Apply Markdown Syntax:
 		$doc = $markdown->transform($doc);
 
 		// Apply GeSHi Syntax Highlighting:
-		$doc = $geshi->parse_codeblocks($doc);	
+		$doc = $geshi->parse_codeblocks($doc);
 
 		$center = $doc;
 	} elseif ($_REQUEST['mode'] === 'spec')  {
@@ -100,7 +100,7 @@
 					}
 				}); 		
 			
-			});		
+			});
 		</script>
 		
 	</head>
@@ -109,7 +109,7 @@
 		<div id="wrap">
 		
 			<div id="header">
-				Your Local MPR ( MooTools Plugin Repository )
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
 			</div>
 			
 			<div class="colmask equal px210x750">
@@ -126,7 +126,7 @@
 			</div>
 			
 			<div id="footer">
-				footer
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
 			</div>
 			
 		</div> <!-- /wrap -->

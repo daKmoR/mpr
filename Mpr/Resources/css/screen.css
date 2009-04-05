@@ -74,10 +74,10 @@
 		a:focus, a:hover { color: #000; }
 	blockquote { color: #666; font-style: italic; margin: 10px; }	
 	
-	#header, #footer { background: #eee; text-align: center; border-bottom: 1 solid #aaa; margin: 5px 0; padding: 8px; }
-	#footer  { border-width: 0 0 1px 0; }
+	#header { border-bottom: 1px solid #eee; margin-bottom: 10px; }
+	#footer  { border-top: 1px solid #eee; color: #555; margin-top: 10px; padding-top: 15px; text-align: right; }
 	
-	#contentMain { margin: 0 20px; }
+	#contentMain { margin: 0 15px; }
 	
 	#menu {}
 		#menu h4 { position: relative; cursor: pointer; height: 25px; padding: 5px 0 0 8px; background: #F9F9F9; border: 1px solid #ddd; margin: 0; }
