@@ -9,18 +9,30 @@
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
 
-	if ($_REQUEST['mode'] === 'doc') {
+		
+	if ($_REQUEST['mode'] === 'demo') {
+		$demoCode = file_get_contents( $_REQUEST['file'] );
+		$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+		
+		$codeHeader = Helper::getContent($demoCode, '<!-- ### Mpr.Header.Start ### -->', '<!-- ### Mpr.Header.End ### -->');
+		if( $codeHeader ) $header .= $codeHeader;
+		
+		$css = Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
+		if( $css ) $header .= Helper::wrap($css, '<style type="text/css">|</style>');
+		
+		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
+		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
+	
+	} elseif ($_REQUEST['mode'] === 'doc') {
+		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
 
 		// Get the classes:
 		require_once 'Mpr/Php/mdocs/markdown.php';
 		require_once 'Mpr/Php/mdocs/markdown.mdocs.php';
-		require_once 'Mpr/Php/mdocs/toc.php';
-		require_once 'Mpr/Php/mdocs/menu.php';
 		require_once 'Mpr/Php/mdocs/geshi.php';
 		require_once 'Mpr/Php/mdocs/geshi.mdocs.php';
 
-		$file = $_REQUEST['file'];
-		$doc = file_get_contents($file);
+		$doc = file_get_contents( $_REQUEST['file'] );
 		
 		// Initialize Markdown
 		$markdown = new MarkdownExtra_Parser_mDocs();
@@ -58,7 +70,6 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="Mpr/Resources/css/screen.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />
 
 		<!--[if IE 7]> 
 			<link rel="stylesheet" href="Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
@@ -68,7 +79,7 @@
 			<link rel="stylesheet" href="Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
 		<![endif]-->
 		
-		<title>Webteam Default Template</title>
+		<title>Your Local MPR (MooTools Plugin Repository)</title>
 		
 		<script type="text/javascript">
 			var MPR = {};

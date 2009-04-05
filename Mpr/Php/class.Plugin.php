@@ -47,9 +47,9 @@ class Plugin extends Options {
 	 */
 	public function getData() {
 		$metaPath = $this->options->path . '/Meta/Plugin.xml';
-		$demoPath = $this->options->path . '/Demos/index.html';
-		$docPath  = $this->options->path . '/Doc/index.md';
-		$specPath = $this->options->path . '/Spec/index.js';
+		$demoPath = $this->options->path . '/Demos/' . $this->options->name . '.html';
+		$docPath  = $this->options->path . '/Doc/' . $this->options->name . '.md';
+		$specPath = $this->options->path . '/Spec/' . $this->options->name . '.js';
 		
 		// right now I'm skipping to read the xml file
 		// if( is_file($metaPath) )

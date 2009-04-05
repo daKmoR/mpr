@@ -51,6 +51,33 @@ class Helper {
 		return $files;
 	}
 	
+	public static function getContent($content, $markerTop = '<!-- ### Mpr.Html.Start ### -->', $markerBottom = '<!-- ### Mpr.Html.End ### -->', $mode = 'cut') {
+	  // $comments = array('javascript' => '/* | */', 'js' => '/* | */', 'php' => '/* | */', 'html' => '<!-- | -->', 'css' => '/* | */', 'html4strict' => '<!-- | -->');
+		// if ($comments[$lang]) {
+		  // $markerTop = Helper::wrap($markerTop, $comments[$lang]);
+		  // $markerBottom = Helper::wrap($markerBottom, $comments[$lang]);
+		// }
+		
+		$whereTop = 0;
+		if ($whereTop = strpos($content, $markerTop))
+		  $whereTop += strlen($markerTop);
+		
+		$length = strlen($content) - $whereTop;
+		if ($whereBottom = strrpos($content, $markerBottom))
+			$length = $whereBottom - $whereTop;
+			
+		if ($whereTop || $whereBottom) {
+			if ($mode == "cut")
+				return substr($content, $whereTop, $length);
+			else if ($mode == "top")
+				return substr($content, 0, $whereTop);
+			else if ($mode == "bottom")
+				return substr($content, $whereBottom, strlen($content));
+		}
+		
+		return $content;
+	}	
+	
 }
 
 ?>
