@@ -80,9 +80,7 @@
 		
 		<?php echo $header; ?>
 		
-		
 		<script type="text/javascript">
-		
 			$require(MPR.path + 'More/Fx.Accordion/Fx.Accordion.js');
 			
 			window.addEvent('domready', function() {
@@ -102,9 +100,8 @@
 					}
 				}); 		
 			
-			});
+			});		
 		</script>
-		
 		
 	</head>
 	<body>

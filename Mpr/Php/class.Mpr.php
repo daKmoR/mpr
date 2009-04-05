@@ -28,6 +28,13 @@ class MPR {
 	 * @var array
 	 */
 	protected $cache = array();
+
+	/**
+	 * A array for simple caching
+	 *
+	 * @var array
+	 */
+	protected $exclude = array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js');
 	
 	/**
 	 * setter for $base
@@ -129,14 +136,15 @@ class MPR {
 	 * @return string
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	private function getSiteScripts($url) {
+	public function getSiteScripts($url) {
 		$text = $this->getUrlContent($url);
 		$scripts = '';
 		$regularExpressionScriptTags = 	'#<script.+?src=["|\'](.+?)["|\']|<script.+?>(.|\s)*?</script>#'; //<script src="[...]" !AND! <script>[...]</script>
 		preg_match_all($regularExpressionScriptTags, $text, $results, PREG_SET_ORDER);
 		
+		
 		foreach($results as $result) {
-		  if ( ($result[1] !== '') && (strpos($result[1], 'MprJs') === false) )
+		  if ( ($result[1] !== '') && ( in_array( basename(strtolower($result[1])), $this->exclude ) === false) )
 				$scripts .= $this->getUrlContent( $this->base . $result[1] ) . PHP_EOL;
 			if ( ($result[1] === '') && ($result[0] !== '') )
 				$scripts .= $result[0] . PHP_EOL;
@@ -156,11 +164,12 @@ class MPR {
 		if( isset($this->cache[$url]) )
 			return $this->cache[$url];
 			
-		$urlInfo = pathinfo($url);
-		$isSiteScript = ( ($urlInfo['extension'] === 'js') || ($urlInfo['extension'] === 'css') ) ? false : true;
-
+		$urlInfo = parse_url($url);
+		$pathinfo = pathinfo( $urlInfo['path'] );
+		$isSiteScript = ( ($pathinfo['extension'] === 'js') || ($pathinfo['extension'] === 'css') ) ? false : true;
+		
 		if (!$isSiteScript) {
-			if (strpos( $url, 'http') === 0)
+			if ( $urlInfo['scheme'] === 'http')
 				$scripts = $this->getUrlContent($url);
 			else
 				$scripts = file_get_contents($url);
@@ -180,12 +189,12 @@ class MPR {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	private function prepareContent($url, $what = 'js') {
+		$urlInfo = parse_url($url);
 		if ($this->base === '')
-			$this->setBase( dirname($url) . '/' );
-			
+			$this->setBase( $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/' );
+		
 		$fileList = $this->getFileList($url);
 		$content = '';
-		
 		if ($what === 'js') {
 			if ($this->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
