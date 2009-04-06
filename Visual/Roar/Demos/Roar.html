@@ -29,17 +29,19 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
-$require(MPR.path + 'Tools/Roar/Roar.js');
+$require(MPR.path + 'Visual/Roar/Roar.js');
 
 window.addEvent('domready', function() {
 
 	var roar = new Roar();
-	$('clickme').addEvent('click', function() {
+	$('clickme').addEvent('click', function(e) {
+		e.stop();
 		roar.alert('here we come', 'with some basic output' ); 
 	});
 	
 	var roar2 = new Roar({ 'position': 'upperRight' });
-	$('upperRight').addEvent('click', function() {
+	$('upperRight').addEvent('click', function(e) {
+		e.stop();
 		roar2.alert('here we come', 'with some basic output' ); 
 	});
 
@@ -77,9 +79,9 @@ window.addEvent('domready', function() {
 	With Roar you can easily show nice informative infoboxes.
 </p>
 <h3 class="section">Some Basic Roar</h3>
-<span id="clickme">clickme</span>
+<a href="#" id="clickme">clickme</a>
 <br />
-<span id="upperRight">upperRight</span>
+<a href="#" id="upperRight">upperRight</a>
 <!-- ### Mpr.Html.End ### -->
 					</div>
 				</div>

@@ -1,1 +1,0 @@
-$require(MPR.path + 'Grid/FlowTable/Resources/FlowTable.css');

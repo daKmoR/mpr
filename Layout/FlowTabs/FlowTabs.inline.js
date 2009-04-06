@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Tabs/FlowTabs/FlowTabs.js');
+$require(MPR.path + 'Layout/FlowTabs/FlowTabs.js');
 
 FlowTabs.inline = new Class({
 	Implements: [Events, Options],

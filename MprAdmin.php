@@ -9,6 +9,8 @@
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
 		
+	$path = explode('/', $_REQUEST['file']);
+		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
 		$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
@@ -94,10 +96,15 @@
 			$require(MPR.path + 'More/Fx.Accordion/Fx.Accordion.js');
 			
 			window.addEvent('domready', function() {
+				var current = 0;
+				$$('#menu h4').each( function(el, i) {
+					if( el.get('text') == '<?php echo $path[1]; ?>')
+						current = i;
+				});
 		
 				var accordionStruc = new Fx.Accordion( $$('#menu h4'), $$('div.accordionContent'), {
 					alwaysHide: true,
-					show: 2,
+					show: current,
 					onActive: function(toggler, element){
 						toggler.setStyle('color', '#FD5C01');
 						toggler.setStyles( { 'border-width' : '1px 1px 0' } );

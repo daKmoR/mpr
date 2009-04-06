@@ -46,7 +46,7 @@ window.addEvent('domready', function() {
 	});
 	
 	$('refactor').addEvent('click', function() {
-		Greeter.refactor({
+		Greeter = Class.Refactor(Greeter, {
 			greet: function(person) {
 				$('log').adopt( new Element('p', {'html': 'Hi Lord ' + person }) );
 			}

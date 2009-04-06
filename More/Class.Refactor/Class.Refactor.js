@@ -9,20 +9,19 @@ Script: Class.Refactor.js
 		Aaron Newton
 */
 
-Class.refactor = function(orig, props){
-	props = $extend($unlink(props), {Extends: orig});
-	var update = new Class(props);
-	$each(orig, function(v, k){
-		update[k] = update[k] || v;
+Class.Refactor = function(original, refactors){
+
+	$each(refactors, function(item, name){
+		var origin = original.prototype[name];
+		if (origin && (origin = origin._origin) && typeof item == 'function') original.implement(name, function(){
+			var old = this.previous;
+			this.previous = origin;
+			var value = item.apply(this, arguments);
+			this.previous = old;
+			return value;
+		}); else original.implement(name, item);
 	});
-	return update;
+
+	return original;
+
 };
-
-$extend(Class.prototype, {
-
-	refactor: function(props){
-		this.prototype = Class.refactor(this, props).prototype;
-		return this;
-	}
-
-});

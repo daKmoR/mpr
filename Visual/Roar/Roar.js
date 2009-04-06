@@ -10,7 +10,7 @@
  * @copyright	Author
  */
  
-$require(MPR.path + 'Tools/Roar/Resources/Roar.css');
+$require(MPR.path + 'Visual/Roar/Resources/Roar.css');
 
 $require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
 $require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');

@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Windows/FlowWindows/FlowWindow.inline.js');
+$require(MPR.path + 'Layout/FlowWindows/FlowWindow.inline.js');
  
 var FlowWindows = new Class({
 	Implements: [Events, Options],
