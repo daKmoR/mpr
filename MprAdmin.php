@@ -8,7 +8,6 @@
 	$dir = dirname( realpath(__FILE__) );
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
-
 		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
