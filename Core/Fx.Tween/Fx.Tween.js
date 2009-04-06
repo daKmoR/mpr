@@ -6,6 +6,8 @@ License:
 	MIT-style license.
 */
 
+$require(MPR.path + 'Core/Fx.Css/Fx.Css.js');
+
 Fx.Tween = new Class({
 
 	Extends: Fx.CSS,

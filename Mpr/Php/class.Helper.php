@@ -52,12 +52,6 @@ class Helper {
 	}
 	
 	public static function getContent($content, $markerTop = '<!-- ### Mpr.Html.Start ### -->', $markerBottom = '<!-- ### Mpr.Html.End ### -->', $mode = 'cut') {
-	  // $comments = array('javascript' => '/* | */', 'js' => '/* | */', 'php' => '/* | */', 'html' => '<!-- | -->', 'css' => '/* | */', 'html4strict' => '<!-- | -->');
-		// if ($comments[$lang]) {
-		  // $markerTop = Helper::wrap($markerTop, $comments[$lang]);
-		  // $markerBottom = Helper::wrap($markerBottom, $comments[$lang]);
-		// }
-		
 		$whereTop = 0;
 		if ($whereTop = strpos($content, $markerTop))
 		  $whereTop += strlen($markerTop);

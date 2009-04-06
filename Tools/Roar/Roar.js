@@ -12,6 +12,10 @@
  
 $require(MPR.path + 'Tools/Roar/Resources/Roar.css');
 
+$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+
 var Roar = new Class({
 
 	Implements: [Options, Events, Chain],

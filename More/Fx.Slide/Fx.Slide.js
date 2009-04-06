@@ -9,6 +9,8 @@ Script: Fx.Slide.js
 		Valerio Proietti
 */
 
+$require(MPR.path + 'Core/Fx/Fx.js');
+
 Fx.Slide = new Class({
 
 	Extends: Fx,
