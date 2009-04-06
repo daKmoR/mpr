@@ -52,8 +52,6 @@
 		MPR.files[MPR.path + "Core/Request/Request.js"] = 1;
 	';
 
-	
-	
-	//echo $localMPR->getScript($url);
+	echo $localMPR->getScript($url);
 
 ?>

@@ -24,7 +24,7 @@ function $require(source) {
 		case '.js': {
 			new Request({ url: source, async: false, evalResponse: true, method: 'get',
 				onComplete: function() {
-					return new Element('script', {src: source, type: 'text/javascript'});
+					return new Element('script', {src: source, type: 'text/javascript'}).inject(document.head);
 				}
 			}).send();
 			return true;
