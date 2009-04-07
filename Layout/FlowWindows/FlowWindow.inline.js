@@ -39,7 +39,7 @@ FlowWindow.inline = new Class({
 			alert('minimize');
 		},
 		onClose: function() {
-			this.window.fade(0);
+			this.window.destroy();
 		}
 	},
 	

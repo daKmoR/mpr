@@ -8,6 +8,6 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Ui/Ui.js');
+$require(MPR.path + 'Ui/Ui/Ui.js');
 
 Ui.Mocha = {};

@@ -1,4 +1,4 @@
-.ui-tab { color: #141414; background: url('img/tab.bg.gif') left -35px; float: left; height: 30px; font-size: 11px; padding: 0; cursor: pointer; }
+.ui-tab { color: #141414; background: url('img/tab.bg.gif') left -35px; float: left; height: 30px; font-size: 11px; padding: 0; cursor: pointer; margin: 0; }
 	.ui-tab span { padding: 6px 16px 5px 10px; background: url('img/tab.bg.gif') right -35px; display: block; margin-left: 8px;  }
 .ui-tab.act { font-weight: bold; background-position: left 0; }
 	.ui-tab.act span { background-position: right 0; }
