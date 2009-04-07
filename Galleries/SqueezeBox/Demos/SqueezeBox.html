@@ -18,7 +18,7 @@
 		
 		<script type="text/javascript">
 			var MPR = {};
-			MPR.path = '';
+			MPR.path = '../../../';
 		</script>
 		
 		<script src="../../../MprJs.php" type="text/javascript"></script>
@@ -29,24 +29,27 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
-$require(MPR.path + 'Galleries/UvumiGallery/UvumiGallery.js');
+
+$require(MPR.path + 'Galleries/SqueezeBox/SqueezeBox.js');
 
 window.addEvent('domready', function() {
 
-	new UvumiGallery({
-			container:'myGallery',
-			loadingImg:'demos/Galleries/UvumiGallery/include/img/ajax-loader.gif'
-	});
+  SqueezeBox.initialize({
+     size: {x: 350, y: 400}
+  });
+
+	SqueezeBox.assign($$('a[rel=lightbox]'));
 	
 });
+
 /* ### Mpr.Js.End ### */
 </script>
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#myGallery { background: #F8F8F8; border: 1px solid #ccc; border-color: #E4E4E4 #D6D6D6 #D6D6D6 #E4E4E4; }
-
+#reset { cursor: pointer; text-decoration: underline; }
+#reset:hover { color: #aaa; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -67,24 +70,23 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>UvumiGallery</h1>
+<h1>ReMooz</h1>
 <h2>Introduction</h2>
 <p>
-	a nice animated gallery
+	an Lightbox alternative
 </p>
-<h3 class="section">Basic UvumiGallery</h3>
+<h3 class="section">Basic ReMooz</h3>
 
-<div id="myGallery" style="height: 500px;">
-	<a href="Galleries/Core/Resources/images/medium-meadow.jpg"><img src="Galleries/Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" /></a>
-	<a href="Galleries/Core/Resources/images/medium-ice.jpg"><img src="Galleries/Core/Resources/images/small-ice.jpg" alt="Some Description about ice" /></a>
-	<a href="Galleries/Core/Resources/images/medium-water.jpg"><img src="Galleries/Core/Resources/images/small-water.jpg" alt="Some Description about water" /></a>
-	<a href="Galleries/Core/Resources/images/medium-sun.jpg"><img src="Galleries/Core/Resources/images/small-sun.jpg" alt="Some Description about sun" /></a>
-	<a href="Galleries/Core/Resources/images/medium-stone.jpg"><img src="Galleries/Core/Resources/images/small-stone.jpg" alt="Some Description about stone" /></a>
-	<a href="Galleries/Core/Resources/images/medium-sevenSisters.jpg"><img src="Galleries/Core/Resources/images/small-sevenSisters.jpg" alt="Some Description about sevenSisters" /></a>
-	<a href="Galleries/Core/Resources/images/medium-river.jpg"><img src="Galleries/Core/Resources/images/small-river.jpg" alt="Some Description about river" /></a>
-	<a href="Galleries/Core/Resources/images/medium-mountains.jpg"><img src="Galleries/Core/Resources/images/small-mountains.jpg" alt="Some Description about mountains" /></a>
-	<a href="Galleries/Core/Resources/images/medium-brownMountains.jpg"><img src="Galleries/Core/Resources/images/small-brownMountains.jpg" alt="Some Description about brownMountains" /></a>
-</div>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-meadow.jpg"><img src="Galleries/Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-ice.jpg"><img src="Galleries/Core/Resources/images/small-ice.jpg" alt="Some Description about ice" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-water.jpg"><img src="Galleries/Core/Resources/images/small-water.jpg" alt="Some Description about water" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-sun.jpg"><img src="Galleries/Core/Resources/images/small-sun.jpg" alt="Some Description about sun" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-stone.jpg"><img src="Galleries/Core/Resources/images/small-stone.jpg" alt="Some Description about stone" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-sevenSisters.jpg"><img src="Galleries/Core/Resources/images/small-sevenSisters.jpg" alt="Some Description about sevenSisters" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-river.jpg"><img src="Galleries/Core/Resources/images/small-river.jpg" alt="Some Description about river" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-mountains.jpg"><img src="Galleries/Core/Resources/images/small-mountains.jpg" alt="Some Description about mountains" /></a>
+<a rel="lightbox" href="Galleries/Core/Resources/images/medium-brownMountains.jpg"><img src="Galleries/Core/Resources/images/small-brownMountains.jpg" alt="Some Description about brownMountains" /></a>
+
 
 <!-- ### Mpr.Html.End ### -->
 					</div>

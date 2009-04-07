@@ -7,15 +7,26 @@
  * @author		Thomas Allmer <at@delusionworld.com>
  * @copyright Copyright belongs to the respective authors
  */
- 
+
+$require(MPR.path + 'Galleries/FlowGallery/Resources/css/FlowGallery.css'); 
+
+$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Element.Style/Element.Style.js');
+
+$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
+$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+
 $require(MPR.path + 'More/Fx.Slide/Fx.Slide.js');
  
 FlowGallery = new Class({
 	Implements: [Options, Events],
 	options: {
 		ui: {
+			menu: { 'class': 'ui-GalleryMenu clearfix' },
+			wrap: { 'class': 'ui-Gallery' },
 			container: { 'class': 'ui-GalleryPics' },
-			menu: { 'class': 'ui-GalleryMenu clearfix' }
+			itemContainer: { 'class' : 'ui-GalleryPic' }
 		},
 		start: 0,
 		auto: true,
@@ -26,14 +37,14 @@ FlowGallery = new Class({
 			title.removeClass('active');
 		},
 		onDisplay: function(image, title, container) {
-			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'show' );
+			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'show' );
 		},
 		onShow: function(image, title, container) {
-			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'in' );
+			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'in' );
 			//this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
 		},
 		onHide: function(image, title, container) { 
-			this.options.effects[this.options.effect.active.getRandom()].call( this, image, 'hide' );
+			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'hide' );
 			//this.options.effects[this.options.effect.active.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
 		},
 		effect: {
@@ -67,7 +78,11 @@ FlowGallery = new Class({
 		this.setOptions(options);
 
 		this.wrap = $(wrap);
+		this.wrap.set( this.options.ui.wrap );
+		
 		this.containers = $$(containers);
+		this.containers.set( this.options.ui.itemContainer );
+		
 		this.images = this.containers.getElement('img');
 		this.titles = this.containers.getElement('h3');
 

@@ -7,7 +7,7 @@
 	
 	header('Content-Type: text/javascript');
 	
-//	echo file_get_contents('Core/Core.js');
+	// echo file_get_contents('Core/Core.js');
 	
 	echo file_get_contents('Core/Core/Core.js');
 	echo file_get_contents('Core/Core.Browser/Core.Browser.js');
@@ -26,9 +26,7 @@
 	echo file_get_contents('Core/Element.Event/Element.Event.js');
 	
 	echo file_get_contents('Core/Utilities.Selectors/Utilities.Selectors.js');
-
 	echo file_get_contents('Core/Utilities.DomReady/Utilities.DomReady.js');
-
 	echo file_get_contents('Core/Request/Request.js');
 	
 	echo file_get_contents('Mpr/MprCore.js');

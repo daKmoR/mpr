@@ -1,0 +1,6 @@
+.ui-Gallery { position: relative; }
+	.ui-GalleryMenu { }
+		.ui-GalleryMenu h3 { float: left; cursor: pointer; margin: 0 10px 10px; font-size: 14px; }
+		.ui-GalleryMenu h3.active { color: #D53200; }
+	.ui-GalleryPics { height: 403px; border: 1px solid #dadada; }
+		.ui-GalleryPic { position: absolute; width: 100%; height: 100%; background: orange; text-align: center; }
