@@ -26,8 +26,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 
 $require(MPR.path + 'Galleries/UvumiGallery/Resources/UvumiGallery.css');
+
+$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
+$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
+
 $require(MPR.path + 'More/Fx.Elements/Fx.Elements.js');
 $require(MPR.path + 'More/Fx.Scroll/Fx.Scroll.js');
+$require(MPR.path + 'More/Utilities.Assets/Utilities.Assets.js');
 
 
 var UvumiGallery = new Class({
