@@ -171,7 +171,7 @@ class MPR {
 		if (!$isSiteScript) {
 			if ( $urlInfo['scheme'] === 'http')
 				$scripts = $this->getUrlContent($url);
-			else
+			elseif ( is_file($url) )
 				$scripts = file_get_contents($url);
 		} else {
 			$scripts = $this->getSiteScripts( $url );
@@ -201,8 +201,11 @@ class MPR {
 					$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
 			foreach( $fileList['js'] as $file ) {
-				$content .= file_get_contents($file) . PHP_EOL;
-				$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+				if( is_file($file) ) {
+					$content .= file_get_contents($file) . PHP_EOL;
+					$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+				} else
+					$content .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
 		}
 		
