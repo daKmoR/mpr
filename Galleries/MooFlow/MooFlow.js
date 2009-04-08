@@ -11,7 +11,6 @@
  * @docmentation	http://outcut.de/MooFlow/Docmentation.html
  */ 
  
-
 $require(MPR.path + 'Galleries/MooFlow/Resources/css/MooFlow.css');
  
 $require(MPR.path + 'More/Drag.Slider/Drag.Slider.js');

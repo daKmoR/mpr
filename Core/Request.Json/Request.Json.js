@@ -6,6 +6,8 @@ License:
 	MIT-style license.
 */
 
+$require(MPR.path + 'Core/Request/Request.js');
+
 Request.JSON = new Class({
 
 	Extends: Request,
