@@ -19,11 +19,6 @@ $require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
 
-$require(MPR.path + 'Core/Element.Style/Element.Style.js');
-
-$require(MPR.path + 'Core/Request.Html/Request.Html.js');
-$require(MPR.path + 'Core/Request.Json/Request.Json.js');
-
 $require(MPR.path + 'More/Utilities.Assets/Utilities.Assets.js');
 
 var MooFlow = new Class({
@@ -411,6 +406,8 @@ Fx.Value = new Class({
 Element.implement({
 	reflect: function(arg){
 		i = arg.img.clone();
+		//forces absolute urls - needed for canvas
+		i.src = i.src;
 		if(Browser.Engine.trident){
 			i.style.filter = 'flipv progid:DXImageTransform.Microsoft.Alpha(opacity=20, style=1, finishOpacity=0, startx=0, starty=0, finishx=0, finishy='+100*arg.ref+')';
 			i.setStyles({'width':'100%', 'height':'100%'});
