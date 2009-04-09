@@ -57,15 +57,16 @@
 
 		$center = $doc;
 	} elseif ($_REQUEST['mode'] === 'spec')  {
-		$header = '
+				$header = '
 			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
 			<script src="Mpr/Resources/js/JSSpec.js" type="text/javascript"></script>
 			<script src="Mpr/Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
 			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
 		';
 		$center = '<div id="jsspec_container"></div>';
+		
+		
 	} elseif ($_REQUEST['mode'] === 'indexing') {
-	
 		ini_set('include_path', 'Mpr/Php/');
 		require_once('Zend/Search/Lucene.php');
 		require_once('Mpr/Php/class.MprIndexedDocument.php');
@@ -102,16 +103,20 @@
 		
 		$index->commit();
 		
-	} elseif ($_REQUEST['mode'] === 'search') {
+		
+	} elseif ( $_REQUEST['mode'] === 'search' && $_REQUEST['query'] != '' ) {
 		ini_set('include_path', 'Mpr/Php/');
     require_once('Zend/Search/Lucene.php');
  
     $index = Zend_Search_Lucene::open($indexPath);
-    $hits = $index->find('request');
+    $hits = $index->find( $_REQUEST['query'] );
 		
 		foreach ($hits as $hit) {
-			$center .= '<h3>' . $hit->category . ' ' . $hit->title . ' (probability: ' .  sprintf('%.0f', $hit->score*100) . '%)</h3>';
-			$center .= '<p>' . $hit->teaser . '<br /> <a href="' . htmlspecialchars( $hit->url ) . '">Read More...</a></p>';
+			$center .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . '</a></h3>';
+			$teaser = $hit->teaser;
+			if( strlen($teaser) > 100 )
+				$teaser = substr($teaser, 0, 100) . '...';
+			$center .= '<p>' . $teaser . '</p>';
 		}
 		
 	}
@@ -180,9 +185,13 @@
 	
 		<div id="wrap">
 		
-			<div id="header">
-				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
-			</div>
+			<form action="">
+				<div id="header">
+					<h2 style="border: none; margin-bottom: 10px;"><a href="./MPRAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+					<input type="text" name="query" />
+					<input type="hidden" name="mode" value="search" />
+				</div>
+			</form>
 			
 			<div class="colmask equal px210x750">
 				<div class="col1">
