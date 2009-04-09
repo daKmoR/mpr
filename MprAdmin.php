@@ -66,6 +66,12 @@
 		$center = '<div id="jsspec_container"></div>';
 	} elseif ($_REQUEST['mode'] === 'indexing') {
 	
+		ini_set('include_path', 'Mpr/Php/');
+		require_once('Zend/Search/Lucene.php');
+		require_once('Mpr/Php/class.MprIndexedDocument.php');
+		
+    $index = Zend_Search_Lucene::create($indexPath);
+	
 		$files = Helper::getFiles( './', 1 );
 		unset( $files['.git'] );
 		unset( $files['Mpr'] );
@@ -86,46 +92,22 @@
 					$curDoc['category'] = $category;
 					$curDoc['type'] = 'doc';
 					$curDoc['title'] = $dir;
-					//$curDoc['content'] = $text;
-					print_r($curDoc);
+					$curDoc['content'] = $text;
+					
+					$doc = new MprIndexedDocument($curDoc);
+					$index->addDocument($doc);
 				}
 			}
 		}
 		
-		die();
-
-		ini_set('include_path', 'Mpr/Php/');
-		require_once('Zend/Search/Lucene.php');
-    $index = Zend_Search_Lucene::create($indexPath);
-		$doc = new Zend_Search_Lucene_Document();
-
-		$doc->addField(Zend_Search_Lucene_Field::Keyword('id', 'MprAdmin.php?mode=doc&file=./More/Drag/Doc/Drag.md'));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', 'MprAdmin.php?mode=doc&file=./More/Drag/Doc/Drag.md'));
-    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', 'An extension to the base Drag class with additional functionality for dragging an Element. Supports snapping and droppables.Inherits methods, properties, options and events from Drag'));
-    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('type', 'doc'));
-    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('category', 'More'));
-    $doc->addField(Zend_Search_Lucene_Field::Text('title', 'Drag'));
-    $doc->addField(Zend_Search_Lucene_Field::UnStored('content', file_get_contents('./More/Drag/Doc/Drag.md') ));
-		$index->addDocument($doc);
-		
-		$doc2 = new Zend_Search_Lucene_Document();
-		$doc2->addField(Zend_Search_Lucene_Field::Keyword('id', 'MprAdmin.php?mode=doc&file=./More/Fx.Accordion/Doc/Fx.Accordion.md'));
-		$doc2->addField(Zend_Search_Lucene_Field::UnIndexed('url', 'MprAdmin.php?mode=doc&file=./More/Fx.Accordion/Doc/Fx.Accordion.md'));
-    $doc2->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', 'here you will see some Fx.Accordion stuff'));
-    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('type', 'doc'));
-    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('category', 'More'));
-    $doc2->addField(Zend_Search_Lucene_Field::Text('title', 'Fx.Accordion'));
-    $doc2->addField(Zend_Search_Lucene_Field::UnStored('content', file_get_contents('./More/Fx.Accordion/Doc/Fx.Accordion.md') ));
-		$index->addDocument($doc2);
-		
 		$index->commit();
-	
+		
 	} elseif ($_REQUEST['mode'] === 'search') {
 		ini_set('include_path', 'Mpr/Php/');
     require_once('Zend/Search/Lucene.php');
  
     $index = Zend_Search_Lucene::open($indexPath);
-    $hits = $index->find('complete');
+    $hits = $index->find('request');
 		
 		foreach ($hits as $hit) {
 			$center .= '<h3>' . $hit->category . ' ' . $hit->title . ' (probability: ' .  sprintf('%.0f', $hit->score*100) . '%)</h3>';
