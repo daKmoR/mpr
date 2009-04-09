@@ -50,7 +50,7 @@ FlowGallery = new Class({
 		effect: {
 			active: ['fade'],
 			options: {
-				fade: { duration: 600 },
+				fade: { duration: 1500 },
 				slide: { duration: 600 }
 			}
 		},

@@ -1,4 +1,9 @@
 <?php
+
+	$indexPath = '../MprIndex';
+	
+	/* CONFIG END */
+
 	require_once('Mpr/Php/FirePHPCore/fb.php');
 	require_once('Mpr/Php/class.MprAdmin.php');
 	
@@ -59,6 +64,74 @@
 			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
 		';
 		$center = '<div id="jsspec_container"></div>';
+	} elseif ($_REQUEST['mode'] === 'indexing') {
+	
+		$files = Helper::getFiles( './', 1 );
+		unset( $files['.git'] );
+		unset( $files['Mpr'] );
+
+		foreach($files as $category => $subdir) {
+			foreach( $subdir as $dir => $empty ) {
+				$path = './' . $category . '/' . $dir . '/Doc/' . $dir . '.md';
+				if( is_file($path) ) {
+					$text = file_get_contents($path);
+					$teaser = substr($text, 0, 300);
+					$teaser = explode("\n", $teaser);
+					$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
+				
+					$curDoc = array();
+					$curDoc['id'] = 'MprAdmin.php?mode=doc&file=' . $path;
+					$curDoc['url'] = $curDoc['id'];
+					$curDoc['teaser'] = $teaser;
+					$curDoc['category'] = $category;
+					$curDoc['type'] = 'doc';
+					$curDoc['title'] = $dir;
+					//$curDoc['content'] = $text;
+					print_r($curDoc);
+				}
+			}
+		}
+		
+		die();
+
+		ini_set('include_path', 'Mpr/Php/');
+		require_once('Zend/Search/Lucene.php');
+    $index = Zend_Search_Lucene::create($indexPath);
+		$doc = new Zend_Search_Lucene_Document();
+
+		$doc->addField(Zend_Search_Lucene_Field::Keyword('id', 'MprAdmin.php?mode=doc&file=./More/Drag/Doc/Drag.md'));
+		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', 'MprAdmin.php?mode=doc&file=./More/Drag/Doc/Drag.md'));
+    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', 'An extension to the base Drag class with additional functionality for dragging an Element. Supports snapping and droppables.Inherits methods, properties, options and events from Drag'));
+    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('type', 'doc'));
+    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('category', 'More'));
+    $doc->addField(Zend_Search_Lucene_Field::Text('title', 'Drag'));
+    $doc->addField(Zend_Search_Lucene_Field::UnStored('content', file_get_contents('./More/Drag/Doc/Drag.md') ));
+		$index->addDocument($doc);
+		
+		$doc2 = new Zend_Search_Lucene_Document();
+		$doc2->addField(Zend_Search_Lucene_Field::Keyword('id', 'MprAdmin.php?mode=doc&file=./More/Fx.Accordion/Doc/Fx.Accordion.md'));
+		$doc2->addField(Zend_Search_Lucene_Field::UnIndexed('url', 'MprAdmin.php?mode=doc&file=./More/Fx.Accordion/Doc/Fx.Accordion.md'));
+    $doc2->addField(Zend_Search_Lucene_Field::UnIndexed('teaser', 'here you will see some Fx.Accordion stuff'));
+    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('type', 'doc'));
+    $doc->addField(Zend_Search_Lucene_Field::UnIndexed('category', 'More'));
+    $doc2->addField(Zend_Search_Lucene_Field::Text('title', 'Fx.Accordion'));
+    $doc2->addField(Zend_Search_Lucene_Field::UnStored('content', file_get_contents('./More/Fx.Accordion/Doc/Fx.Accordion.md') ));
+		$index->addDocument($doc2);
+		
+		$index->commit();
+	
+	} elseif ($_REQUEST['mode'] === 'search') {
+		ini_set('include_path', 'Mpr/Php/');
+    require_once('Zend/Search/Lucene.php');
+ 
+    $index = Zend_Search_Lucene::open($indexPath);
+    $hits = $index->find('complete');
+		
+		foreach ($hits as $hit) {
+			$center .= '<h3>' . $hit->category . ' ' . $hit->title . ' (probability: ' .  sprintf('%.0f', $hit->score*100) . '%)</h3>';
+			$center .= '<p>' . $hit->teaser . '<br /> <a href="' . htmlspecialchars( $hit->url ) . '">Read More...</a></p>';
+		}
+		
 	}
 
 
@@ -80,7 +153,7 @@
 			<link rel="stylesheet" href="Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
 		<![endif]-->
 		
-		<title>Your Local MPR (MooTools Plugin Repository)</title>
+		<title><?php if($_REQUEST['mode']) echo $path[2] . ' ' . ucfirst($_REQUEST['mode']) . ' - '; ?>Your Local MPR (MooTools Plugin Repository)</title>
 		
 		<script type="text/javascript">
 			var MPR = {};
