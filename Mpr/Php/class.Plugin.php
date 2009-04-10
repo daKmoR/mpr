@@ -48,7 +48,7 @@ class Plugin extends Options {
 	public function getData() {
 		$metaPath = $this->options->path . '/Meta/Plugin.xml';
 		$demoPath = $this->options->path . '/Demos/' . $this->options->name . '.html';
-		$docPath  = $this->options->path . '/Doc/' . $this->options->name . '.md';
+		$docPath  = $this->options->path . '/Docu/' . $this->options->name . '.md';
 		$specPath = $this->options->path . '/Spec/' . $this->options->name . '.js';
 		
 		// right now I'm skipping to read the xml file
@@ -56,7 +56,7 @@ class Plugin extends Options {
 			// fb( file_get_contents( $metaPath ) );
 		
 		//$this->options->demo = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>demo</span></a>' : '';
-		$this->options->doc = is_file($docPath) ? '<a class="doc" href="?mode=doc&amp;file=' . $docPath . '"><span>doc</span></a>' : '';
+		$this->options->doc = is_file($docPath) ? '<a class="doc" href="?mode=docu&amp;file=' . $docPath . '"><span>doc</span></a>' : '';
 		$this->options->name = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>' . $this->options->name . '</span></a>' : $this->options->name;
 		$this->options->spec = is_file($specPath) ? '<a class="spec" href="?mode=spec&amp;file=' . $specPath . '"><span>spec</span></a>' : '';
 	}

@@ -29,7 +29,7 @@
 		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 	
-	} elseif ($_REQUEST['mode'] === 'doc') {
+	} elseif ($_REQUEST['mode'] === 'docu') {
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
 
 		// Get the classes:
@@ -77,10 +77,10 @@
 		$files = Helper::getFiles( './', 1 );
 		unset( $files['.git'] );
 		unset( $files['Mpr'] );
-
+		
 		foreach($files as $category => $subdir) {
 			foreach( $subdir as $dir => $empty ) {
-				$path = './' . $category . '/' . $dir . '/Doc/' . $dir . '.md';
+				$path = './' . $category . '/' . $dir . '/Docu/' . $dir . '.md';
 				if( is_file($path) ) {
 					$text = file_get_contents($path);
 					$teaser = substr($text, 0, 300);
@@ -88,11 +88,11 @@
 					$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
 				
 					$curDoc = array();
-					$curDoc['id'] = 'MprAdmin.php?mode=doc&file=' . $path;
+					$curDoc['id'] = 'MprAdmin.php?mode=docu&file=' . $path;
 					$curDoc['url'] = $curDoc['id'];
 					$curDoc['teaser'] = $teaser;
 					$curDoc['category'] = $category;
-					$curDoc['type'] = 'doc';
+					$curDoc['type'] = 'docu';
 					$curDoc['title'] = $dir;
 					$curDoc['content'] = $text;
 					
