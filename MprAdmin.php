@@ -80,28 +80,38 @@
 		
 		foreach($files as $category => $subdir) {
 			foreach( $subdir as $dir => $empty ) {
+				// docu indexing
 				$path = './' . $category . '/' . $dir . '/Docu/' . $dir . '.md';
 				if( is_file($path) ) {
 					$text = file_get_contents($path);
-					$teaser = substr($text, 0, 300);
-					$teaser = explode("\n", $teaser);
+					$teaser = explode("\n", substr($text, 0, 300) );
 					$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
+					$id = 'MprAdmin.php?mode=docu&file=' . $path;
 				
-					$curDoc = array();
-					$curDoc['id'] = 'MprAdmin.php?mode=docu&file=' . $path;
-					$curDoc['url'] = $curDoc['id'];
-					$curDoc['teaser'] = $teaser;
-					$curDoc['category'] = $category;
-					$curDoc['type'] = 'docu';
-					$curDoc['title'] = $dir;
-					$curDoc['content'] = $text;
+					$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $dir, 'content' => $text);
 					
 					$doc = new MprIndexedDocument($curDoc);
 					$index->addDocument($doc);
 				}
+				
+				// demo indexing
+				$path = './' . $category . '/' . $dir . '/Demos/' . $dir . '.html';
+				if( is_file($path) ) {
+					$demoCode = file_get_contents( $path );
+					$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+					$teaser = explode("\n", substr($text, 0, 300) );
+					$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
+					$id = 'MprAdmin.php?mode=demo&file=' . $path;
+					$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
+					$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
+
+					$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $dir, 'content' => $text);
+					$doc = new MprIndexedDocument($curDoc);
+					$index->addDocument($doc);
+				}
+				
 			}
 		}
-		
 		$index->commit();
 		
 		
@@ -110,7 +120,22 @@
     require_once('Zend/Search/Lucene.php');
  
     $index = Zend_Search_Lucene::open($indexPath);
-    $hits = $index->find( $_REQUEST['query'] );
+		$query = $_REQUEST['query'];
+
+		if( (strpos($query, '*') === false) AND (strpos($query, '"') === false) )
+			$query .= '*';
+		
+		try {
+			$hits = $index->find( $query );
+		} catch (Exception $e) {
+			echo 'Error: ' .  $e->getMessage();
+			die();
+		}
+		
+		if(count($hits) === 0) {
+			echo 'No Results';
+			die();
+		}
 		
 		$array = array();
 		if( $_REQUEST['json'] ) {
@@ -122,7 +147,7 @@
 		}
 		
 		foreach ($hits as $hit) {
-			$center .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . '</a></h3>';
+			$center .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . ' <span class="' . $hit->type . '">(' . $hit->type . ')</span></a></h3>';
 			$teaser = $hit->teaser;
 			if( strlen($teaser) > 100 )
 				$teaser = substr($teaser, 0, 100) . '...';
@@ -192,14 +217,16 @@
 					}
 				});
 				
-				$('searchResult').fade('hide');
+				var SearchResult = $('searchResult');
+				
+				SearchResult.fade('hide');
 				var SearchRequest = new Request({
 					url: 'MprAdmin.php',
 					onComplete: function(els) {
-						$('searchResult').set('html', els);
-						$('searchResult').fade(1);
-						if( $('searchResult').getStyle('opacity') == 1 )
-							$('searchResult').highlight();
+						SearchResult.set('html', els);
+						SearchResult.fade(1);
+						if( SearchResult.getStyle('opacity') == 1 )
+							SearchResult.highlight();
 					}
 				});
 				
@@ -208,8 +235,11 @@
 					SearchRequest.get( {ajax: 1, mode: 'search', query: $('searchInput').get('value')} );
 				});
 				
-				$('searchInput').addEvent('blur', function() { $('searchResult').fade(0); });
-			
+				document.addEvent('click', function(e){
+					if (e.target != SearchResult && !SearchResult.hasChild(e.target) ) 
+						SearchResult.fade(0);
+				});
+				
 			});
 		</script>
 		
