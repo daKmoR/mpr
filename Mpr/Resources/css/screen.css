@@ -85,8 +85,11 @@
 	
 	#wrap { margin: 0 auto 20px; }
 	#header { border-bottom: 1px solid #eee; margin-bottom: 10px; position: relative; }
-		#header input { position: absolute; right: 0; top: 6px; border: 1px solid #bbb; width: 250px; padding: 3px; font-size: 11px;  }
-	
+		#search { width: 258px; position: absolute; right: 0; top: 6px; z-index: 999; font-size: 11px; }
+			#search input { border: 1px solid #bbb; width: 250px; padding: 3px; font-size: 11px; }
+			#searchResult { padding: 10px; background: #ddd; }
+				#searchResult h3 { margin: 10px 0 0; padding: 0; }
+			
 	#footer  { border-top: 1px solid #eee; color: #555; margin-top: 10px; padding-top: 15px; text-align: right; }
 	
 	#contentMain { margin: 0 15px; }

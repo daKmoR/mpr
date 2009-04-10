@@ -67,6 +67,7 @@
 		
 		
 	} elseif ($_REQUEST['mode'] === 'indexing') {
+		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
 		ini_set('include_path', 'Mpr/Php/');
 		require_once('Zend/Search/Lucene.php');
 		require_once('Mpr/Php/class.MprIndexedDocument.php');
@@ -111,6 +112,15 @@
     $index = Zend_Search_Lucene::open($indexPath);
     $hits = $index->find( $_REQUEST['query'] );
 		
+		$array = array();
+		if( $_REQUEST['json'] ) {
+			foreach ($hits as $hit)
+				$array[] = array('title' => $hit->title, 'category' => $hit->category, 'teaser' => $teaser, 'url' => $hit->url);
+				
+			echo json_encode($array);
+			die();
+		}
+		
 		foreach ($hits as $hit) {
 			$center .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . '</a></h3>';
 			$teaser = $hit->teaser;
@@ -119,8 +129,12 @@
 			$center .= '<p>' . $teaser . '</p>';
 		}
 		
+		if( $_REQUEST['ajax'] ) {
+			echo $center;
+			die();
+		}
+		
 	}
-
 
 ?>
 
@@ -154,6 +168,7 @@
 		
 		<script type="text/javascript">
 			$require(MPR.path + 'More/Fx.Accordion/Fx.Accordion.js');
+			$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
 			
 			window.addEvent('domready', function() {
 				var current = 0;
@@ -175,7 +190,25 @@
 						toggler.setStyles( { 'border-width' : '1px' } );
 						toggler.getElement('span').setStyle('background-position', '0');
 					}
-				}); 		
+				});
+				
+				$('searchResult').fade('hide');
+				var SearchRequest = new Request({
+					url: 'MprAdmin.php',
+					onComplete: function(els) {
+						$('searchResult').set('html', els);
+						$('searchResult').fade(1);
+						if( $('searchResult').getStyle('opacity') == 1 )
+							$('searchResult').highlight();
+					}
+				});
+				
+				$('searchForm').addEvent('submit', function(e) {
+					e.stop();
+					SearchRequest.get( {ajax: 1, mode: 'search', query: $('searchInput').get('value')} );
+				});
+				
+				$('searchInput').addEvent('blur', function() { $('searchResult').fade(0); });
 			
 			});
 		</script>
@@ -185,11 +218,17 @@
 	
 		<div id="wrap">
 		
-			<form action="">
+			<form action="" method="get" id="searchForm">
 				<div id="header">
 					<h2 style="border: none; margin-bottom: 10px;"><a href="./MPRAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
-					<input type="text" name="query" />
-					<input type="hidden" name="mode" value="search" />
+					<div id="search">
+						<input type="text" name="query" id="searchInput" />
+						<input type="hidden" name="mode" value="search" />
+						<div id="searchResult">
+							<h3><a href="MprAdmin.php?mode=doc&amp;file=./Core/Element.Style/Doc/Element.Style.md">Core / Element.Style</a></h3>
+							<p>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $....</p>
+						</div>
+					</div>
 				</div>
 			</form>
 			

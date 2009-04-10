@@ -7,6 +7,7 @@ License:
 */
 
 $require(MPR.path + 'Core/Request/Request.js');
+$require(MPR.path + 'Core/Utilities.Json/Utilities.Json.js');
 
 Request.JSON = new Class({
 
