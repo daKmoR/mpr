@@ -186,7 +186,8 @@
 			MPR.path = '';
 		</script>
 		
-		<script src="MprJs.php" type="text/javascript"></script>
+		<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
+		<script src="MprJs.php?mode=noCore" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />
 		
 		<?php echo $header; ?>

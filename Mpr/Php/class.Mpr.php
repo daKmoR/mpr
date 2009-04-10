@@ -34,7 +34,7 @@ class MPR {
 	 *
 	 * @var array
 	 */
-	protected $exclude = array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js');
+	protected $exclude = array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js');
 	
 	/**
 	 * setter for $base

@@ -1,14 +1,18 @@
 <?php
-	require_once('Mpr/Php/class.Mpr.php');
-
 	$url = $_SERVER['HTTP_REFERER'];
-	
-	$localMPR = new MPR();
-	
 	header('Content-Type: text/javascript');
 	
-	// echo file_get_contents('Core/Core.js');
+	if($_REQUEST['mode'] !== 'noCore') {
+		echo file_get_contents('Mpr/MprFullCore.js');
+	}
+
+	if($_REQUEST['mode'] !== 'onlyCore') {
+		require_once('Mpr/Php/class.Mpr.php');
+		$localMPR = new MPR();
+		echo $localMPR->getScript($url);
+	}
 	
+	/* JUST LEAVE THEM AS A REFERENCE - TO KNOW WHAT THE MprCore NEEDS 
 	echo file_get_contents('Core/Core/Core.js');
 	echo file_get_contents('Core/Core.Browser/Core.Browser.js');
 	
@@ -49,7 +53,6 @@
 		MPR.files[MPR.path + "Core/Utilities.DomReady/Utilities.DomReady.js"] = 1;
 		MPR.files[MPR.path + "Core/Request/Request.js"] = 1;
 	';
-
-	echo $localMPR->getScript($url);
+	*/	
 
 ?>
