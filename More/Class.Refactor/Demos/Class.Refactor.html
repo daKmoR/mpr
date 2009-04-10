@@ -45,7 +45,7 @@ window.addEvent('domready', function() {
 		myGreeter.greet('MooTooler');
 	});
 	
-	$('refactor').addEvent('click', function() {
+	$('refactor').addEvent('click', function(e) { e.stop();
 		Greeter = Class.Refactor(Greeter, {
 			greet: function(person) {
 				$('log').adopt( new Element('p', {'html': 'Hi Lord ' + person }) );
@@ -60,9 +60,6 @@ window.addEvent('domready', function() {
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
-
-#reset { cursor: pointer; text-decoration: underline; }
-#reset:hover { color: #aaa; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -88,7 +85,7 @@ window.addEvent('domready', function() {
 <p>
 	A basic example on howto Refactor a given class and reuse it afterwards.
 </p>
-<h3 class="section">Basic Typewrtier</h3>
+<h3>Refactor a Greeter Class</h3>
 
 <a href="#" id="refactor">refactor</a> <br />
 <a href="#" id="greet">greet "MooTooler"</a>

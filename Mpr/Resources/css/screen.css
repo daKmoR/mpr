@@ -94,6 +94,8 @@
 	
 	#contentMain { margin: 0 15px; }
 	
+	#log { padding: 10px; background: #eee; border: 1px solid #aaa; min-height: 50px; font-style: italic; }
+	
 	#menu {}
 		#menu h4 { position: relative; cursor: pointer; height: 25px; padding: 5px 0 0 8px; background: #F9F9F9; border: 1px solid #ddd; margin: 0; }
 			#menu h4 span {	position: absolute; width: 25px; height: 25px; background: url('img/menu.png'); right: -1px; top: -1px; }

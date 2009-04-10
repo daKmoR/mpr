@@ -18,7 +18,7 @@
 		
 		<script type="text/javascript">
 			var MPR = {};
-			MPR.path = '';
+			MPR.path = '../../../';
 		</script>
 		
 		<script src="../../../MprJs.php" type="text/javascript"></script>
@@ -35,7 +35,7 @@ window.addEvent('domready', function() {
 
 	var writer = new Typewriter( $('text') );
 	
-	$('reset').addEvent('click', function() {
+	$('reset').addEvent('click', function(e) { e.stop();
 		writer.reset();
 	});
 
@@ -45,9 +45,6 @@ window.addEvent('domready', function() {
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
-
-#reset { cursor: pointer; text-decoration: underline; }
-#reset:hover { color: #aaa; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -71,12 +68,12 @@ window.addEvent('domready', function() {
 <h1>Typewriter</h1>
 <h2>Introduction</h2>
 <p>
-	a simple Typewriter class.
+	a simple Typewriter effect.
 </p>
-<h3 class="section">Basic Typewrtier</h3>
+<h3 class="section">Basic Typewriter</h3>
 <p id="text">This Text will be displayed with a little Typewriter effekt.</p>
 <br />
-<span id="reset">=> restart the effect</span>
+<a href="#" id="reset">=> restart the effect</a>
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
