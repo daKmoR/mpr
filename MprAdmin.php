@@ -1,6 +1,7 @@
 <?php
 
-	$indexPath = '../MprIndex';
+	$indexPath = 'Mpr/MprIndex';
+	$zipPath = 'Mpr/MprZip';
 	
 	/* CONFIG END */
 
@@ -18,7 +19,9 @@
 		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
-		$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+		$center .= '<a href="?mode=zip&file=' . $path[1] . '/' .  $path[2] . '"><span>download</span></a>';
+		
+		$center .= Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 		
 		$codeHeader = Helper::getContent($demoCode, '<!-- ### Mpr.Header.Start ### -->', '<!-- ### Mpr.Header.End ### -->');
 		if( $codeHeader ) $header .= $codeHeader;
@@ -159,6 +162,22 @@
 			die();
 		}
 		
+	} elseif ( $_REQUEST['mode'] === 'zip' && $_REQUEST['file'] != '' ) {
+		if( !is_dir($zipPath) )
+			mkdir($zipPath);
+		if( !is_dir($zipPath . '/' . $path[0]) )
+			mkdir($zipPath . '/' . $path[0]);
+		
+		require_once 'Mpr/Php/class.AdvZipArchive.php';
+		$myZip = new AdvZipArchive();
+		$myZip->open($zipPath . '/' . $_REQUEST['file'] . '.zip', ZIPARCHIVE::CREATE);
+
+		$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
+		$myZip->close();
+		
+		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $_REQUEST['file'] . '.zip');
+		
+		die();
 	}
 
 ?>
