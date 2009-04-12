@@ -371,7 +371,7 @@
 				</div>
 			</form>
 			
-			<div class="colmask equal px210x750">
+			<div class="colmask equal px240x720">
 				<div class="col1">
 					<div class="content" id="menu">
 						<div>
