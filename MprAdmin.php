@@ -4,18 +4,30 @@
 	$zipPath = 'Mpr/MprZip';
 	
 	/* CONFIG END */
-
-	require_once('Mpr/Php/FirePHPCore/fb.php');
-	require_once('Mpr/Php/class.MprAdmin.php');
-	
-	$MprAdmin = new MprAdmin();
-	$left = $MprAdmin->render();
 	
 	$dir = dirname( realpath(__FILE__) );
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
 		
 	$path = explode('/', $_REQUEST['file']);
+	
+	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
+		$zip = new ZipArchive();
+		if ($zip->open( $_REQUEST['file'] ) === TRUE) {
+			$zip->extractTo('./');
+			$zip->close();
+			$_REQUEST['mode'] = 'admin_general';
+			unset($_REQUEST['file']);
+		} else {
+			$center .= 'Install/Restore failed';
+		}	
+	}
+
+	require_once('Mpr/Php/FirePHPCore/fb.php');
+	require_once('Mpr/Php/class.MprAdmin.php');
+	
+	$MprAdmin = new MprAdmin();
+	$left = $MprAdmin->render();
 		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
@@ -176,6 +188,7 @@
 		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '^' . $path[1] . '.zip');
 		
 		die();
+		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div><h3>Search Index</h3><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
 		$center .= '<div><h3>Install</h3>';
@@ -190,19 +203,40 @@
 				$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $zipPath . '/' . $file . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 		}
 		if ($install !== '')
-			$center .= Helper::wrap($install, '<table><tr><th>Name</th><th>Category</th></tr>|</table>');
+			$center .= Helper::wrap($install, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
-			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "Mpr/MprZip/" [if not configured otherwise]</p>';
+			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "Mpr/MprZip/" [if not configured otherwise]. This can also just mean that you have all available Plugins installed.</p>';
 		
 	 $center .= '</div><div><h3>Restore</h3>';
 		if ($restore !== '')
-			$center .= Helper::wrap($restore, '<table><tr><th>Name</th><th>Category</th></tr>|</table>');
+			$center .= Helper::wrap($restore, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
-			$restore .= '<p class="notice">no Plugins to restore; Either you have no Plugins installed or you don\'t have the the backupfiles.</p>';
-		 
+			$center .= '<p class="notice">no Plugins to restore; pls check the directory "Mpr/MprZip/" [if not configured otherwise] if it contains the needed backupfiles</p>';
 		$center .= '</div>';
 		
+		$files = Helper::getFiles('./', 1);
+		unset( $files['.git'] );
+		unset( $files['Mpr'] );
+		unset( $files['Core'] );
+		unset( $files['More'] );
+
+		$center .= '<div><h3>UnInstall</h3>';
+		$unInstall = '';
+		foreach($files as $category => $subdir) {
+			foreach( $subdir as $dir => $empty ) {
+				$unInstall .= '<tr><td><a href="?mode=uninstall&amp;file=' . $category . '/' . $dir . '">uninstall</a></td><td>' . $dir . '</td><td>' . $category . '</td></tr>';
+			}
+		}
+		
+		if( $unInstall !== '' )
+			$center .= Helper::wrap($unInstall, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
+		else
+			$center .= '<p class="notice">nothing to UnInstall?</p>';
+			
+		$center .= '</div>';
+	
 	}
+		
 
 ?>
 
