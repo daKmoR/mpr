@@ -4,10 +4,12 @@
 	$zipPath = 'Mpr/MprZip';
 	
 	/* CONFIG END */
-	
 	$dir = dirname( realpath(__FILE__) );
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
+
+	require_once('Mpr/Php/FirePHPCore/fb.php');
+	require_once('Mpr/Php/class.MprAdmin.php');
 		
 	$path = explode('/', $_REQUEST['file']);
 	
@@ -19,12 +21,41 @@
 			$_REQUEST['mode'] = 'admin_general';
 			unset($_REQUEST['file']);
 		} else {
-			$center .= 'Install/Restore failed';
-		}	
+			$center .= 'Install failed';
+		}
+	} elseif ( $_REQUEST['mode'] === 'uninstall' && $_REQUEST['file'] != '' ) {
+		if( !is_dir($zipPath) )
+			mkdir($zipPath);
+			
+		require_once 'Mpr/Php/class.AdvZipArchive.php';
+		$myZip = new AdvZipArchive();
+		if( $myZip->open($zipPath . '/' . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
+			$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
+			$myZip->close();
+			
+			Helper::removeDir( $_REQUEST['file'] );
+			$_REQUEST['mode'] = 'admin_general';
+			
+			unset($_REQUEST['file']);
+		}
+	} elseif ( $_REQUEST['mode'] === 'restore' && $_REQUEST['file'] != '') {
+		$fileInfo = explode('^', $_REQUEST['file']);
+		if( is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+			Helper::removeDir( $_REQUEST['file'] );
+		
+		$zip = new ZipArchive();
+		if ($zip->open( $_REQUEST['file'] ) === TRUE) {
+			$zip->extractTo('./');
+			$zip->close();
+			$_REQUEST['mode'] = 'admin_general';
+			unset($_REQUEST['file']);
+		} else {
+			$center .= 'Restore failed';
+		}
+		
 	}
-
-	require_once('Mpr/Php/FirePHPCore/fb.php');
-	require_once('Mpr/Php/class.MprAdmin.php');
+	
+	
 	
 	$MprAdmin = new MprAdmin();
 	$left = $MprAdmin->render();

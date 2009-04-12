@@ -51,6 +51,17 @@ class Helper {
 		return $files;
 	}
 	
+	public static function removeDir($dir, $DeleteMe = TRUE) {
+		if ( ! $dh = @opendir ( $dir ) ) return;
+		while ( false !== ( $obj = readdir ( $dh ) ) ) {
+			if ( $obj == '.' || $obj == '..') continue;
+			if ( ! @unlink ( $dir . '/' . $obj ) ) Helper::removeDir ( $dir . '/' . $obj, true );
+		}
+		closedir ( $dh );
+		if ( $DeleteMe ) 
+			@rmdir ( $dir );
+	}
+	
 	public static function getContent($content, $markerTop = '<!-- ### Mpr.Html.Start ### -->', $markerBottom = '<!-- ### Mpr.Html.End ### -->', $mode = 'cut') {
 		$whereTop = 0;
 		if ($whereTop = strpos($content, $markerTop))
