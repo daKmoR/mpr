@@ -165,17 +165,15 @@
 	} elseif ( $_REQUEST['mode'] === 'zip' && $_REQUEST['file'] != '' ) {
 		if( !is_dir($zipPath) )
 			mkdir($zipPath);
-		if( !is_dir($zipPath . '/' . $path[0]) )
-			mkdir($zipPath . '/' . $path[0]);
 		
 		require_once 'Mpr/Php/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		$myZip->open($zipPath . '/' . $_REQUEST['file'] . '.zip', ZIPARCHIVE::CREATE);
+		$myZip->open($zipPath . '/' . $path[0] . '_' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
 
 		$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
 		$myZip->close();
 		
-		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $_REQUEST['file'] . '.zip');
+		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '_' . $path[1] . '.zip');
 		
 		die();
 	}
