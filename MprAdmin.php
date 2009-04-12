@@ -19,7 +19,7 @@
 		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
-		$center .= '<a href="?mode=zip&file=' . $path[1] . '/' .  $path[2] . '"><span>download</span></a>';
+		$center .= '<a href="' . htmlspecialchars('?mode=zip&file=' . $path[1] . '/' .  $path[2]) . '"><span>download</span></a>';
 		
 		$center .= Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 		
@@ -168,14 +168,40 @@
 		
 		require_once 'Mpr/Php/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		$myZip->open($zipPath . '/' . $path[0] . '_' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
+		$myZip->open($zipPath . '/' . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
 
 		$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
 		$myZip->close();
 		
-		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '_' . $path[1] . '.zip');
+		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '^' . $path[1] . '.zip');
 		
 		die();
+	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
+		$center .= '<div><h3>Search Index</h3><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
+		$center .= '<div><h3>Install</h3>';
+		
+		$files = Helper::getFiles($zipPath, 2, 0);
+		$install = ''; $restore = '';
+		foreach( $files as $file ) {
+			$fileInfo = explode('^', $file);
+			if( !is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+				$install .= '<tr><td><a href="#"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+			else
+				$restore .= '<tr><td><a href="#"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+		}
+		if ($install !== '')
+			$center .= Helper::wrap($install, '<table><tr><th>Name</th><th>Category</th></tr>|</table>');
+		else
+			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "Mpr/MprZip/" [if not configured otherwise]</p>';
+		
+	 $center .= '</div><div><h3>Restore</h3>';
+		if ($restore !== '')
+			$center .= Helper::wrap($restore, '<table><tr><th>Name</th><th>Category</th></tr>|</table>');
+		else
+			$restore .= '<p class="notice">no Plugins to restore; Either you have no Plugins installed or you don\'t have the the backupfiles.</p>';
+		 
+		$center .= '</div>';
+		
 	}
 
 ?>
@@ -283,6 +309,16 @@
 			<div class="colmask equal px210x750">
 				<div class="col1">
 					<div class="content" id="menu">
+						<div>
+							<h4>Admin<span class="right"></span></h4>
+							<div class="accordionContent">
+								<div>
+									<p><a href="?mode=admin_general"><span>General</span></a></p>
+									<span class="leftBottom"/>
+								</div>
+							</div>
+						</div>
+							
 						<?php echo $left; ?>
 					</div>
 				</div>

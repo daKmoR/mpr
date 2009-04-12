@@ -111,6 +111,14 @@
 		
 	#jsspec_container { position: relative; }
 	
+	.error, .notice, .success {	border: 2px solid #DDDDDD; 	margin-bottom: 10px; 	padding: 6px; } 
+	.error { background: #FBE3E4; border-color: #FBC2C4; color: #8A1F11; }
+		.error a { color:#8A1F11; }
+	.notice { background: #FFF6BF; border-color:#FFD324; color:#514721; }
+		.notice a { color:#514721; }
+	.success { background:#E6EFC2; border-color:#C6D880; color:#264409; }
+		.success a { color:#264409; }
+	
 
 	
 	
