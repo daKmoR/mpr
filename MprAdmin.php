@@ -185,9 +185,9 @@
 		foreach( $files as $file ) {
 			$fileInfo = explode('^', $file);
 			if( !is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
-				$install .= '<tr><td><a href="#"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+				$install .= '<tr><td><a href="?mode=install&amp;file=' . $zipPath . '/' . $file . '"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 			else
-				$restore .= '<tr><td><a href="#"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+				$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $zipPath . '/' . $file . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 		}
 		if ($install !== '')
 			$center .= Helper::wrap($install, '<table><tr><th>Name</th><th>Category</th></tr>|</table>');
