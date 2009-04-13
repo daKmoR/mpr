@@ -19,8 +19,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-	require_once('../FirePHPCore/fb.php');
-
 /**
  * DESCRIPTION
  *
@@ -45,6 +43,13 @@ class CssPacker {
 	 * @var array
 	 */
 	protected $file_selector = array();
+	
+	/**
+	 * DESCRIPTION
+	 *
+	 * @var array
+	 */
+	protected $file_props = array();
 
 	public function __construct($css)	{
 		$this->css = $css;
@@ -81,42 +86,37 @@ class CssPacker {
 		* there Output need to be created afterwards with $this->render();
 		*********************************************************************************/
 		
-		
 		$this->sort_css(); // seperate into selectors($this->file_selector) and properties($this->file_props)
 		$this->font_weight_text_to_numbers();
 		$this->combine_identical_selectors();
 		$this->remove_overwritten_properties();
 		
-		fb( $this->file_props );
-		fb( $this->file_selector );
-		
-		return $this->css;
-
 		// for each rule in the file - attempt to combine the different parts
-		for ($n = 0; $n < count($this->file_props); $n++)
-			$this->$this->combine_props_list($this->file_props[$n]);    
-
-		// for each rule in the file - run all the individual functions to reduce their size
-		for ($n = 0; $n < count($this->file_props); $n++)
-			array_walk($this->file_props[$n], 'reduce_prop');
+		for ($i = 0; $i < count($this->file_props); $i++)
+			$this->file_props[$i] = $this->combine_props_list( $this->file_props[$i] );
+			
+		// for each rule - run all the individual functions to reduce their size
+		for ($i = 0; $i < count($this->file_props); $i++)
+			for ($j = 0; $j < count($this->file_props[$i]); $j++)
+				$this->file_props[$i][$j] = $this->reduce_prop( $this->file_props[$i][$j] );
 
 		// remove all the properties that were blanked out earlier
 		$this->remove_empty_rules();
 
 		// check if any rules are the same as other ones and remove the first ones
 		$this->combine_identical_rules();
-
+		
 		// one final run through to remove all unnecessary parts of the arrays
 		$this->remove_empty_rules();
 
-		$output = $this->create_output();
+		$this->css = $this->render();
 
 		// turn back colons
-		$output = str_replace('[!semi-colon!]//', '://', $output);
+		$this->css = str_replace('[!semi-colon!]//', '://', $this->css);
 
-		$output = stripslashes($output);
+		$this->css = stripslashes($this->css);
 		
-		return $output;
+		return $this->css;
 	}
 	
 	// this removes html and css comments from the file
@@ -216,8 +216,6 @@ class CssPacker {
 		$string = eregi_replace(' +', ' ', $string);
 		return $string;
 	}
-
-	
  
 	// this seperates the css file into it's rules,
 	// which it then sends to another function to sort into each part
@@ -351,116 +349,109 @@ class CssPacker {
 	}
  
 	// this is the list of properties that can be combined
-	function combine_props_list(&$props) {
-		 // each call sends the current part of the stylesheet being worked on,
-		 // the combined property,
-		 // the parts which makes up this property
-		 
-		 $this->combine_props($props, 'padding', array('padding-top', 'padding-right', 'padding-bottom', 'padding-left'));    
-		 
-		 $this->combine_props($props, 'margin', array('margin-top', 'margin-right', 'margin-bottom', 'margin-left'));    
-	 
-		 $this->combine_props($props, 'list-style', array('list-style-type', 'list-style-position', 'list-style-image'));
-		 $this->combine_props($props, 'list-style', array('list-style-type', 'list-style-position'));
-		 
-		 $this->combine_props($props, 'outline', array('outline-color', 'outline-style', 'outline-width'));    
-		 
-		 // to do: this might be improvable
-		 $this->combine_props($props, 'background', array('background-color', 'background-image', 'background-repeat', 'background-attachment', 'background-position'));
-	 
-		 // to do: combine all border-[places] if they're the same (need a special function for that)
-		 $this->combine_props($props, 'border-bottom', array('border-bottom-width', 'border-bottom-style', 'border-bottom-color'));
-		 $this->combine_props($props, 'border-top', array('border-top-width', 'border-top-style', 'border-top-color'));
-		 $this->combine_props($props, 'border-left', array('border-left-width', 'border-left-style', 'border-left-color'));
-		 $this->combine_props($props, 'border-right', array('border-right-width', 'border-right-style', 'border-right-color'));
-		 
-		 // to do: this needs some checking
-		 $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-weight', 'font-size', 'line-height', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-variant', 'font-weight', 'font-size', 'line-height', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-weight', 'font-size', 'line-height', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-size', 'line-height', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-variant', 'font-weight', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-weight', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-variant', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-weight', 'font-size', 'font-family'));
-		 $this->combine_props($props, 'font', array('font-style', 'font-size', 'font-family'));    
+	function combine_props_list($props) {
+		// each call sends the current part of the stylesheet being worked on,
+		// the combined property,
+		// the parts which makes up this property
+
+		$props = $this->combine_props($props, 'padding', array('padding-top', 'padding-right', 'padding-bottom', 'padding-left'));
+
+		$props = $this->combine_props($props, 'margin', array('margin-top', 'margin-right', 'margin-bottom', 'margin-left'));
+
+		$props = $this->combine_props($props, 'list-style', array('list-style-type', 'list-style-position', 'list-style-image'));
+		$props = $this->combine_props($props, 'list-style', array('list-style-type', 'list-style-position'));
+
+		$props = $this->combine_props($props, 'outline', array('outline-color', 'outline-style', 'outline-width'));
+
+		// to do: this might be improvable
+		$props = $this->combine_props($props, 'background', array('background-color', 'background-image', 'background-repeat', 'background-attachment', 'background-position'));
+
+		// to do: combine all border-[places] if they're the same (need a special function for that)
+		$props = $this->combine_props($props, 'border-bottom', array('border-bottom-width', 'border-bottom-style', 'border-bottom-color'));
+		$props = $this->combine_props($props, 'border-top', array('border-top-width', 'border-top-style', 'border-top-color'));
+		$props = $this->combine_props($props, 'border-left', array('border-left-width', 'border-left-style', 'border-left-color'));
+		$props = $this->combine_props($props, 'border-right', array('border-right-width', 'border-right-style', 'border-right-color'));
+
+		// to do: this needs some checking
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-weight', 'font-size', 'line-height', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-weight', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-variant', 'font-weight', 'font-size', 'line-height', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-weight', 'font-size', 'line-height', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-size', 'line-height', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-variant', 'font-weight', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-weight', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-variant', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-variant', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-weight', 'font-size', 'font-family'));
+		$props = $this->combine_props($props, 'font', array('font-style', 'font-size', 'font-family'));
+		
+		return $props;
 	}
  
 	// this code is responsible for combining properties off rules
 	// example: margin-left, margin-right, margin-top, margin-bottom can be combined to just margin:
 	// the combined variable would be 'margin' and the parts would eb the properties before
-	function combine_props(&$props, $combined, $parts) {
-		 // split the properties and values
-		 for ($n = 0; $n < count($props); $n++) {
-				 // add the type to an array
-				 $props_type[] = substr($props[$n], 0, strpos($props[$n], ':'));
-				 // add the values to an array, although those are just stored and not processed
-				 $props_values[] = substr($props[$n], strpos($props[$n], ':')+1, strlen($props[$n]));
-		 }
-		 // assume it's combinable
-		 $combinable = TRUE;
-		 // loop through all the different properties that can be combined in this instance
-		 for ($n = 0; $n < count($parts); $n++)
-		 {
-				 // check if this property isn't contained within the combinable array
-				 if (!in_array($parts[$n], $props_type))
-						 // if so, it can't be combined, so store that
-						 $combinable = FALSE;
-		 }
-		 // if any of the properties were contained in the combinable array
-		 if ($combinable)
-		 {
-				 // loop through all the parts
-				 for ($a = 0; $a < count($parts); $a++)
-				 {
-						 // loop through all the properties found here
-						 for ($b = 0; $b < count($props_type); $b++)
-						 {
-								 // check if it's the same
-								 if ($props_type[$b] == $parts[$a])
-								 {
-										 // add the current values to the combined values
-										 // this must be done in the correct order
-										 $combined_values[] = $props_values[$b];
-										 // no longer need the property since it's been added to the combined part, so remove it
-										 $props[$b] = NULL;
-								 }
-						 }
-				 }
-				 // add the new combined property with all the values of the individual propertys
-				 $props[] = $combined . ':' . implode(' ', $combined_values);
-		 }
+	function combine_props($props, $combined, $parts) {
+		// split the properties and values
+		for ($n = 0; $n < count($props); $n++) {
+			// add the type to an array
+			$props_type[] = substr($props[$n], 0, strpos($props[$n], ':'));
+			// add the values to an array, although those are just stored and not processed
+			$props_values[] = substr($props[$n], strpos($props[$n], ':')+1, strlen($props[$n]));
+		}
+		// assume it's combinable
+		$combinable = TRUE;
+		// loop through all the different properties that can be combined in this instance; if we can't find all it's not combineable
+		for ($n = 0; $n < count($parts); $n++) {
+			if (!in_array($parts[$n], $props_type))
+				$combinable = FALSE;
+		}
+		// if any of the properties were contained in the combinable array
+		if ($combinable) {
+			// loop through all the parts
+			for ($a = 0; $a < count($parts); $a++) {
+				// loop through all the properties found here
+				for ($b = 0; $b < count($props_type); $b++) {
+					// check if it's the same
+					if ($props_type[$b] == $parts[$a]) {
+						// add the current values to the combined values
+						// this must be done in the correct order
+						$combined_values[] = $props_values[$b];
+						// no longer need the property since it's been added to the combined part, so remove it
+						$props[$b] = NULL;
+					}
+				}
+			}
+			// add the new combined property with all the values of the individual propertys
+			$props[] = $combined . ':' . implode(' ', $combined_values);
+		}
+		return $props;
 	}
  
 	// this function just calls other ones
-	function reduce_prop(&$item, $key) {
-		 // reduces six hex codes to three (#ff0000 -> #f00)
-		 if ($_REQUEST['opt_short_hex'])
-				 short_hex($item);
-		 // removes useless values from padding and margins (margin: 4px 5px 4px 5px -> margin: 4px 5px)
-		 if ($_REQUEST['opt_short_margins_and_paddings']);
-				 compress_padding_and_margins($item);
+	public function reduce_prop($item) {
+		$item = $this->short_hex($item);
+		$item = $this->compress_padding_and_margins($item);
+		return $item;
 	}
  
 	// this code turns hex codes into short three-character hex codes when possible
 	// for example:
 	//  #ff0000 -> #f00
 	//  #aabbcc -> #abc
-	function short_hex(&$item) {
-		 // check if this part of the code has some hex codes in it
-		 if (strstr($item, '#')) {
-				 // grab the next six characters
-				 $hex = substr($item, strpos($item, '#')+1, 6);
-				 // check if this is a hex code, so ids don't get picked up
-				 if (eregi('[0-9a-f]{6}', $hex)) {
-						 // if the characters in each pair match
-						 if ($hex[0] == $hex[1] && $hex[2] == $hex[3] && $hex[4] == $hex[5])
-								 // it can be made shorter, so convert to the shorter version
-								 $item = eregi_replace('#' . $hex, '#' . $hex[0] . $hex[2] . $hex[4], $item);
-				 }
-		 }
+	function short_hex($item) {
+		// check if this part of the code has some hex codes in it
+		if (strstr($item, '#')) {
+			// grab the next six characters
+			$hex = substr($item, strpos($item, '#')+1, 6);
+			// check if this is a hex code, so ids don't get picked up
+			if (eregi('[0-9a-f]{6}', $hex)) {
+				// if the characters in each pair match - it can be made shorter, so convert to the shorter version
+				if ($hex[0] == $hex[1] && $hex[2] == $hex[3] && $hex[4] == $hex[5])
+					$item = eregi_replace('#' . $hex, '#' . $hex[0] . $hex[2] . $hex[4], $item);
+			}
+		}
+		return $item;
 	}
  
 	// this removes the useless values from padding and margin properties
@@ -469,191 +460,112 @@ class CssPacker {
 	//  padding: 5px 5px 5px 5px -> padding: 5px
 	//  margin: 2px 4px 2px 4px -> margin: 2px 4px
 	//  padding: 3px 5px 9px 5px -> padding: 3px 5px 9px
-	function compress_padding_and_margins(&$item) {
-		 // get the type and value of the property
-		 $item_parts = explode(':', $item);
-	 
-		 // check if this is a padding or margin property
-		 if ($item_parts[0] == 'padding' || $item_parts[0] == 'margin')
-		 {
-				 // place all the values into an array
-				 $values = explode(' ', $item_parts[1]);
-				 
-				 // switched based on the number of values found
-				 // no need to check if it's 1, because that can't be compressed
-				 switch (count($values))
-				 {
-						 // icey demonstrates the art of making pop corn:
-						 case 2:
-								 // example: margin: 4px 4px
-								 if ($values[0] == $values[1])
-										 // example: margin: 4px
-										 array_pop($values);
-						 break;            
-						 case 3:
-								 // example: margin: 5px 7px 5px
-								 if ($values[0] == $values[2])
-								 {
-										 // example: margin: 5px 7px
-										 array_pop($values);
-										 // example: margin: 4px 4px
-										 if ($values[0] == $values[1])
-												 // example: 4px
-												 array_pop($values);
-								 }    
-						 break;            
-						 case 4:
-								 // example: margin: 3px 7px 9px 7px
-								 if ($values[1] == $values[3])
-								 {
-										 // example: 3px 7px 9px
-										 array_pop($values);
-										 // example: 3px 4px 3px
-										 if ($values[0] == $values[2])
-										 {
-												 // example: 3px 4px
-												 array_pop($values);
-												 // example: 7px 7px
-												 if ($values[0] == $values[1])
-														 // example: 7px
-														 array_pop($values);
-										 }                    
-								 }    
-						 break;            
-				 }
-				 // check if any changes were made by comparing the original values to the current values
-				 if (implode(' ', $values) != $item_parts[1])
-						 // if so, change the item in the array to the shorter version
-						 $item = $item_parts[0] . ':' . implode(' ', $values);
-		 }
+	function compress_padding_and_margins( $item ) {
+		// get the type and value of the property
+		$item_parts = explode(':', $item);
+
+		// check if this is a padding or margin property
+		if ($item_parts[0] == 'padding' || $item_parts[0] == 'margin') {
+			// place all the values into an array
+			$values = explode(' ', $item_parts[1]);
+
+			// switched based on the number of values found
+			// no need to check if it's 1, because that can't be compressed
+			switch (count($values)) {
+				// icey demonstrates the art of making pop corn:
+			case 2:
+				// example: margin: 4px 4px
+				if ($values[0] == $values[1])
+				// example: margin: 4px
+				array_pop($values);
+				break;
+			case 3:
+				// example: margin: 5px 7px 5px
+				if ($values[0] == $values[2]) {
+					// example: margin: 5px 7px
+					array_pop($values);
+					// example: margin: 4px 4px
+					if ($values[0] == $values[1])
+					// example: 4px
+					array_pop($values);
+				}
+				break;
+			case 4:
+				// example: margin: 3px 7px 9px 7px
+				if ($values[1] == $values[3]) {
+					// example: 3px 7px 9px
+					array_pop($values);
+					// example: 3px 4px 3px
+					if ($values[0] == $values[2]) {
+						// example: 3px 4px
+						array_pop($values);
+						// example: 7px 7px
+						if ($values[0] == $values[1])
+						// example: 7px
+						array_pop($values);
+					}
+				}
+				break;
+			}
+			// check if any changes were made by comparing the original values to the current values
+			if (implode(' ', $values) != $item_parts[1])
+			// if so, change the item in the array to the shorter version
+			$item = $item_parts[0].':'.implode(' ', $values);
+		}
+		return $item;
 	}
  
 	function remove_empty_rules() {
-		 // loop through each section of the css file and see if it contains no properties
-		 for ($a = 0; $a < count($this->file_selector); $a++)
-		 {
-				 // remove blank items from the array
-				 $this->file_props[$a] = array_values(array_diff($this->file_props[$a], array(NULL)));
-				 // check if this part has no properties
-				 if (!$this->file_props[$a][0])
-				 {
-						 // remove the empty prop part of the array and the class(es)
-						 array_splice($this->file_selector, $a, 1);
-						 array_splice($this->file_props, $a, 1);
-						 // decrease by one due to the decreased total
-						 $a--;
-				 }
-		 }
+		// loop through each section of the css file and see if it contains no properties
+		for ($a = 0; $a < count($this->file_selector); $a++) {
+			// remove blank items from the array
+			$this->file_props[$a] = array_values(array_diff($this->file_props[$a], array(NULL)));
+			// check if this part has no properties
+			if (!$this->file_props[$a][0]) {
+				// remove the empty prop part of the array and the class(es)
+				array_splice($this->file_selector, $a, 1);
+				array_splice($this->file_props, $a, 1);
+				// decrease by one due to the decreased total
+				$a--;
+			}
+		}
 	}
  
 	// now that the stylesheet has been compressed as much as possible,
 	// the code to combine identical classes is used
 	function combine_identical_rules() {
-	 
-		 // loop through each rule
-		 for ($a = 0; $a < count($this->file_props); $a++)
-		 {
-				 // loop from 0 up the current number, this ensures future processed properties aren't processed prematurely
-				 for ($b = 0; $b < $a; $b++)
-				 {
-						 if (substr($this->file_selector[$a][0], 0, 1) <> "@" && substr($this->file_selector[$b][0], 0, 1) <> "@")
-						 {
-								 // check if this rule is identical to an earlier one
-								 if (!array_diff($this->file_props[$a], $this->file_props[$b]) && !array_diff($this->file_props[$b], $this->file_props[$a]))
-								 {
-										 // combine the selectors
-										 $this->file_selector[$a] = array_unique(array_merge($this->file_selector[$a], $this->file_selector[$b]));
-										 // remove the old properties
-										 $this->file_props[$b] = array(NULL);
-										 // remove the old selectors
-										 $this->file_selector[$b] = array(NULL);
-								 }
-						 }
-				 }
-		 }
+		// loop through each rule
+		for ($a = 0; $a < count($this->file_props); $a++) {
+			// loop from 0 up the current number, this ensures future processed properties aren't processed prematurely
+			for ($b = 0; $b < $a; $b++) {
+				if (substr($this->file_selector[$a][0], 0, 1) <> "@" && substr($this->file_selector[$b][0], 0, 1) <> "@") {
+					// check if this rule is identical to an earlier one
+					if (!array_diff($this->file_props[$a], $this->file_props[$b]) && !array_diff($this->file_props[$b], $this->file_props[$a])) {
+						// combine the selectors
+						$this->file_selector[$a] = array_unique(array_merge($this->file_selector[$a], $this->file_selector[$b]));
+						// remove the old properties
+						$this->file_props[$b] = array(NULL);
+						// remove the old selectors
+						$this->file_selector[$b] = array(NULL);
+					}
+				}
+			}
+		}
 	}
- 
-	function create_output()
-	{
-		 
-		 if ($_REQUEST['opt_output_colour'])
-		 {
-				 if ($_REQUEST['opt_output_compress'])
-				 {
-						 $css = '<span style="color:#000;font-family:monospace">';
-						 for ($a = 0; $a < count($this->file_selector); $a++)
-						 {
-								 for ($b = 0; $b < count($this->file_selector[$a]); $b++)
-										 $this->file_selector[$a][$b] = '<span style="color:#685">' . $this->file_selector[$a][$b] . '</span>';
-								 for ($b = 0; $b < count($this->file_props[$a]); $b++)
-								 {
-										 $parts = explode(':', $this->file_props[$a][$b]);
-										 $this->file_props[$a][$b] = '<span style="color:#c86464">' . $parts[0] . '</span>:<span style="color:#369">' . $parts[1] . '</span>';        
-								 }    
-								 $css .= implode(',', $this->file_selector[$a]) . '{';
-								 $css .= implode(';', $this->file_props[$a]) . '}';
-						 }
-						 $css .= '</span>';        
-				 }
-				 else
-				 {
-						 $css = '<span style="color:#000;font-family:monospace">';
-						 for ($a = 0; $a < count($this->file_selector); $a++)
-						 {
-								 for ($b = 0; $b < count($this->file_selector[$a]); $b++)
-										 $this->file_selector[$a][$b] = '<span style="color:#685">' . $this->file_selector[$a][$b] . '</span>';
-								 for ($b = 0; $b < count($this->file_props[$a]); $b++)
-								 {
-										 $parts = explode(':', $this->file_props[$a][$b]);
-										 $this->file_props[$a][$b] = '<span style="color:#c86464"> &nbsp; &nbsp; &nbsp;' . $parts[0] . '</span>: <span style="color:#369">' . $parts[1] . '</span>';        
-								 }    
-								 $css .= implode(', ', $this->file_selector[$a]) . ' {<br>';
-								 $css .= implode(';<br>', $this->file_props[$a]) . ';<br>}<br> <br>';
-						 }
-						 $css .= '</span>';
-				 }
-		 }
-		 else
-		 {
-				 if ($_REQUEST['opt_output_compress'])
-				 {    
-						 $css = '<span style="font-family:monospace">';
-						 for ($a = 0; $a < count($this->file_selector); $a++)
-						 {
-								 for ($b = 0; $b < count($this->file_selector[$a]); $b++)
-										 $this->file_selector[$a][$b] = $this->file_selector[$a][$b];
-								 for ($b = 0; $b < count($this->file_props[$a]); $b++)
-								 {
-										 $parts = explode(':', $this->file_props[$a][$b]);
-										 $this->file_props[$a][$b] = '' . $parts[0] . ':' . $parts[1];        
-								 }    
-								 $css .= implode(',', $this->file_selector[$a]) . '{';
-								 $css .= implode(';', $this->file_props[$a]) . '}';
-						 }
-						 $css .= '</span>';    
-				 }
-				 else
-				 {
-						 $css = '<span style="font-family:monospace">';
-						 for ($a = 0; $a < count($this->file_selector); $a++)
-						 {
-								 for ($b = 0; $b < count($this->file_selector[$a]); $b++)
-										 $this->file_selector[$a][$b] = $this->file_selector[$a][$b];
-								 for ($b = 0; $b < count($this->file_props[$a]); $b++)
-								 {
-										 $parts = explode(':', $this->file_props[$a][$b]);
-										 $this->file_props[$a][$b] = ' &nbsp; &nbsp; &nbsp;' . $parts[0] . ': ' . $parts[1];        
-								 }    
-								 $css .= implode(', ', $this->file_selector[$a]) . ' {<br>';
-								 $css .= implode(';<br>', $this->file_props[$a]) . ';<br>}<br> <br>';
-						 }
-						 $css .= '</span>';    
-				 }
-		 }
-		 
-		 return $css;
+	
+	function render() {
+		for ($a = 0; $a < count($this->file_selector); $a++) {
+			for ($b = 0; $b < count($this->file_selector[$a]); $b++)
+				$this->file_selector[$a][$b] = $this->file_selector[$a][$b];
+			for ($b = 0; $b < count($this->file_props[$a]); $b++) {
+				$parts = explode(':', $this->file_props[$a][$b]);
+				$this->file_props[$a][$b] = '' . $parts[0] . ':' . $parts[1];        
+			}
+			$css .= implode(',', $this->file_selector[$a]) . '{';
+			$css .= implode(';', $this->file_props[$a]) . '}';
+		}
+		return $css;
 	}
 
 }
- 
 ?>
