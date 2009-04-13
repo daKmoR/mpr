@@ -83,7 +83,7 @@ class JsPacker {
 		'High ASCII' => 95
 	);
 	
-	public function __construct($_script, $_encoding = 62, $_fastDecode = true, $_specialChars = false)	{
+	public function __construct($_script, $_encoding = 'normal', $_fastDecode = true, $_specialChars = false)	{
 		$this->_script = $_script . "\n";
 		if (array_key_exists($_encoding, $this->LITERAL_ENCODING))
 			$_encoding = $this->LITERAL_ENCODING[$_encoding];
