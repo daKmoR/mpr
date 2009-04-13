@@ -28,7 +28,7 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
  */
-class CssPacker {
+class CssMin {
 
 	/**
 	 * DESCRIPTION
@@ -56,8 +56,8 @@ class CssPacker {
 	}
 
 	public static function compress($string) {
-		$obj = new CssPacker($string);
-		return $obj->pack();
+		$obj = new CssMin($string);
+		return $obj->min();
 	}
 	
 	/**
@@ -67,7 +67,7 @@ class CssPacker {
 	 * @return void
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	public function pack() {
+	public function min() {
 		// temporarily change semicolons in web links
 		$this->css = str_replace('://', '[!semi-colon!]//', $this->css);
 
