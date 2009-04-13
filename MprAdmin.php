@@ -55,14 +55,11 @@
 		
 	}
 	
-	
-	
 	$MprAdmin = new MprAdmin();
 	$left = $MprAdmin->render();
 		
 	if ($_REQUEST['mode'] === 'demo') {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
-		$center .= '<a href="' . htmlspecialchars('?mode=zip&file=' . $path[1] . '/' .  $path[2]) . '"><span>download</span></a>';
 		
 		$center .= Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 		
@@ -221,8 +218,8 @@
 		die();
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
-		$center .= '<div><h3>Search Index</h3><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
-		$center .= '<div><h3>Install</h3>';
+		$center .= '<div><h2>Search Index</h2><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
+		$center .= '<div><h2>Install</h2>';
 		
 		$files = Helper::getFiles($zipPath, 2, 0);
 		$install = ''; $restore = '';
@@ -238,20 +235,21 @@
 		else
 			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "Mpr/MprZip/" [if not configured otherwise]. This can also just mean that you have all available Plugins installed.</p>';
 		
-	 $center .= '</div><div><h3>Restore</h3>';
+	 $center .= '</div><div><h2>Restore</h2>';
 		if ($restore !== '')
 			$center .= Helper::wrap($restore, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
 			$center .= '<p class="notice">no Plugins to restore; pls check the directory "Mpr/MprZip/" [if not configured otherwise] if it contains the needed backupfiles</p>';
 		$center .= '</div>';
+		$center .= '<div><h2>UnInstall</h2><p class="notice">for uninstalling pls use the Uninstall Option on the left</p></div>';
+
 		
+	} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
 		$files = Helper::getFiles('./', 1);
 		unset( $files['.git'] );
 		unset( $files['Mpr'] );
-		unset( $files['Core'] );
-		unset( $files['More'] );
 
-		$center .= '<div><h3>UnInstall</h3>';
+		$center .= '<div><h2>UnInstall</h2>';
 		$unInstall = '';
 		foreach($files as $category => $subdir) {
 			foreach( $subdir as $dir => $empty ) {
@@ -263,9 +261,8 @@
 			$center .= Helper::wrap($unInstall, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
 			$center .= '<p class="notice">nothing to UnInstall?</p>';
-			
 		$center .= '</div>';
-	
+		
 	}
 		
 
@@ -379,6 +376,7 @@
 							<div class="accordionContent">
 								<div>
 									<p><a href="?mode=admin_general"><span>General</span></a></p>
+									<p><a href="?mode=admin_uninstall"><span>UnInstall</span></a></p>
 									<span class="leftBottom"/>
 								</div>
 							</div>

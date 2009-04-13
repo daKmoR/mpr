@@ -79,6 +79,7 @@
 
 	h1, h2, h3 {	border-bottom: 1px solid #ddd; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-weight: normal; }
 	h1 { margin: 0 0 20px 0; color: #78BA91; }
+	h2 { color: #78ba91; }
 	h3 { border: none; }
 	h1 a:link, h1 a:visited { color: #c17878; text-decoration: none; }
 	h2 a:link, h2 a:visited { color: #78ba91;	text-decoration: none; }
