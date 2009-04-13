@@ -1,9 +1,7 @@
 <?php
 
-	$indexPath = 'Mpr/MprIndex';
-	$zipPath = 'Mpr/MprZip';
+	require_once 'Mpr/Php/MprConfig.php';
 	
-	/* CONFIG END */
 	$dir = dirname( realpath(__FILE__) );
 	if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
 		die('you can only use files within MPR');
@@ -34,7 +32,7 @@
 			$myZip->close();
 			
 			Helper::removeDir( $_REQUEST['file'] );
-			$_REQUEST['mode'] = 'admin_general';
+			$_REQUEST['mode'] = 'admin_uninstall';
 			
 			unset($_REQUEST['file']);
 		}
@@ -71,6 +69,7 @@
 		
 		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
+		
 	
 	} elseif ($_REQUEST['mode'] === 'docu') {
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
@@ -82,23 +81,18 @@
 		require_once 'Mpr/Php/mdocs/geshi.mdocs.php';
 
 		$doc = file_get_contents( $_REQUEST['file'] );
-		
-		// Initialize Markdown
 		$markdown = new MarkdownExtra_Parser_mDocs();
 		$markdown->maxlevel = 1;
 		$markdown->minlevel = 2;
-		
-		// Initialize GeSHi (Syntax Highlighting)
 		$geshi = new GeSHi_mDocs();
 		$geshi->default_language = 'javascript';
-		
-		// Apply Markdown Syntax:
 		$doc = $markdown->transform($doc);
 
 		// Apply GeSHi Syntax Highlighting:
 		$doc = $geshi->parse_codeblocks($doc);
-
 		$center = $doc;
+		
+		
 	} elseif ($_REQUEST['mode'] === 'spec')  {
 				$header = '
 			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
@@ -214,8 +208,8 @@
 		$myZip->close();
 		
 		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '^' . $path[1] . '.zip');
-		
 		die();
+		
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div><h2>Search Index</h2><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
@@ -262,7 +256,6 @@
 		else
 			$center .= '<p class="notice">nothing to UnInstall?</p>';
 		$center .= '</div>';
-		
 	}
 		
 
