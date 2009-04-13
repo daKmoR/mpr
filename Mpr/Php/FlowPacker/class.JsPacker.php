@@ -21,17 +21,17 @@
  * ----------------------------------------------------------------------
  * 
  * examples of usage :
- * $myPacker = new JavaScriptPacker($script, 62, true, false);
+ * $myPacker = new JsPacker($script, 62, true, false);
  * $packed = $myPacker->pack();
  * 
  * or
  * 
- * $myPacker = new JavaScriptPacker($script, 'Normal', true, false);
+ * $myPacker = new JsPacker($script, 'Normal', true, false);
  * $packed = $myPacker->pack();
  * 
  * or (default values)
  * 
- * $myPacker = new JavaScriptPacker($script);
+ * $myPacker = new JsPacker($script);
  * $packed = $myPacker->pack();
  * 
  * 
@@ -66,7 +66,7 @@
  */
 
 
-class JavaScriptPacker {
+class JsPacker {
 	// constants
 	const IGNORE = '$1';
 
@@ -83,14 +83,18 @@ class JavaScriptPacker {
 		'High ASCII' => 95
 	);
 	
-	public function __construct($_script, $_encoding = 62, $_fastDecode = true, $_specialChars = false)
-	{
+	public function __construct($_script, $_encoding = 62, $_fastDecode = true, $_specialChars = false)	{
 		$this->_script = $_script . "\n";
 		if (array_key_exists($_encoding, $this->LITERAL_ENCODING))
 			$_encoding = $this->LITERAL_ENCODING[$_encoding];
 		$this->_encoding = min((int)$_encoding, 95);
 		$this->_fastDecode = $_fastDecode;	
 		$this->_specialChars = $_specialChars;
+	}
+	
+	public static function compress($string) {
+		$obj = new JsPacker($string);
+		return $obj->pack();
 	}
 	
 	public function pack() {
@@ -341,7 +345,7 @@ class JavaScriptPacker {
 			$unpack = preg_replace($ENCODE, $inline, $unpack);
 		}
 		// pack the boot function too
-		$unpackPacker = new JavaScriptPacker($unpack, 0, false, true);
+		$unpackPacker = new JsPacker($unpack, 0, false, true);
 		$unpack = $unpackPacker->pack();
 		
 		// arguments
