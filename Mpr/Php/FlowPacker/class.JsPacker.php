@@ -20,6 +20,9 @@
  * 1.1 : correct a bug, '\0' packed then unpacked becomes '\'.
  * ----------------------------------------------------------------------
  * 
+ * added Static function for easy use: 
+ * $packed = JsPacker::compress($script);
+ *
  * examples of usage :
  * $myPacker = new JsPacker($script, 62, true, false);
  * $packed = $myPacker->pack();
