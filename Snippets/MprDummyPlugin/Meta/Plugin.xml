@@ -12,7 +12,7 @@
 		<category>Dummy</category>
 	</categories>
 	<reservations>
-		<!-- write in things you globally reserve like classnameas -->
+		<!-- write in things you globally reserve like class names  //syntax not final -->
 		<class>MprDummyPlugin</class>
 		<element>
 			<implement>show</implement>
