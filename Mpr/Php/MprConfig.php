@@ -13,4 +13,8 @@
 		'compress' => 'minify' //[none, minify] should the generated Css and Js be minified?
 	);
 	
+	// if there is a MprConfig.php file in the root folder include it - you can override any value there
+	if( is_file('MprConfig.php') )
+		include_once 'MprConfig.php';
+	
 ?>

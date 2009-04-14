@@ -60,7 +60,9 @@
 	} elseif ( $_REQUEST['mode'] === 'clear_cache' ) {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
 	
-		Helper::removeDir( $MprOptions['cachePath'] );
+		Helper::removeDir( $MprOptions['cachePath'] . 'css/' );
+		Helper::removeDir( $MprOptions['cachePath'] . 'js/' );
+		
 		$_REQUEST['mode'] = 'admin_general';
 	}
 	
