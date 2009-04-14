@@ -174,7 +174,8 @@ class MPR extends Options {
 		
 		if( $this->options->useCache === true ) {
 			$siteRequire = $this->getFileList( $siteScript, 'noLoad' );
-			$name = md5( implode(' ', $siteRequire[$what]) );
+			$requireString = ($what === 'js') ? implode(' ', $siteRequire['js']) : implode(' ', $siteRequire['js']) . ' ' . implode(' ', $siteRequire['css']);
+			$name = md5( $requireString );
 		
 			//if a cache is found for these required files it's returned
 			if( is_file($this->options->cachePath . $what . '/' . $name) )
