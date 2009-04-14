@@ -1,20 +1,19 @@
 <?php
-
 /**
- * DESCRIPTION
+ * a simple class to use MooTools Style options in PHP
  *
  * @package MPR
- * @subpackage Controller
  * @version $Id:
  * @copyright Copyright belongs to the respective authors
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
+ * @author	Thomas Allmer <at@delusionworld.com>
+ * @license	MIT-style license
  */
 class Options {
 
 	/**
-	 * DESCRIPTION
+	 * This array holds all the options you can set
 	 *
-	 * @var string
+	 * @var array
 	 */
 	public $options = array();
 	
@@ -46,5 +45,4 @@ class Options {
 	}
 
 }
-
 ?>

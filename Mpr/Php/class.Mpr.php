@@ -1,4 +1,7 @@
 <?php
+
+require_once 'class.Options.php';
+
 /**
  * it allows you to easily find out what MooTools file you need an creates a costum version for you.
  *
@@ -6,21 +9,14 @@
  * @copyright Copyright belongs to the respective authors
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
  */
-class MPR {
-	
-	/**
-	 * Holds the absolute url to the url
-	 *
-	 * @var string
-	 */
-	protected $base = '';
-	
-	/**
-	 * relative path from the script to the MPR
-	 *
-	 * @var string
-	 */
-	protected $pathToMpr = '';
+class MPR extends Options {
+
+	public $options = array(
+		'base' => '',
+		'pathToMpr' => '',
+		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
+		'cssMprIsUsed' => true
+	);
 	
 	/**
 	 * A array for simple caching
@@ -29,30 +25,9 @@ class MPR {
 	 */
 	protected $cache = array();
 
-	/**
-	 * A array for simple caching
-	 *
-	 * @var array
-	 */
-	protected $exclude = array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js');
-	
-	/**
-	 * setter for $base
-	 *
-	 * @param string $base
-	 * @return void
-	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	public function setBase($base) {
-		$this->base = $base;
+	public function __construct($options = null) {
+		$this->setOptions($options);
 	}
-	
-	/**
-	 * set if the css is also created with this script [should be autoset, xxx - not implemented yet]
-	 *
-	 * @var boolean
-	 */
-	protected $cssMprIsUsed = true;
 	
 	/**
 	 * returns the full js code you need
@@ -77,7 +52,7 @@ class MPR {
 	}
 
 	/**
-	 * finds all need files and same them in an array['js'] and array['css']
+	 * finds all need files and save them in an array['js'] and array['css']
 	 *
 	 * @param string $url
 	 * @return array
@@ -93,7 +68,7 @@ class MPR {
 			preg_match_all($regularExpressionRequire, $scripts[$i], $results, PREG_SET_ORDER);
 			$results = array_reverse($results);
 			foreach($results as $result) {
-				//$result = preg_replace( array( '#\s*?MPR\.path\s*?\+\s*#', '#\'#' ), array( $this->pathToMpr, '' ), $result[1]);	// MPR.path + '[...]'
+				//$result = preg_replace( array( '#\s*?MPR\.path\s*?\+\s*#', '#\'#' ), array( $this->options->pathToMpr, '' ), $result[1]);	// MPR.path + '[...]'
 				$result = $result[1];
 				$resultInfo = pathinfo($result);
 				if ( $resultInfo['extension'] === 'js' ) {
@@ -113,7 +88,7 @@ class MPR {
 	}	
 	
 	/**
-	 * returns the content of a page view curl
+	 * returns the content of a page via curl
 	 *
 	 * @param string $url
 	 * @return string
@@ -142,10 +117,9 @@ class MPR {
 		$regularExpressionScriptTags = 	'#<script.+?src=["|\'](.+?)["|\']|<script.+?>(.|\s)*?</script>#'; //<script src="[...]" !AND! <script>[...]</script>
 		preg_match_all($regularExpressionScriptTags, $text, $results, PREG_SET_ORDER);
 		
-		
 		foreach($results as $result) {
-		  if ( ($result[1] !== '') && ( in_array( basename(strtolower($result[1])), $this->exclude ) === false) )
-				$scripts .= $this->getUrlContent( $this->base . $result[1] ) . PHP_EOL;
+		  if ( ($result[1] !== '') && ( in_array( basename(strtolower($result[1])), (array) $this->options->exclude ) === false) )
+				$scripts .= $this->getUrlContent( $this->options->base . $result[1] ) . PHP_EOL;
 			if ( ($result[1] === '') && ($result[0] !== '') )
 				$scripts .= $result[0] . PHP_EOL;
 		}
@@ -190,13 +164,13 @@ class MPR {
 	 */
 	private function prepareContent($url, $what = 'js') {
 		$urlInfo = parse_url($url);
-		if ($this->base === '')
-			$this->setBase( $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/' );
+		if ($this->options->base === '')
+			$this->options->base = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/';
 		
 		$fileList = $this->getFileList($url);
 		$content = '';
 		if ($what === 'js') {
-			if ($this->cssMprIsUsed === true)
+			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
 					$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
