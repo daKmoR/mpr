@@ -55,7 +55,7 @@ class CssMin {
 		$this->css = $css;
 	}
 
-	public static function compress($string) {
+	public static function minify($string) {
 		$obj = new CssMin($string);
 		return $obj->min();
 	}

@@ -18,7 +18,7 @@ class MPR extends Options {
 		'cssMprIsUsed' => true,
 		'useCache' => false,
 		'cachePath' => 'Mpr/MprCache/',
-		'compress' => 'none' //[none, minify, gzip, minifyGzip]
+		'compress' => 'minify' //[none, minify]
 	);
 	
 	/**
@@ -195,17 +195,23 @@ class MPR extends Options {
 				} else
 					$content .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
+			if ( $this->options->compress === 'minify' ) {
+				require_once 'class.JsMin.php';
+				$content = JsMin::minify($content);
+			}
 		}
 		
-		if ($what === 'css')
+		if ($what === 'css') {
 			foreach( $fileList['css'] as $file ) {
 				$raw = file_get_contents($file);
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
 				$content .= $raw . PHP_EOL;
 			}
-			
-		if ( $this->options->compress === 'gzip' || $this->options->compress === 'minifyGzip' )
-			$content = gzcompress( $content );
+			if ( $this->options->compress === 'minify' ) {
+				require_once 'class.CssMin.php';
+				$content = CssMin::minify($content);
+			}
+		}
 		
 		if( $this->options->useCache === true ) {
 			//save cache
