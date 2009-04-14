@@ -1,6 +1,8 @@
 <?php
-	require_once('Mpr/Php/MprConfig.php');
 	$url = $_SERVER['HTTP_REFERER'];
+	if( !$url ) die();
+
+	require_once('Mpr/Php/MprConfig.php');
 	
 	header('Content-Type: text/javascript');
 	
