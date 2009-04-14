@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <plugin>
-	<key>UvumiGallery</key>
-	<title>UvumiGallery</title>
-	<description>A gallery with flowing images</description>
+	<!-- All this configuration isn't currently used but will be with an MPR Server version... (once I start working on it...) -->
+	<key>MprDummyPlugin</key>
+	<title>a default MPR Plugin</title>
+	<description>use this package if you are unfamiliar what you can/should do</description>
 	<version>0.0.1</version>
 	<state>Development</state>
 	<categories>
-		<category>Gallery</category>
+		<!-- you can add as many categories as you want; the main category will always be the parent FolderName the Plugin resists in. -->
+		<category>Snippets</category>
+		<category>Dummy</category>
 	</categories>
 	<reservations>
-		<class>UvumiGallery</class>
+		<!-- write in things you globally reserve like classnameas -->
+		<class>MprDummyPlugin</class>
+		<element>
+			<implement>show</implement>
+		</element>
 	</reservations>
 	<parties>
 		<person role="Publisher">
