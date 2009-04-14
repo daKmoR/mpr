@@ -15,7 +15,10 @@ class MPR extends Options {
 		'base' => '',
 		'pathToMpr' => '',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
-		'cssMprIsUsed' => true
+		'cssMprIsUsed' => true,
+		'useCache' => false,
+		'cachePath' => 'Mpr/MprCache/',
+		'compress' => 'none' //[none, minify, gzip, minifyGzip]
 	);
 	
 	/**
@@ -58,12 +61,12 @@ class MPR extends Options {
 	 * @return array
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	public function getFileList($url) {
+	public function getFileList($scripts, $mode = 'loadRequire') {
 		$regularExpressionRequire = '#\$require\(\s*?MPR\.path\s*?\+\s*?\'(.*?)\'\)#';
 		
 		$fileList = array('js' => array(), 'css' => array());
-		$scripts = array( $this->loadUrl($url) );
-		
+
+		$scripts = array($scripts);
 		for ($i = 0; $i < count($scripts); $i++) {
 			preg_match_all($regularExpressionRequire, $scripts[$i], $results, PREG_SET_ORDER);
 			$results = array_reverse($results);
@@ -72,7 +75,8 @@ class MPR extends Options {
 				$result = $result[1];
 				$resultInfo = pathinfo($result);
 				if ( $resultInfo['extension'] === 'js' ) {
-					$scripts[] = $this->loadUrl($result);
+					if( $mode == 'loadRequire' ) 
+						$scripts[] = $this->loadUrl($result);
 					$fileList['js'][] = $result;
 				}
 
@@ -111,8 +115,7 @@ class MPR extends Options {
 	 * @return string
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	public function getSiteScripts($url) {
-		$text = $this->getUrlContent($url);
+	public function getSiteScripts($text) {
 		$scripts = '';
 		$regularExpressionScriptTags = 	'#<script.+?src=["|\'](.+?)["|\']|<script.+?>(.|\s)*?</script>#'; //<script src="[...]" !AND! <script>[...]</script>
 		preg_match_all($regularExpressionScriptTags, $text, $results, PREG_SET_ORDER);
@@ -130,8 +133,8 @@ class MPR extends Options {
 	/**
 	 * DESCRIPTION
 	 *
-	 * @param string $input
-	 * @return void
+	 * @param string $url
+	 * @return string
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	private function loadUrl($url) {
@@ -148,7 +151,7 @@ class MPR extends Options {
 			elseif ( is_file($url) )
 				$scripts = file_get_contents($url);
 		} else {
-			$scripts = $this->getSiteScripts( $url );
+			$scripts = $this->getSiteScripts( $this->getUrlContent($url) );
 		}
 		
 		$this->cache[$url] = $scripts;
@@ -166,8 +169,19 @@ class MPR extends Options {
 		$urlInfo = parse_url($url);
 		if ($this->options->base === '')
 			$this->options->base = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/';
+			
+		$siteScript = $this->loadUrl($url);
 		
-		$fileList = $this->getFileList($url);
+		if( $this->options->useCache === true ) {
+			$siteRequire = $this->getFileList( $siteScript, 'noLoad' );
+			$name = md5( implode(' ', $siteRequire[$what]) );
+		
+			//if a cache is found for these required files it's returned
+			if( is_file($this->options->cachePath . $what . '/' . $name) )
+				return file_get_contents($this->options->cachePath . $what . '/' . $name);
+		}
+		
+		$fileList = $this->getFileList( $siteScript );
 		$content = '';
 		if ($what === 'js') {
 			if ($this->options->cssMprIsUsed === true)
@@ -189,6 +203,18 @@ class MPR extends Options {
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
 				$content .= $raw . PHP_EOL;
 			}
+			
+		if ( $this->options->compress === 'gzip' || $this->options->compress === 'minifyGzip' )
+			$content = gzcompress( $content );
+		
+		if( $this->options->useCache === true ) {
+			//save cache
+			if( !is_dir($this->options->cachePath) )
+				mkdir( $this->options->cachePath );
+			if( !is_dir($this->options->cachePath . $what . '/') )
+				mkdir( $this->options->cachePath . $what . '/' );
+			file_put_contents( $this->options->cachePath . $what . '/' . $name, $content );
+		}
 		
 		return $content;
 	}
