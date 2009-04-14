@@ -108,10 +108,23 @@
 				</div>
 				<h4>Howto create a MPR Plugin?</h4>
 				<div>If you have a Plugin inside MPR you find this little icon beside it to download it - just distribute it instead of the single files. As a start you can look at the 
-					<a href="MprAdmin.php?mode=demo&file=./Snippets/MprDummyPlugin/Demos/MprDummyPlugin.html">MprDummyPlugin</a> or you can download it <a href="MprAdmin.php?mode=zip&file=Snippets/MprDummyPlugin">directly as zip</a>.
+					<a href="MprAdmin.php?mode=demo&amp;file=./Snippets/MprDummyPlugin/Demos/MprDummyPlugin.html">MprDummyPlugin</a> or you can download it <a href="MprAdmin.php?mode=zip&amp;file=Snippets/MprDummyPlugin">directly as zip</a>.
 				</div>
-				
-				
+				<h4>Enough already - I wanna try it...</h4>
+				<div>Just click on top at "Your Local MPR" - there you see what it will look like once you installed it at home... :p</div>
+				<h4>Enough already - I wanna have it!</h4>
+				<div>You can download the latest version at <a href="http://github.com/daKmoR/mpr/tree/master">github</a> where you can also get a zip file of it (click on the download button at the top).</div>
+				<h4>Requirements</h4>
+				<div>You need an server with php support. (no database)</div>
+				<h4>More detail on the Installation</h4>
+				<div>1) make it display something: download -> extract -> set rights (easiers: chmod 777 Mpr/MprCache Mpr/MprZip Mpr/MprIndex) [folders would be created automatically] <br />
+				  2) use it: create a file called "USE_ADMIN_FUNCTIONS" in the root folder (it can/should be empt) [if you don't do this you can't use admin functions] <br />
+					3) use the Search: General Admin -> Recreate Search Index
+				</div>
+				<h4>Change the Config</h4>
+				<div>If you want to change something like the Zip/Cache or whatever path take a look at Mpr/Php/MprConfig.php for available options. Now create a MprConfig.php in the root folder and "override" what you want. 
+					my "local" Config usually just resists of $MprOptions['useCache'] = false; so I can develop without cache.
+				</div>
 			
 			</div>
 			
