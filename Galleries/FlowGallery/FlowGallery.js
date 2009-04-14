@@ -1,5 +1,5 @@
 /**
- * Allows to create Tabs with progressive Enhancement
+ * gives a simple Gallery
  *
  * @version		0.0.1
  *

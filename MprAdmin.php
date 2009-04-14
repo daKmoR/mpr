@@ -220,7 +220,7 @@
 				<a href="?mode=indexing">Recreate Search Index</a> <span class="note">This will complete erase your current search index (for Docs and Demos) and recreate it. (Might take some time)</span><br />
 				<a href="?mode=clear_cache">clear cache</a> <span class="note">This will clear the cache in ' . $MprOptions['cachePath'] . '.</span>
 			</div>';
-		$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or a Demos)</span>';
+		$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or Demos)</span>';
 		
 		$files = Helper::getFiles($zipPath, 2, 0);
 		$install = ''; $restore = '';
