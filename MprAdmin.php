@@ -12,6 +12,8 @@
 	$path = explode('/', $_REQUEST['file']);
 	
 	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
+		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
+	
 		$zip = new ZipArchive();
 		if ($zip->open( $_REQUEST['file'] ) === TRUE) {
 			$zip->extractTo('./');
@@ -22,6 +24,8 @@
 			$center .= 'Install failed';
 		}
 	} elseif ( $_REQUEST['mode'] === 'uninstall' && $_REQUEST['file'] != '' ) {
+		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
+	
 		if( !is_dir($zipPath) )
 			mkdir($zipPath);
 			
@@ -37,6 +41,8 @@
 			unset($_REQUEST['file']);
 		}
 	} elseif ( $_REQUEST['mode'] === 'restore' && $_REQUEST['file'] != '') {
+		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
+	
 		$fileInfo = explode('^', $_REQUEST['file']);
 		if( is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
 			Helper::removeDir( $_REQUEST['file'] );
@@ -52,6 +58,8 @@
 		}
 		
 	} elseif ( $_REQUEST['mode'] === 'clear_cache' ) {
+		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
+	
 		Helper::removeDir( $MprOptions['cachePath'] );
 		$_REQUEST['mode'] = 'admin_general';
 	}
