@@ -51,6 +51,9 @@
 			$center .= 'Restore failed';
 		}
 		
+	} elseif ( $_REQUEST['mode'] === 'clear_cache' ) {
+		Helper::removeDir( $MprOptions['cachePath'] );
+		$_REQUEST['mode'] = 'admin_general';
 	}
 	
 	$MprAdmin = new MprAdmin();
@@ -212,8 +215,12 @@
 		
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
-		$center .= '<div><h2>Search Index</h2><a href="?mode=indexing">ReIndex local Docs and Demos</a><span>This will complete erase your current search index and recreate it. (Might take some time)</span></div>';
-		$center .= '<div><h2>Install</h2>';
+		$center .= '<div>
+			<h2>Maintenance</h2>
+				<a href="?mode=indexing">Recreate Search Index</a> <span class="note">This will complete erase your current search index (for Docs and Demos) and recreate it. (Might take some time)</span><br />
+				<a href="?mode=clear_cache">clear cache</a> <span class="note">This will clear the cache in ' . $MprOptions['cachePath'] . '.</span>
+			</div>';
+		$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or a Demos)</span>';
 		
 		$files = Helper::getFiles($zipPath, 2, 0);
 		$install = ''; $restore = '';
@@ -229,7 +236,7 @@
 		else
 			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "' . $zipPath . '". This can also just mean that you have all available Plugins installed.</p>';
 		
-	 $center .= '</div><div><h2>Restore</h2><span>This will restore the Plugin to the saved zip file (these files are created every time you extract a plugin; or you can manually copy them into "' . $zipPath . '")</span>';
+	 $center .= '</div><div><h2>Restore</h2> <span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">This will override the Plugin to the saved zip state (files are created every time you extract a plugin; or you can manually copy them into "' . $zipPath . '")</span>';
 		if ($restore !== '')
 			$center .= Helper::wrap($restore, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
