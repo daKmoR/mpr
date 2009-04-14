@@ -27,4 +27,16 @@ Outputs the stored element(s) either with the console or with alert.
 
 ### Syntax:
 
-	myMprDummyPlugin.show();
+	myMprDummyPlugin.show([where]);
+
+### Arguments:
+
+1. where - (*element*, optional) If where is given the element will also be clonded inside this element.
+
+### Returns:
+
+* nothing
+
+### Examples:
+
+	myMprDummyPlugin.show( $('logger') ); //will now outputs the element to console and clone it into $('logger')
