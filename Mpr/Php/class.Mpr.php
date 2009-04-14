@@ -16,7 +16,7 @@ class MPR extends Options {
 		'pathToMpr' => '',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
 		'cssMprIsUsed' => true,
-		'useCache' => false,
+		'useCache' => true,
 		'cachePath' => 'Mpr/MprCache/',
 		'compress' => 'minify' //[none, minify]
 	);

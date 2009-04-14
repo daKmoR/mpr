@@ -1,6 +1,11 @@
 <?php
+	require_once('Mpr/Php/MprConfig.php');
 	$url = $_SERVER['HTTP_REFERER'];
+	
 	header('Content-Type: text/javascript');
+	
+	if( $useGzip === true )
+		ob_start("ob_gzhandler");
 	
 	if($_REQUEST['mode'] !== 'noCore') {
 		echo file_get_contents('Mpr/MprFullCore.js');
@@ -8,7 +13,7 @@
 
 	if($_REQUEST['mode'] !== 'onlyCore') {
 		require_once('Mpr/Php/class.Mpr.php');
-		$localMPR = new MPR();
+		$localMPR = new MPR( $MprOptions );
 		echo $localMPR->getScript($url);
 	}
 	

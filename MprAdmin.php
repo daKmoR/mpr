@@ -27,7 +27,7 @@
 			
 		require_once 'Mpr/Php/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		if( $myZip->open($zipPath . '/' . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
+		if( $myZip->open($zipPath . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
 			$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
 			$myZip->close();
 			
@@ -202,17 +202,17 @@
 		
 		require_once 'Mpr/Php/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		$myZip->open($zipPath . '/' . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
+		$myZip->open($zipPath . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
 
 		$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
 		$myZip->close();
 		
-		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . '/' . $path[0] . '^' . $path[1] . '.zip');
+		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . $path[0] . '^' . $path[1] . '.zip');
 		die();
 		
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
-		$center .= '<div><h2>Search Index</h2><a href="?mode=indexing">ReIndex local Docs and Demos</a></div>';
+		$center .= '<div><h2>Search Index</h2><a href="?mode=indexing">ReIndex local Docs and Demos</a><span>This will complete erase your current search index and recreate it. (Might take some time)</span></div>';
 		$center .= '<div><h2>Install</h2>';
 		
 		$files = Helper::getFiles($zipPath, 2, 0);
@@ -220,20 +220,20 @@
 		foreach( $files as $file ) {
 			$fileInfo = explode('^', $file);
 			if( !is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
-				$install .= '<tr><td><a href="?mode=install&amp;file=' . $zipPath . '/' . $file . '"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+				$install .= '<tr><td><a href="?mode=install&amp;file=' . $zipPath . $file . '"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 			else
-				$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $zipPath . '/' . $file . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
+				$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $zipPath . $file . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 		}
 		if ($install !== '')
 			$center .= Helper::wrap($install, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
-			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "Mpr/MprZip/" [if not configured otherwise]. This can also just mean that you have all available Plugins installed.</p>';
+			$center .= '<p class="notice">no Plugins to install; if you want to install a Plugin pls copy the zip file into the directory "' . $zipPath . '". This can also just mean that you have all available Plugins installed.</p>';
 		
-	 $center .= '</div><div><h2>Restore</h2>';
+	 $center .= '</div><div><h2>Restore</h2><span>This will restore the Plugin to the saved zip file (these files are created every time you extract a plugin; or you can manually copy them into "' . $zipPath . '")</span>';
 		if ($restore !== '')
 			$center .= Helper::wrap($restore, '<table><tr><th>Action</th><th>Name</th><th>Category</th></tr>|</table>');
 		else
-			$center .= '<p class="notice">no Plugins to restore; pls check the directory "Mpr/MprZip/" [if not configured otherwise] if it contains the needed backupfiles</p>';
+			$center .= '<p class="notice">no Plugins to restore; pls check the directory "' . $zipPath . '" if it contains the needed backupfiles</p>';
 		$center .= '</div>';
 		$center .= '<div><h2>UnInstall</h2><p class="notice">for uninstalling pls use the Uninstall Option on the left</p></div>';
 
