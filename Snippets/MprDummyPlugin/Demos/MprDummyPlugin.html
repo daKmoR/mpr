@@ -18,7 +18,7 @@
 		
 		<script type="text/javascript">
 			var MPR = {};
-			MPR.path = '';
+			MPR.path = '../../../';
 		</script>
 		
 		<script src="../../../MprJs.php" type="text/javascript"></script>
@@ -29,30 +29,19 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
-$require(MPR.path + 'More/Class.Refactor/Class.Refactor.js');
+
+//stay within the ### ... ### Markers for each Part (JS, CSS, HTML, Header)
+//include your js/css files with $require(Mpr.path + '...');
+$require(MPR.path + 'Snippets/MprDummyPlugin/MprDummyPlugin.js');
 
 window.addEvent('domready', function() {
-
-	var Greeter = new Class({
-		greet: function(person) {
-			$('logger').adopt( new Element('p', {'html': 'Hi ' + person }) );
-		}
+	
+	var myMprDummyPlugin = new MprDummyPlugin( '#text' );
+	
+	$('clickMe').addEvent('click', function() {
+		myMprDummyPlugin.show( $('logger') );
 	});
 	
-	var myGreeter = new Greeter();
-
-	$('greet').addEvent('click', function(e) { e.stop();
-		myGreeter.greet('MooTooler');
-	});
-	
-	$('refactor').addEvent('click', function(e) { e.stop();
-		Greeter = Class.Refactor(Greeter, {
-			greet: function(person) {
-				$('logger').adopt( new Element('p', {'html': 'Hi Lord ' + person }) );
-			}
-		});
-		myGreeter = new Greeter();
-	});
 
 });
 /* ### Mpr.Js.End ### */
@@ -73,26 +62,25 @@ window.addEvent('domready', function() {
 				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
 			</div>
 			
-			<div class="colmask equal px210x750">
+			<div class="colmask equal px240x720">
 				<div class="col1">
 					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
 				</div>
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>Class.Refactor</h1>
+<h1>MprDummyPlugin</h1>
 <h2>Introduction</h2>
 <p>
-	A basic example on howto Refactor a given class and reuse it afterwards.
+	a quick description of what our Plugin can do. [it needs to be line 4 after the "### Mpr.Html.Start ###" Marker to be indexed into the search]
 </p>
-<h3>Refactor a Greeter Class</h3>
-
-<a href="#" id="refactor">refactor</a> <br />
-<a href="#" id="greet">greet "MooTooler"</a>
-
+<h3>Basic MprDummyPlugin</h3>
+<p id="text">Here you can write whatever you want</p>
+<a id="clickMe" href="#">click ME</a>
+<p>The DOM is all yours - use it best for your Plugin</p>
+<p>stay within the ### ... ### Markers for each part</p>
 <h3>Log</h3>
 <div id="logger"></div>
-
 <!-- ### Mpr.Html.End ### -->
 					</div>
 				</div>
