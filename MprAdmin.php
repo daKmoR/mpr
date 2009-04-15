@@ -366,7 +366,7 @@
 		
 			<form action="" method="get" id="searchForm">
 				<div id="header">
-					<h2 style="border: none; margin-bottom: 10px;"><a href="./MPRAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+					<h2 style="border: none; margin-bottom: 10px;"><a href="./MprAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
 					<div id="search">
 						<input type="text" name="query" id="searchInput" />
 						<input type="hidden" name="mode" value="search" />
