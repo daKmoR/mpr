@@ -36,7 +36,7 @@ $require(MPR.path + 'Snippets/MprDummyPlugin/MprDummyPlugin.js');
 
 window.addEvent('domready', function() {
 	
-	var myMprDummyPlugin = new MprDummyPlugin( '#text' );
+	var myMprDummyPlugin = new MprDummyPlugin( '#text', { console: false } );
 	
 	$('clickMe').addEvent('click', function() {
 		myMprDummyPlugin.show( $('logger') );
