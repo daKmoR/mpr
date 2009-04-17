@@ -1,0 +1,93 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>MultiOverlay</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../MprJs.php" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="../../../MprCss.php" media="screen, projection" />
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+
+$require(MPR.path + 'Visual/MultiOverlays/MultiOverlay.js');
+
+window.addEvent('domready', function() {
+	
+	var overlay = new MultiOverlay( $('source') );
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+img { border: none; }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>MultiOverlay</h1>
+<h2>Introduction</h2>
+<p>
+	use a imagemap to display multiple image overlays
+</p>
+<h3>Single MultiOverlay</h3>
+
+<img id="source" usemap="#MultiOverlayMap" src="Visual/MultiOverlays/Resources/images/MultiOverlay.bg.gif" alt="MultiOverlay" />
+<map name="MultiOverlayMap" id="MultiOverlayMap">
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.M.png" alt="MooTools" coords="21,81,136,178" />
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.P.png" alt="Plugin" coords="142,81,222,178" />
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.R.png" alt="Repository" coords="226,81,320,178" />
+	<area href="#" shape="poly" title="Visual/MultiOverlays/Resources/images/MultiOverlay.Secret.png" alt="Secret Star" coords="262,36,280,33,288,17,298,32,314,36,302,49,304,66,288,60,272,67,274,49" />
+</map>
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
