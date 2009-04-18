@@ -7,6 +7,8 @@
  * @author		Thomas Allmer <at@delusionworld.com>
  * @copyright Copyright belongs to the respective authors
  */
+
+$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
  
 $require(MPR.path + 'More/Class.Occlude/Class.Occlude.js');
 
