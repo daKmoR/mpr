@@ -30,13 +30,19 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 
+// for AutoMultiOverlay you just need to include it with
+$require(MPR.path + 'Visual/MultiOverlays/AutoMultiOverlays.js');
+// no additional js code needed
+
+// you can also create the MultiOverlay by yourself than you need
 $require(MPR.path + 'Visual/MultiOverlays/MultiOverlay.js');
 
 window.addEvent('domready', function() {
 	
-	var overlay = new MultiOverlay( $('source') );
+	var SingleMultiOverlay = new MultiOverlay( $('singleMultiOverlay') );
 
 });
+
 /* ### Mpr.Js.End ### */
 </script>
 
@@ -64,15 +70,26 @@ img { border: none; }
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>MultiOverlay</h1>
+<h1>MultiOverlays</h1>
 <h2>Introduction</h2>
 <p>
 	use a imagemap to display multiple image overlays
 </p>
-<h3>Single MultiOverlay</h3>
-
-<img id="source" usemap="#MultiOverlayMap" src="Visual/MultiOverlays/Resources/images/MultiOverlay.bg.gif" alt="MultiOverlay" />
+<p>can you find the secret Star?</p>
+<h2>Auto MultiOverlays</h2>
+<p>You just set the class "MultiOverlay" for the image with the usemap and give the urls for the images in the title of the areas; no costum js code needed</p>
+<img class="MultiOverlay" usemap="#MultiOverlayMap" src="Visual/MultiOverlays/Resources/images/MultiOverlay.bg.gif" alt="MultiOverlay" />
 <map name="MultiOverlayMap" id="MultiOverlayMap">
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.M.png" alt="MooTools" coords="21,81,136,178" />
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.P.png" alt="Plugin" coords="142,81,222,178" />
+	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.R.png" alt="Repository" coords="226,81,320,178" />
+	<area href="#" shape="poly" title="Visual/MultiOverlays/Resources/images/MultiOverlay.Secret.png" alt="Secret Star" coords="262,36,280,33,288,17,298,32,314,36,302,49,304,66,288,60,272,67,274,49" />
+</map>
+
+<h2>Single MultiOverlay</h2>
+<p>you can also create the Overlay by yourself</p>
+<img id="singleMultiOverlay" usemap="#MultiOverlayMap2" src="Visual/MultiOverlays/Resources/images/MultiOverlay.bg.gif" alt="MultiOverlay" />
+<map name="MultiOverlayMap2" id="MultiOverlayMap2">
 	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.M.png" alt="MooTools" coords="21,81,136,178" />
 	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.P.png" alt="Plugin" coords="142,81,222,178" />
 	<area href="#" shape="rect" title="Visual/MultiOverlays/Resources/images/MultiOverlay.R.png" alt="Repository" coords="226,81,320,178" />

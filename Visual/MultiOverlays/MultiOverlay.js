@@ -7,9 +7,12 @@
  * @author		Thomas Allmer <at@delusionworld.com>
  * @copyright Copyright belongs to the respective authors
  */
+ 
+$require(MPR.path + 'More/Class.Occlude/Class.Occlude.js');
 
 var MultiOverlay = new Class({
-	Implements: [Events, Options],
+	Implements: [Events, Options, Class.Occlude],
+	property: 'MultiOverlay',
 	
 	options: {
 		activeClass: 'active',
@@ -27,15 +30,20 @@ var MultiOverlay = new Class({
 		}
 	},
 	
-	initialize: function(source, options) {
+	initialize: function(element, options) {
 		this.setOptions(options);
-		this.source = $(source);
+		this.element = $(element);
+		
+		// if the element doesn't have the property "usemap" we can't/shouldn't use it...
+		if ( !this.element.get('usemap') ) return;
+		
+		if (this.occlude()) return this.occluded;
 		this.build();
 	},
 	
 	build: function() {
-		this.areas = $$(this.source.get('usemap'))[0].getElements('area');
-		this.container = new Element('div', { style: 'position: relative;' }).wraps(this.source);
+		this.areas = $$(this.element.get('usemap'))[0].getElements('area');
+		this.container = new Element('div', { style: 'position: relative;' }).wraps(this.element);
 		
 		$each( this.areas, function(el) {
 			this.attach(el);
@@ -47,7 +55,7 @@ var MultiOverlay = new Class({
 			src: area.get('title'), 
 			alt: area.get('alt'), 
 			style: 'position: absolute; left: 0; top: 0;', 
-			usemap : this.source.get('usemap') 
+			usemap : this.element.get('usemap') 
 		});
 		area.erase('title');
 		this.fireEvent('onInit', [overlay, area.hasClass(this.options.activeClass)] );
