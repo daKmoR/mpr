@@ -1,0 +1,96 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../MprJs.php" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="../../../MprCss.php" media="screen, projection" />
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+
+//stay within the ### ... ### Markers for each Part (JS, CSS, HTML, Header)
+//include your js/css files with $require(Mpr.path + '...');
+$require(MPR.path + 'Visual/Notimoo/Notimoo.js');
+
+window.addEvent('domready', function() {
+	
+	var myNotimoo = new Notimoo();
+	
+	$('clickMe').addEvent('click', function() {
+		// Showing a simple notification
+		myNotimoo.show({
+			title: 'Testing notification',
+			message: 'This is a sample notitication showing how easy is to use Notimoo.'
+		});
+		
+	});
+	
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Notimooo</h1>
+<h2>Introduction</h2>
+<p>
+	an Growl Style Notification System
+</p>
+<h3>Basic Notimoo</h3>
+<a id="clickMe" href="#">click ME</a>
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>

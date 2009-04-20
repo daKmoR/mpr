@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin>
+	<!-- All this configuration isn't currently used but will be with an MPR Server version... (once I start working on it...) -->
+	<key>MprDummyPlugin</key>
+	<title>a default MPR Plugin</title>
+	<description>use this package if you are unfamiliar what you can/should do</description>
+	<version>0.0.1</version>
+	<state>Development</state>
+	<categories>
+		<!-- you can add as many categories as you want; the main category will always be the parent FolderName the Plugin resists in. -->
+		<category>Snippets</category>
+		<category>Dummy</category>
+	</categories>
+	<reservations>
+		<!-- write in things you globally reserve like class names  //syntax not final -->
+		<class>MprDummyPlugin</class>
+		<element>
+			<implement>show</implement>
+		</element>
+	</reservations>
+	<parties>
+		<person role="Publisher">
+			<name>Thomas Allmer</name>
+			<email>at@delusionworld.com</email>
+			<website></website>
+			<organisation></organisation>
+			<repositoryUserName>daKmoR</repositoryUserName>
+		</person>
+	</parties>
+	<constraints>
+		<depends>
+			<package minVersion="1.2">Core</package>
+		</depends>
+		<conflicts/>
+		<suggests/>
+	</constraints>
+</plugin>
