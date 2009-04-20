@@ -65,6 +65,11 @@ window.addEvent('domready', function() {
 	$(document.body).addEvent('click', function(e) {
 		$('multiple').hasChild(e.target) || v2_fx.start( [v2_lowlightAll, v2_revealAll] );
 	});
+	
+	$('highlightPower').addEvent('click', function(e) {
+		e.stop();
+		v2_fx.start( [v2_highlightOne, v2_revealOne], $('powerBox') );
+	});
 
 });
 /* ### Mpr.Js.End ### */
@@ -118,10 +123,12 @@ window.addEvent('domready', function() {
 	<div><p>someText</p></div>
 	<div><p>someText</p></div>
 	<div><p>someText</p></div>
-	<div><p>someText</p></div>
+	<div id="powerBox"><p>powerBox</p></div>
 	<div><p>someText</p></div>
 	<div><p>someText</p></div>
 </div>
+<br />
+<a href="#" id="highlightPower">highlight PowerBox</a>
 <!-- ### Mpr.Html.End ### -->
 					</div>
 				</div>

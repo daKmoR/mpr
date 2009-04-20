@@ -19,6 +19,9 @@ Fx.Elements.Preset = new Class({
 	},
 	
 	start: function(preset, variables) {
+		if( $type(variables) === 'element' || $type(variables) === 'string')
+			variables = this.elements.indexOf( $(variables) );
+		
 		var properties = {};
 		var presetNum = 0;
 		var total = 0;
@@ -39,7 +42,6 @@ Fx.Elements.Preset = new Class({
 	onComplete: function(){
 		this.fireEvent('complete', this.vars.shift());
 		if (!this.callChain()) this.fireEvent('chainComplete', this.subject);
-		
 	}
 });
 
