@@ -1,0 +1,137 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../MprJs.php" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="../../../MprCss.php" media="screen, projection" />
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require(MPR.path + 'Tools/Fx.Presets/Fx.Presets.js');
+
+window.addEvent('domready', function() {
+	
+	/* EXAMPLE ONE */
+	var highlightOne = new Fx.Preset(Fx.Presets.Unique, [{'background-color':'#aaa'}, {'background-color':'#eee'}]);
+	var lowlightAll = new Fx.Preset(Fx.Presets.All, {'background-color':'#eee'});
+	
+	var myFx = new Fx.Elements.Preset( $$('#simpleHighlight div'), {link: 'cancel'});
+
+	$$('#simpleHighlight div').each(function(el, i) {
+		el.addEvent('click', function() {
+			myFx.start(highlightOne, i);
+		});
+	});
+	
+	$(document.body).addEvent('click', function(e) {
+		$('simpleHighlight').hasChild(e.target) || myFx.start(lowlightAll);
+	});
+	
+	/* EXAMPLE TWO */
+	var v2_highlightOne = new Fx.Preset(Fx.Presets.Unique, [ {'background-color': '#aaa'}, {'background-color': '#eee'} ] );
+	var v2_revealOne = new Fx.Preset(Fx.Presets.Unique, [ {opacity: 1}, {opacity: 0.2} ] );
+	var v2_lowlightAll = new Fx.Preset(Fx.Presets.All, {'background-color': '#eee'} );
+	var v2_revealAll = new Fx.Preset(Fx.Presets.All, {opacity: 1} );
+	
+	var v2_fx = new Fx.Elements.Preset( [$$('#multiple div'), $$('#multiple div p')], {link: 'cancel'} );
+	$$('#multiple div').each(function(el, i) {
+		el.addEvent('click', function() {
+			v2_fx.start( [v2_highlightOne, v2_revealOne], i);
+		});
+	});
+	
+	$(document.body).addEvent('click', function(e) {
+		$('multiple').hasChild(e.target) || v2_fx.start( [v2_lowlightAll, v2_revealAll] );
+	});
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+.boxes { height: 80px; }
+.boxes div { height: 80px; width: 80px; margin-right: 20px; margin-bottom: 10px; background-color: #eee; float: left; }
+.boxes div p { text-align: center; margin-top: 27px; }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Fx.Presets</h1>
+<h2>Introduction</h2>
+<p>
+	Fx.Presets can be used to clearly define and use groups of related animations on multiple elements.
+</p>
+<h3>Simple Highlight Demo</h3>
+<p>Click on a box to highlight it. Click outside of all boxes to reset.</p>
+<div id="simpleHighlight" class="boxes">
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+</div>
+
+<h3>Multiple Fx Demo</h3>
+<p>Click on a box to highlight it. Click outside of all boxes to reset.</p>
+<div id="multiple" class="boxes">
+	<div><p>someText</p></div>
+	<div><p>someText</p></div>
+	<div><p>someText</p></div>
+	<div><p>someText</p></div>
+	<div><p>someText</p></div>
+	<div><p>someText</p></div>
+</div>
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>

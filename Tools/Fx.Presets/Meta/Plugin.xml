@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin>
+	<key>Fx.Presets</key>
+	<title>Presets for Fx Groups</title>
+	<description>Fx.Presets can be used to clearly define and use groups of related animations on multiple elements.</description>
+	<version>0.0.1</version>
+	<state>Development</state>
+	<categories>
+		<category>Tools</category>
+	</categories>
+	<reservations>
+		<class>Fx.Elements.Preset</class>
+		<class>Fx.Presets</class>
+		<class>Fx.Preset</class>
+	</reservations>
+	<parties>
+		<person role="Publisher">
+			<name>Michal Charemza</name>
+			<email></email>
+			<website></website>
+			<organisation></organisation>
+			<repositoryUserName>michalc</repositoryUserName>
+		</person>
+	</parties>
+	<constraints>
+		<depends>
+			<package minVersion="1.0">More/Fx.Elements</package>
+		</depends>
+		<conflicts/>
+		<suggests/>
+	</constraints>
+</plugin>
