@@ -44,6 +44,9 @@ var CanvasOverlay = new Class({
 		// if the element doesn't have the property "usemap" we can't/shouldn't use it...
 		if ( !this.element.get('usemap') ) return;
 		
+		// no canvas support so we can't do anything
+		if ( !document.createElement('canvas').getContext ) return;
+		
 		if (this.occlude()) return this.occluded;
 		this.build();
 	},
