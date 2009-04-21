@@ -31,7 +31,8 @@ var CanvasOverlay = new Class({
 		glow: true,
 		glowSize: 8,
 		glowColor: '#ffffa8',
-		
+		active: true,
+		alwaysActive: false,
 		fade: true
 	},
 	
@@ -54,11 +55,7 @@ var CanvasOverlay = new Class({
 		
 		this.element.set('style', 'opacity: 0;');
 		
-		this.canvas = new Element('canvas', {
-			width: this.element.getSize().x, 
-			height: this.element.getSize().y,
-			style: 'position: absolute; left: 0; top: 0;'
-		}).inject(this.container, 'top');
+		this.canvas = this.createCanvas();
 		if( this.options.fade )
 			this.canvas.setStyle('opacity', 0);
 		
@@ -73,11 +70,33 @@ var CanvasOverlay = new Class({
 		}, this);
 	},
 	
+	createCanvas: function() {
+		return new Element('canvas', {
+			width: this.element.getSize().x, 
+			height: this.element.getSize().y,
+			style: 'position: absolute; left: 0; top: 0;'
+		}).inject(this.container, 'top');
+	},
+	
 	attach: function(area) {
 		var that = this;
+		
+		var options = that.options;
+		try {
+			options = $merge(options, JSON.decode( area.get('alt') ) );
+		} catch(e) {}
+		area.store('CanvasOverlay:ElementOptions', options);
+		
+		if ( options.alwaysActive ) {
+			this.activeCanvas = this.activeCanvas || this.createCanvas();
+			this.attachShape( area.get('shape'), area.get('coords').split(','), options, this.activeCtx || this.activeCanvas.getContext('2d') );
+		}
+		
 		area.addEvents({
 			'mouseenter': function() {
-				that.attachShape( this.get('shape'), this.get('coords').split(',') );
+				options = area.retrieve('CanvasOverlay:ElementOptions');
+				if ( options.active && !options.alwaysActive )
+					that.attachShape( this.get('shape'), this.get('coords').split(','), options );
 			},
 			'mouseout': function() {
 				that.clear();
@@ -85,44 +104,45 @@ var CanvasOverlay = new Class({
 		});
 	},
 	
-	attachShape: function(shape, coords, options) {
-		this.ctx.beginPath();
+	attachShape: function(shape, coords, options, ctx) {
+		options = options || this.options;
+		ctx = ctx || this.ctx;
+		ctx.beginPath();
 		if (shape === 'rect') {
-			this.ctx.rect(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]);
+			ctx.rect(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]);
 		} else if (shape === 'poly') {
-			this.ctx.moveTo(coords[0], coords[1]);
+			ctx.moveTo(coords[0], coords[1]);
 			for(i = 2; i < coords.length; i += 2) {
-				this.ctx.lineTo(coords[i], coords[i+1]);
+				ctx.lineTo(coords[i], coords[i+1]);
 			}
 		} else if (shape === 'circ') {
-			this.ctx.arc(coords[0], coords[1], coords[2], 0, Math.PI * 2, false);
+			ctx.arc(coords[0], coords[1], coords[2], 0, Math.PI * 2, false);
 		}
-		this.ctx.closePath();
+		ctx.closePath();
 		
-		if( this.options.glow ) {
-			for(i = this.options.glowSize; i > 0; i--) {
-				this.ctx.strokeStyle = this.options.glowColor.hexToRgba( 0.1 );
-				this.ctx.lineWidth = i*2;
-				this.ctx.stroke();
+		if( options.glow ) {
+			for(i = options.glowSize; i > 0; i--) {
+				ctx.strokeStyle = options.glowColor.hexToRgba( 0.1 );
+				ctx.lineWidth = i*2;
+				ctx.stroke();
 			}
 		}
 		
-		if(this.options.fill) {
-			this.ctx.fillStyle = this.options.fillColor.hexToRgba( this.options.fillOpacity );
-			this.ctx.fill();
+		if(options.fill) {
+			ctx.fillStyle = options.fillColor.hexToRgba( options.fillOpacity );
+			ctx.fill();
 		}
 		
-		if(this.options.stroke) {
-			this.ctx.strokeStyle = this.options.strokeColor.hexToRgba( this.options.strokeOpacity );
-			this.ctx.lineWidth = this.options.strokeWidth;
-			this.ctx.stroke();
+		if(options.stroke) {
+			ctx.strokeStyle = options.strokeColor.hexToRgba( options.strokeOpacity );
+			ctx.lineWidth = options.strokeWidth;
+			ctx.stroke();
 		}
-		if(this.options.fade)
+		if(options.fade)
 			this.canvas.tween('opacity', 1);
 	},
 	
 	clear: function() {
-		console.log('clear');
 		if(this.options.fade)
 			this.canvas.tween('opacity', 0);
 		this.ctx.clearRect(0, 0, this.canvas.getSize().x, this.canvas.getSize().y);
