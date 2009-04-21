@@ -1,5 +1,6 @@
 /**
- * create multiple overlays from images with an imagemap
+ * create canvas overlays from images with an imagemap
+ * heavily inspired by http://davidlynch.org/js/maphilight/docs/
  *
  * @version		0.0.1
  *
@@ -89,7 +90,8 @@ var CanvasOverlay = new Class({
 		
 		if ( options.alwaysActive ) {
 			this.activeCanvas = this.activeCanvas || this.createCanvas();
-			this.attachShape( area.get('shape'), area.get('coords').split(','), options, this.activeCtx || this.activeCanvas.getContext('2d') );
+			this.activeCtx = this.activeCtx || this.activeCanvas.getContext('2d');
+			this.attachShape( area.get('shape'), area.get('coords').split(','), options, this.activeCtx );
 		}
 		
 		area.addEvents({
@@ -97,6 +99,8 @@ var CanvasOverlay = new Class({
 				options = area.retrieve('CanvasOverlay:ElementOptions');
 				if ( options.active && !options.alwaysActive )
 					that.attachShape( this.get('shape'), this.get('coords').split(','), options );
+				if( options.fade )
+					that.canvas.tween('opacity', 1);
 			},
 			'mouseout': function() {
 				that.clear();
@@ -138,8 +142,6 @@ var CanvasOverlay = new Class({
 			ctx.lineWidth = options.strokeWidth;
 			ctx.stroke();
 		}
-		if(options.fade)
-			this.canvas.tween('opacity', 1);
 	},
 	
 	clear: function() {

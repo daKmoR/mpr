@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin>
+	<key>CanvasOverlays</key>
+	<title>Canvas Overlay for Image with an imagemap</title>
+	<description>Uses canvas to dynamically create overlays (with fill, border, glow) for Images with imagemaps</description>
+	<version>0.0.1</version>
+	<state>Development</state>
+	<categories>
+		<category>Visual</category>
+	</categories>
+	<reservations>
+		<class>CanvasOverlay</class>
+		<class>CanvasOverlays</class>
+	</reservations>
+	<parties>
+		<person role="Publisher">
+			<name>Thomas Allmer</name>
+			<email>at@delusionworld.com</email>
+			<website></website>
+			<organisation></organisation>
+			<repositoryUserName>daKmoR</repositoryUserName>
+		</person>
+	</parties>
+	<constraints>
+		<depends>
+			<plugin minVersion="1.2">Core</plugin>
+		</depends>
+		<conflicts/>
+		<suggests/>
+	</constraints>
+</plugin>

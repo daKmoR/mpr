@@ -1,0 +1,17 @@
+/**
+ * create automatic CanvasOverlays for all CSS-Classes "CanvasOverlay"
+ *
+ * @version		0.0.1
+ *
+ * @license		MIT-style license
+ * @author		Thomas Allmer <at@delusionworld.com>
+ * @copyright Copyright belongs to the respective authors
+ */
+ 
+$require(MPR.path + 'Visual/CanvasOverlays/CanvasOverlays.js');
+
+var Auto = Auto || {};
+
+window.addEvent('domready', function() {
+	Auto.CanvasOverlays = new CanvasOverlays( '.CanvasOverlay' );
+});
