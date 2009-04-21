@@ -11,6 +11,24 @@
 	
 	if($_REQUEST['mode'] !== 'noCore') {
 		echo file_get_contents('Mpr/MprFullCore.js');
+		echo '
+			MPR.files[MPR.path + "Mpr/MprCore.js"] = 1;
+			MPR.files[MPR.path + "Core/Core/Core.js"] = 1;
+			MPR.files[MPR.path + "Core/Core.Browser/Core.Browser.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.Array/Native.Array.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.Function/Native.Function.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.Number/Native.Number.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.String/Native.String.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.Hash/Native.Hash.js"] = 1;
+			MPR.files[MPR.path + "Core/Native.Event/Native.Event.js"] = 1;
+			MPR.files[MPR.path + "Core/Class/Class.js"] = 1;
+			MPR.files[MPR.path + "Core/Class.Extras/Class.Extras.js"] = 1;
+			MPR.files[MPR.path + "Core/Element/Element.js"] = 1;
+			MPR.files[MPR.path + "Core/Element.Event/Element.Event.js"] = 1;
+			MPR.files[MPR.path + "Core/Utilities.Selectors/Utilities.Selectors.js"] = 1;
+			MPR.files[MPR.path + "Core/Utilities.DomReady/Utilities.DomReady.js"] = 1;
+			MPR.files[MPR.path + "Core/Request/Request.js"] = 1;
+		';		
 	}
 
 	if($_REQUEST['mode'] !== 'onlyCore') {
@@ -41,25 +59,6 @@
 	echo file_get_contents('Core/Request/Request.js');
 	
 	echo file_get_contents('Mpr/MprCore.js');
-	
-	echo '
-		MPR.files[MPR.path + "Mpr/MprCore.js"] = 1;
-		MPR.files[MPR.path + "Core/Core/Core.js"] = 1;
-		MPR.files[MPR.path + "Core/Core.Browser/Core.Browser.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.Array/Native.Array.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.Function/Native.Function.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.Number/Native.Number.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.String/Native.String.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.Hash/Native.Hash.js"] = 1;
-		MPR.files[MPR.path + "Core/Native.Event/Native.Event.js"] = 1;
-		MPR.files[MPR.path + "Core/Class/Class.js"] = 1;
-		MPR.files[MPR.path + "Core/Class.Extras/Class.Extras.js"] = 1;
-		MPR.files[MPR.path + "Core/Element/Element.js"] = 1;
-		MPR.files[MPR.path + "Core/Element.Event/Element.Event.js"] = 1;
-		MPR.files[MPR.path + "Core/Utilities.Selectors/Utilities.Selectors.js"] = 1;
-		MPR.files[MPR.path + "Core/Utilities.DomReady/Utilities.DomReady.js"] = 1;
-		MPR.files[MPR.path + "Core/Request/Request.js"] = 1;
-	';
 	*/	
 
 ?>
