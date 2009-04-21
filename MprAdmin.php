@@ -72,7 +72,7 @@
 	if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
 		
-		$center .= Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+		$center .= str_replace('../', $path[1] . '/' . $path[2] . '/', Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->') );
 		
 		$codeHeader = Helper::getContent($demoCode, '<!-- ### Mpr.Header.Start ### -->', '<!-- ### Mpr.Header.End ### -->');
 		if( $codeHeader ) $header .= $codeHeader;
