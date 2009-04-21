@@ -62,7 +62,7 @@ class MPR extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function getFileList($scripts, $mode = 'loadRequire') {
-		$regularExpressionRequire = '#\$require\(\s*?MPR\.path\s*?\+\s*?\'(.*?)\'\)#';
+		$regularExpressionRequire = '#\$require\(MPR\.path\s*?\+\s*?\'(.*?)\'\)#';
 		
 		$fileList = array('js' => array(), 'css' => array());
 
