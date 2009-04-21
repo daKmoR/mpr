@@ -69,7 +69,7 @@
 	$MprAdmin = new MprAdmin();
 	$left = $MprAdmin->render();
 		
-	if ($_REQUEST['mode'] === 'demo') {
+	if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
 		
 		$center .= Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
@@ -84,7 +84,7 @@
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 		
 	
-	} elseif ($_REQUEST['mode'] === 'docu') {
+	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
 
 		// Get the classes:

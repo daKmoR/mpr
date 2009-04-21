@@ -12,6 +12,6 @@ $require(MPR.path + 'Visual/CanvasOverlays/CanvasOverlays.js');
 
 var Auto = Auto || {};
 
-window.addEvent('domready', function() {
+window.addEvent('load', function() {
 	Auto.CanvasOverlays = new CanvasOverlays( '.CanvasOverlay' );
 });

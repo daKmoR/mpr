@@ -7,6 +7,7 @@ Just include the AutoCanvasOverlays and set the CSS-Class "CanvasOverlay" for im
 These images must have the "usemap" property. You can individiually override the display options for each area by defining them in the alt tag.
 
 	//either require it or build a costum library for the page using it.
+	//the AutoCanvasOverlays uses 'load' and not 'domready' as canvas might fail otherwise (sometimes)
 	$require(MPR.path + 'Visual/CanvasOverlays/AutoCanvasOverlays.js');
 
 Class: CanvasOverlay {#CanvasOverlay}
