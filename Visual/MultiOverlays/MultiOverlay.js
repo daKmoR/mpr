@@ -54,12 +54,11 @@ var MultiOverlay = new Class({
 	
 	attach: function(area) {
 		var overlay = new Element('img', { 
-			src: area.get('title'), 
-			alt: area.get('alt'), 
+			src: area.get('alt'),
+			title: area.get('title'),
 			style: 'position: absolute; left: 0; top: 0;', 
 			usemap : this.element.get('usemap') 
 		});
-		area.erase('title');
 		this.fireEvent('onInit', [overlay, area.hasClass(this.options.activeClass)] );
 		this.container.grab(overlay);
 		
@@ -79,4 +78,4 @@ var MultiOverlay = new Class({
 		});
 	}
 	
-});
+});2

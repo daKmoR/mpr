@@ -1,10 +1,10 @@
 Class: AutoMultiOverlays {#AutoMultiOverlays}
 =============================
 
-Allows you to create multiple image overlays for an image with imagemap by defining the overlay images in the title tag. All used images should have the same size.
+Allows you to create multiple image overlays for an image with imagemap by defining the overlay images in the alt tag. All used images should have the same size.
 
 Just include the AutoMultiOverlay and set the CSS-Class "MultiOverlay" for images that should be used.
-These images must have the "usemap" property. In the title tag of the areas for the map give the url to the overlay image.
+These images must have the "usemap" property. In the alt tag of the areas for the map give the url to the overlay image.
 
 	//either require it or build a costum library for the page using it.
 	$require(MPR.path + 'Visual/MultiOverlays/AutoMultiOverlays.js');
@@ -12,7 +12,7 @@ These images must have the "usemap" property. In the title tag of the areas for 
 Class: MultiOverlay {#MultiOverlay}
 =============================
 
-Allows you to create multiple image overlays for an image with imagemap by defining the overlay images in the title tag. All used images should have the same size.
+Allows you to create multiple image overlays for an image with imagemap by defining the overlay images in the alt tag. All used images should have the same size.
 
 ### Syntax:
 
@@ -77,8 +77,8 @@ MultiOverlay Example: html {#MultiOverlay:html}
 
 	<img id="source" usemap="#MultiOverlayMap" src="MultiOverlay.bg.gif" alt="MultiOverlay" />
 	<map name="MultiOverlayMap" id="MultiOverlayMap">
-		<area href="#" shape="rect" title="MultiOverlay.A.gif" alt="A" coords="226,81,320,178" />
-		<area href="#" shape="poly" title="MultiOverlay.B.gif" alt="B" coords="262,36,280,33,288" />
+		<area href="#" shape="rect" alt="MultiOverlay.A.gif" coords="226,81,320,178" />
+		<area href="#" shape="poly" alt="MultiOverlay.B.gif" coords="262,36,280,33,288" />
 	</map>
 	
 	
