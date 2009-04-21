@@ -54,7 +54,8 @@ var CanvasOverlay = new Class({
 			style: 'position: relative; background: url(' + this.element.get('src') + ');'
 		}).wraps(this.element);
 		
-		this.element.set('style', 'opacity: 0;');
+		this.element.setStyle('opacity', 0);
+		this.element.setStyle('visibility', 'visible');
 		
 		this.canvas = this.createCanvas();
 		if( this.options.fade )
