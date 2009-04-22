@@ -15,15 +15,13 @@ $require(MPR.path + 'Core/Utilities.Json/Utilities.Json.js');
  
 $require(MPR.path + 'More/Class.Occlude/Class.Occlude.js');
 
-$require(MPR.path + 'Snippets/String/String.hexToRgba.js');
-
 var CanvasOverlay = new Class({
 	Implements: [Events, Options, Class.Occlude],
 	property: 'CanvasOverlay',
 	
 	options: {
 		fill: true,
-		fillColor: '#333',
+		fillColor: '#333333',
 		fillOpacity: 0.2,
 		stroke: true,
 		strokeColor: '#ff3333',
@@ -45,7 +43,7 @@ var CanvasOverlay = new Class({
 		if ( !this.element.get('usemap') ) return;
 		
 		// no canvas support so we can't do anything
-		if ( !document.createElement('canvas').getContext ) return;
+		if ( !new Element('canvas').getContext ) return;
 		
 		if (this.occlude()) return this.occluded;
 		this.build();
@@ -54,18 +52,17 @@ var CanvasOverlay = new Class({
 	build: function() {
 		this.areas = $$(this.element.get('usemap'))[0].getElements('area');
 		this.container = new Element('div', { 
-			style: 'position: relative; background: url(' + this.element.get('src') + ');'
+			style: 'position: relative; background: url(' + this.element.get('src') + '); width: ' + this.element.getSize().x + 'px; height: ' + this.element.getSize().y + 'px;'
 		}).wraps(this.element);
 		
-		this.element.setStyle('opacity', 0);
-		this.element.setStyle('visibility', 'visible');
+		this.element.setStyle('opacity', 0.01);
 		
 		this.canvas = this.createCanvas();
 		if( this.options.fade )
 			this.canvas.setStyle('opacity', 0);
 		
 		this.ctx = this.canvas.getContext('2d');
-		this.ctx.lineJoin  = 'round';
+		this.ctx.lineJoin = 'round';
 		
 		this.clear();
 		
@@ -106,7 +103,7 @@ var CanvasOverlay = new Class({
 				if( options.fade )
 					that.canvas.tween('opacity', 1);
 			},
-			'mouseout': function() {
+			'mouseleave': function() {
 				that.clear();
 			}
 		});
@@ -115,37 +112,47 @@ var CanvasOverlay = new Class({
 	attachShape: function(shape, coords, options, ctx) {
 		options = options || this.options;
 		ctx = ctx || this.ctx;
+		shape = shape.toLowerCase();
 		ctx.beginPath();
 		if (shape === 'rect') {
 			ctx.rect(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]);
 		} else if (shape === 'poly') {
 			ctx.moveTo(coords[0], coords[1]);
-			for(i = 2; i < coords.length; i += 2) {
+			for(i = 2; i < coords.length; i += 2)
 				ctx.lineTo(coords[i], coords[i+1]);
-			}
 		} else if (shape === 'circ') {
 			ctx.arc(coords[0], coords[1], coords[2], 0, Math.PI * 2, false);
 		}
 		ctx.closePath();
 		
-		if( options.glow ) {
+		if ( options.glow ) {
+			ctx.save();
+			ctx.globalAlpha = 0.1; 
+			ctx.strokeStyle = options.glowColor;
 			for(i = options.glowSize; i > 0; i--) {
-				ctx.strokeStyle = options.glowColor.hexToRgba( 0.1 );
 				ctx.lineWidth = i*2;
 				ctx.stroke();
 			}
+			ctx.restore();
 		}
-		
-		if(options.fill) {
-			ctx.fillStyle = options.fillColor.hexToRgba( options.fillOpacity );
+
+		if ( options.fill ) {
+			ctx.save();
+			ctx.globalAlpha = options.fillOpacity;
+			ctx.fillStyle = options.fillColor;
 			ctx.fill();
+			ctx.restore();
 		}
 		
-		if(options.stroke) {
-			ctx.strokeStyle = options.strokeColor.hexToRgba( options.strokeOpacity );
+		if ( options.stroke ) {
+			ctx.save();
+			ctx.globalAlpha = options.strokeOpacity;
+			ctx.strokeStyle = options.strokeColor;
 			ctx.lineWidth = options.strokeWidth;
 			ctx.stroke();
+			ctx.restore();
 		}
+
 	},
 	
 	clear: function() {
