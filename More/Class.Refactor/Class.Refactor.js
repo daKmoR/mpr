@@ -9,7 +9,7 @@ Script: Class.Refactor.js
 		Aaron Newton
 */
 
-Class.Refactor = function(original, refactors){
+Class.refactor = function(original, refactors){
 
 	$each(refactors, function(item, name){
 		var origin = original.prototype[name];
