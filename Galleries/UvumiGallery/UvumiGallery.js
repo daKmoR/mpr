@@ -25,7 +25,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-$require(MPR.path + 'Galleries/UvumiGallery/Resources/UvumiGallery.css');
+$require(MPR.path + 'Galleries/UvumiGallery/Resources/css/UvumiGallery.css');
 
 $require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
 $require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
@@ -687,33 +687,4 @@ var UvumiGallery = new Class({
 	max:function(a,b){
 		return( (a>b) ? a : b );	
 	}
-});
-
-
-//updated Asset.images : the original doesn't handle errors, which cause the script to freeze if a thumbnail was missing
-Asset.set('images',function(sources, options){
-	options = $merge({
-		onComplete: $empty,
-		onProgress: $empty,
-		onError: $empty
-	}, options);
-	if (!sources.push) sources = [sources];
-	var images = [];
-	var counter = 0;
-	sources.each(function(source){
-		var img = new Asset.image(source, {
-			'onload': function(){
-				options.onProgress.call(this, counter, sources.indexOf(source));
-				counter++;
-				if (counter == sources.length) options.onComplete();
-			},
-			'onerror': function(){
-				options.onError.call(this, counter, sources.indexOf(source));
-				counter++;
-				if (counter == sources.length) options.onComplete();
-			}
-		});
-		images.push(img);
-	});
-	return new Elements(images);
 });

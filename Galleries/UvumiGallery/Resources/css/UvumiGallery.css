@@ -1,0 +1,15 @@
+/*
+TO AVOID UNEXPECTED RESULTS, DO NOT MODIFY ANY OF THE PROPERTY OTHER THAN THE ONES SET HERE
+*/
+img { border: 0; }
+
+/*The color of the border will actually also define the color of the progresser inside*/
+div.progress-bar{ border: 1px solid #fff; background-color: #000; }
+
+/*try not to make the border thicker than 1px*/
+div.missing-thumbnail{ background: #333 url('img/redx.gif') center center no-repeat; cursor: pointer; border: 1px solid #bbb; }
+div.error-message{ color: #bbb; font-size: 1.2em; margin-top: -0.6em;	position: relative;	text-align: center; }
+div.caption{ background-color: #000; color: #fff; }
+
+/*to style the direct link inside the caption*/
+div.caption a { color: #fff; }
