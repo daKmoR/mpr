@@ -14,7 +14,6 @@ Class.Mutators.Binds = function(binds){
 };
 
 Class.Mutators.initialize = function(initialize){
-	
 	return function(){
 		$splat(this.Binds).each(function(name){
 			var original = this[name];
@@ -22,5 +21,4 @@ Class.Mutators.initialize = function(initialize){
 		}, this);
 		return initialize.apply(this, arguments);
 	};
-
 };

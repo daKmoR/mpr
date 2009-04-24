@@ -9,7 +9,7 @@ Script: Fx.SmoothScroll.js
 		Valerio Proietti
 */
 
-Fx.SmoothScroll = new Class({
+var SmoothScroll = Fx.SmoothScroll = new Class({
 
 	Extends: Fx.Scroll,
 
@@ -35,7 +35,7 @@ Fx.SmoothScroll = new Class({
 	useLink: function(link, anchor){
 		var el;
 		link.addEvent('click', function(event){
-			if (el !== false && !el) el = this.doc.getElement('a[name=' + anchor + ']');
+			if (el !== false && !el) el = $(anchor) || this.doc.getElement('a[name=' + anchor + ']');
 			if (el) {
 				event.preventDefault();
 				this.anchor = anchor;

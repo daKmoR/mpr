@@ -1,3 +1,5 @@
+[Request]: /core/Request/Request
+
 Class: Request.HTML {#Request-HTML}
 ===================================
 

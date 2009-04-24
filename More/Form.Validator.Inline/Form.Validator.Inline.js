@@ -92,6 +92,7 @@ FormValidator.Inline = new Class({
 		field.className.split(' ').each(function(className){
 			this.hideAdvice(className, field);
 		}, this);
+		return this;
 	},
 
 	getAllAdviceMessages: function(field, force){
@@ -121,13 +122,8 @@ FormValidator.Inline = new Class({
 		var props = field.get('validatorProps');
 		//Build advice
 		if (!props.msgPos || !$(props.msgPos)){
-			switch (field.type.toLowerCase()){
-				case 'radio':
-					var p = field.getParent().adopt(advice);
-					break;
-				default:
-					advice.inject($(field), 'after');
-			};
+			if(field.type.toLowerCase() == 'radio') field.getParent().adopt(advice);
+			else advice.inject($(field), 'after');
 		} else {
 			$(props.msgPos).grab(advice);
 		}
@@ -144,7 +140,7 @@ FormValidator.Inline = new Class({
 			var scrolls;
 			while (par != document.body && !isScrolled(par)){
 				par = par.getParent();
-			};
+			}
 			var fx = par.retrieve('fvScroller');
 			if (!fx && window.Fx && Fx.Scroll){
 				fx = new Fx.Scroll(par, {

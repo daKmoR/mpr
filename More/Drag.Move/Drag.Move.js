@@ -23,7 +23,8 @@ Drag.Move = new Class({
 		droppables: [],
 		container: false,
 		precalculate: false,
-		includeMargins: true
+		includeMargins: true,
+		checkDroppables: true
 	},
 
 	initialize: function(element, options){
@@ -57,7 +58,7 @@ Drag.Move = new Class({
 			if (this.options.includeMargins) {
 				$each(ems, function(value, key) {
 					ems[key] = 0;
-				})
+				});
 			}
 			if (this.container == this.element.getOffsetParent()) {
 				this.options.limit = {
@@ -97,7 +98,7 @@ Drag.Move = new Class({
 
 	drag: function(event){
 		this.parent(event);
-		if (this.droppables.length) this.checkDroppables();
+		if (this.options.checkDroppables && this.droppables.length) this.checkDroppables();
 	},
 
 	stop: function(event){
