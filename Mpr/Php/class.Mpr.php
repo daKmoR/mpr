@@ -220,7 +220,7 @@ class MPR extends Options {
 				$css = CssMin::minify($css);
 			}
 			if ($what === 'jsInlineCss')
-				$content .= PHP_EOL . 'new Element("style", {type: "text/css", text: "' . $css . '"}).inject(document.head);';
+				$content .= PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
 			else
 				$content .= $css;
 		}
