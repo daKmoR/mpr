@@ -40,6 +40,10 @@ class MPR extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function getScript($url) {
+		return $this->prepareContent($url, 'js');
+	}
+	
+	public function getJsInlineCss($url) {
 		return $this->prepareContent($url);
 	}
 	
@@ -165,7 +169,7 @@ class MPR extends Options {
 	 * @return void
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	private function prepareContent($url, $what = 'js') {
+	private function prepareContent($url, $what = 'jsInlineCss') {
 		$urlInfo = parse_url($url);
 		if ($this->options->base === '')
 			$this->options->base = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/';
@@ -184,34 +188,41 @@ class MPR extends Options {
 		
 		$fileList = $this->getFileList( $siteScript );
 		$content = '';
-		if ($what === 'js') {
+		$js = '';
+		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
-					$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
 			foreach( $fileList['js'] as $file ) {
 				if( is_file($file) ) {
-					$content .= file_get_contents($file) . PHP_EOL;
-					$content .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+					$js .= file_get_contents($file) . PHP_EOL;
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				} else
-					$content .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
+					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
 			if ( $this->options->compress === 'minify' ) {
 				require_once 'class.JsMin.php';
-				$content = JsMin::minify($content);
+				$js = JsMin::minify($js);
 			}
+			$content .= $js;
 		}
 		
-		if ($what === 'css') {
+		$css = '';
+		if ($what === 'css' || $what === 'jsInlineCss') {
 			foreach( $fileList['css'] as $file ) {
 				$raw = file_get_contents($file);
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
-				$content .= $raw . PHP_EOL;
+				$css .= $raw . PHP_EOL;
 			}
 			if ( $this->options->compress === 'minify' ) {
 				require_once 'class.CssMin.php';
-				$content = CssMin::minify($content);
+				$css = CssMin::minify($css);
 			}
+			if ($what === 'jsInlineCss')
+				$content .= PHP_EOL . 'new Element("style", {type: "text/css", text: "' . $css . '"}).inject(document.head);';
+			else
+				$content .= $css;
 		}
 		
 		if( $this->options->useCache === true ) {

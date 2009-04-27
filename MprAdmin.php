@@ -302,8 +302,7 @@
 		</script>
 		
 		<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
-		<script src="MprJs.php?mode=noCore" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />
+		<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
 		
 		<?php echo $header; ?>
 		
