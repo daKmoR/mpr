@@ -50,7 +50,7 @@ var Ui = new Class({
 						this.options[name].name.split('.').each( function(el) {
 							tmp = tmp[el];
 						});
-						tmp = Class.Refactor(tmp, this.Uis[name].options.refactor);
+						tmp = Class.refactor(tmp, this.Uis[name].options.refactor);
 					}
 				}
 			}
