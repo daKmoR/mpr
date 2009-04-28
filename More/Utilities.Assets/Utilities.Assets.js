@@ -11,7 +11,7 @@ Script: Assets.js
 
 var Asset = Asset || {};
 
-Asset = {
+$extend(Asset, {
 
 	javascript: function(source, properties){
 		properties = $extend({
@@ -94,4 +94,4 @@ Asset = {
     }));
   }
 
-};
+});
