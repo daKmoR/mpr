@@ -62,7 +62,7 @@ class MPR extends Options {
 	/**
 	 * finds all need files and save them in an array['js'] and array['css']
 	 *
-	 * @param string $url
+	 * @param string/array $scripts either string or an array where to look for $require
 	 * @return array
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
