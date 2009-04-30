@@ -1,3 +1,7 @@
+
+$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+
 Element.implement({
 	beat: function(radius,rate){
 		radius = radius || 2;
