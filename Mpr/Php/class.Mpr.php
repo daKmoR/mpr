@@ -16,7 +16,8 @@ class MPR extends Options {
 		'pathToMpr' => '',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
 		'cssMprIsUsed' => true,
-		'useCache' => true,
+		'externalFiles' => true,
+		'cache' => true,
 		'cachePath' => 'Mpr/MprCache/',
 		'compress' => 'minify' //[none, minify]
 	);
@@ -176,7 +177,7 @@ class MPR extends Options {
 			
 		$siteScript = $this->loadUrl($url);
 		
-		if( $this->options->useCache === true ) {
+		if( $this->options->cache === true ) {
 			$siteRequire = $this->getFileList( $siteScript, 'noLoad' );
 			$requireString = ($what === 'js') ? implode(' ', $siteRequire['js']) : implode(' ', $siteRequire['js']) . ' ' . implode(' ', $siteRequire['css']);
 			$name = md5( $requireString );
@@ -225,7 +226,7 @@ class MPR extends Options {
 				$content .= $css;
 		}
 		
-		if( $this->options->useCache === true ) {
+		if( $this->options->cache === true ) {
 			//save cache
 			if( !is_dir($this->options->cachePath) )
 				mkdir( $this->options->cachePath );

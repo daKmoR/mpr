@@ -5,7 +5,7 @@
 	// once you defined your options rename this file from MprConfig.examle.php to MprConfig.php
 
 	// for example if you don't want to use cache
-	$MprOptions['useCache'] = false;
+	$MprOptions['cache'] = false;
 	
 	// or you don't want to use gzip
 	$useGzip = false; 
