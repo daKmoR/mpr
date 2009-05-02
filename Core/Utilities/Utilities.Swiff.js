@@ -9,7 +9,7 @@ Credits:
 	Flash detection & Internet Explorer + Flash Player 9 fix inspired by SWFObject.
 */
 
-$require(MPR.path + 'Core/Core/Class.Extras.js');
+$require(MPR.path + 'Core/Class/Class.Extras.js');
 
 var Swiff = new Class({
 

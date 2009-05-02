@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Core/Class.Extras.js');
+$require(MPR.path + 'Core/Class/Class.Extras.js');
 
 var Request = new Class({
 

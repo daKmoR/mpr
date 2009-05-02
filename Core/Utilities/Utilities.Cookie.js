@@ -10,7 +10,7 @@ Credits:
 */
 
 $require(MPR.path + 'Core/Core/Core.Browser.js');
-$require(MPR.path + 'Core/Core/Class.Extras.js');
+$require(MPR.path + 'Core/Class/Class.Extras.js');
 
 var Cookie = new Class({
 
