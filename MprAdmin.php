@@ -302,7 +302,17 @@
 		</script>
 		
 		<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
-		<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
+		
+		<?php
+			//<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
+			require_once 'Mpr/Php/class.Mpr.php';
+			$localMPR = new MPR( $MprOptions );
+			echo $localMPR->getScriptTagInlineCss(
+				'$require(MPR.path + \'More/Fx.Accordion/Fx.Accordion.js\');
+				$require(MPR.path + \'Core/Fx.Tween/Fx.Tween.js\');' .
+				$js
+			);
+		?>
 		
 		<?php echo $header; ?>
 		

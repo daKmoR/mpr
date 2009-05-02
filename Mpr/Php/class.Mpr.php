@@ -34,29 +34,22 @@ class MPR extends Options {
 	}
 	
 	/**
-	 * returns the full js code you need
+	 * returns the full js and css code with script tag; either as inline js or as a src to an external file (also cache)
 	 *
 	 * @param string $url
 	 * @return string
 	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	public function getScript($url) {
-		return $this->prepareContent($url, 'js');
-	}
-	
-	public function getJsInlineCss($url) {
-		return $this->prepareContent($url);
-	}
-	
-	/**
-	 * returns the full css code you need
-	 *
-	 * @param string $url
-	 * @return string
-	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	public function getCss($url) {
-		return $this->prepareContent($url, 'css');
+	 */	
+	public function getScriptTagInlineCss($text) {
+		$code = $this->prepareContent($text, 'jsInlineCss', &$name);
+
+		if( $this->options->externalFiles === true )
+			return '<script type="text/javascript" src="' . $this->options->cachePath . 'jsInlineCss/' . $name . '"></script>';
+
+		return '
+			<script type="text/javascript"><!--
+				' . $code .	'
+			--></script>';
 	}
 
 	/**
@@ -95,6 +88,119 @@ class MPR extends Options {
 		
 		return $fileList;
 	}	
+	
+	/**
+	 * before we return anything we want to do some common workup.
+	 *
+	 * @param string $input
+	 * @return void
+	 * @author Thomas Allmer <at@delusionworld.com>
+	 */
+	private function prepareContent($jsCode, $what = 'jsInlineCss', &$name = null) {
+		
+		if( $this->options->externalFiles === true ) {
+			$siteRequire = $this->getFileList( $jsCode, 'noLoad' );
+			$requireString = ($what === 'js') ? implode(' ', $siteRequire['js']) : implode(' ', $siteRequire['js']) . ' ' . implode(' ', $siteRequire['css']);
+			$name = md5( $requireString );
+			$name .= ($what !== 'css') ? '.js' : '.css';
+		
+			//if a cache is found for these required files it's returned
+			if( is_file($this->options->cachePath . $what . '/' . $name) && $this->options->cache === true )
+				return file_get_contents($this->options->cachePath . $what . '/' . $name);
+		}
+		
+		$fileList = $this->getFileList( $jsCode );
+		$content = '';
+		$js = '';
+		if ($what === 'js' || $what === 'jsInlineCss') {
+			if ($this->options->cssMprIsUsed === true)
+				foreach($fileList['css'] as $file)
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+				
+			foreach( $fileList['js'] as $file ) {
+				if( is_file($file) ) {
+					$js .= file_get_contents($file) . PHP_EOL;
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
+				} else
+					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
+			}
+			if ( $this->options->compress === 'minify' ) {
+				require_once 'class.JsMin.php';
+				$js = JsMin::minify($js);
+			}
+			$content .= $js;
+		}
+		
+		$css = '';
+		if ($what === 'css' || $what === 'jsInlineCss') {
+			foreach( $fileList['css'] as $file ) {
+				$raw = file_get_contents($file);
+				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
+				$css .= $raw . PHP_EOL;
+			}
+			if ( $this->options->compress === 'minify' ) {
+				require_once 'class.CssMin.php';
+				$css = CssMin::minify($css);
+			}
+			if ($what === 'jsInlineCss')
+				$content .= PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
+			else
+				$content .= $css;
+		}
+		
+		if( $this->options->externalFiles === true ) {
+			//save cache
+			if( !is_dir($this->options->cachePath) )
+				mkdir( $this->options->cachePath );
+			if( !is_dir($this->options->cachePath . $what . '/') )
+				mkdir( $this->options->cachePath . $what . '/' );
+			file_put_contents( $this->options->cachePath . $what . '/' . $name, $content );
+		}
+		
+		return $content;
+	}
+	
+	/**
+	 * returns the full js code you need
+	 *
+	 * @param string $url
+	 * @return string
+	 * @author Thomas Allmer <at@delusionworld.com>
+	 */
+	public function getScript($url) {
+		return $this->prepareContent($url, 'js');
+	}
+	
+	//alias for $this->getScript()
+	public function getJs($url) { return $this->getScript($url); }
+	
+	/**
+	 * returns the full js code for a given url
+	 *
+	 * @param string $url - the url you want to get the requirements from
+	 * @return string
+	 * @author Thomas Allmer <at@delusionworld.com>
+	 */
+	public function getJsInlineCss($url) {
+		$urlInfo = parse_url($url);
+		if ($this->options->base === '')
+			$this->options->base = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/';
+			
+		$siteScript = $this->loadUrl($url);
+	
+		return $this->prepareContent($siteScript);
+	}
+	
+	/**
+	 * returns the full css code you need
+	 *
+	 * @param string $url
+	 * @return string
+	 * @author Thomas Allmer <at@delusionworld.com>
+	 */
+	public function getCss($url) {
+		return $this->prepareContent($url, 'css');
+	}
 	
 	/**
 	 * returns the content of a page via curl
@@ -161,82 +267,7 @@ class MPR extends Options {
 		
 		$this->cache[$url] = $scripts;
 		return $scripts;
-	}
-	
-	/**
-	 * before we return anything we want to do some common workup.
-	 *
-	 * @param string $input
-	 * @return void
-	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	private function prepareContent($url, $what = 'jsInlineCss') {
-		$urlInfo = parse_url($url);
-		if ($this->options->base === '')
-			$this->options->base = $urlInfo['scheme'] . '://' . $urlInfo['host'] . dirname($urlInfo['path']) . '/';
-			
-		$siteScript = $this->loadUrl($url);
-		
-		if( $this->options->cache === true ) {
-			$siteRequire = $this->getFileList( $siteScript, 'noLoad' );
-			$requireString = ($what === 'js') ? implode(' ', $siteRequire['js']) : implode(' ', $siteRequire['js']) . ' ' . implode(' ', $siteRequire['css']);
-			$name = md5( $requireString );
-		
-			//if a cache is found for these required files it's returned
-			if( is_file($this->options->cachePath . $what . '/' . $name) )
-				return file_get_contents($this->options->cachePath . $what . '/' . $name);
-		}
-		
-		$fileList = $this->getFileList( $siteScript );
-		$content = '';
-		$js = '';
-		if ($what === 'js' || $what === 'jsInlineCss') {
-			if ($this->options->cssMprIsUsed === true)
-				foreach($fileList['css'] as $file)
-					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
-				
-			foreach( $fileList['js'] as $file ) {
-				if( is_file($file) ) {
-					$js .= file_get_contents($file) . PHP_EOL;
-					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
-				} else
-					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
-			}
-			if ( $this->options->compress === 'minify' ) {
-				require_once 'class.JsMin.php';
-				$js = JsMin::minify($js);
-			}
-			$content .= $js;
-		}
-		
-		$css = '';
-		if ($what === 'css' || $what === 'jsInlineCss') {
-			foreach( $fileList['css'] as $file ) {
-				$raw = file_get_contents($file);
-				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
-				$css .= $raw . PHP_EOL;
-			}
-			if ( $this->options->compress === 'minify' ) {
-				require_once 'class.CssMin.php';
-				$css = CssMin::minify($css);
-			}
-			if ($what === 'jsInlineCss')
-				$content .= PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
-			else
-				$content .= $css;
-		}
-		
-		if( $this->options->cache === true ) {
-			//save cache
-			if( !is_dir($this->options->cachePath) )
-				mkdir( $this->options->cachePath );
-			if( !is_dir($this->options->cachePath . $what . '/') )
-				mkdir( $this->options->cachePath . $what . '/' );
-			file_put_contents( $this->options->cachePath . $what . '/' . $name, $content );
-		}
-		
-		return $content;
-	}
+	}	
 	
 }
 
