@@ -9,7 +9,7 @@ Script: Fx.Elements.js
 		Valerio Proietti
 */
 
-$require(MPR.path + 'Core/Fx.Css/Fx.Css.js');
+$require(MPR.path + 'Core/Fx/Fx.Css.js');
 
 Fx.Elements = new Class({
 

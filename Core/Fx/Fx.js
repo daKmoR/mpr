@@ -6,6 +6,8 @@ License:
 	MIT-style license.
 */
 
+$require(MPR.path + 'Core/Core/Class.Extras.js');
+
 var Fx = new Class({
 
 	Implements: [Chain, Events, Options],

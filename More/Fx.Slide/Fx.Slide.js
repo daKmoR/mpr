@@ -10,7 +10,7 @@ Script: Fx.Slide.js
 */
 
 $require(MPR.path + 'Core/Fx/Fx.js');
-$require(MPR.path + 'Core/Element.Style/Element.Style.js');
+$require(MPR.path + 'Core/Element/Element.Style.js');
 
 Fx.Slide = new Class({
 

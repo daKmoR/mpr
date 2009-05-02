@@ -10,12 +10,12 @@
 
 $require(MPR.path + 'Galleries/FlowGallery/Resources/css/FlowGallery.css'); 
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
-$require(MPR.path + 'Core/Element.Style/Element.Style.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require(MPR.path + 'Core/Element/Element.Style.js');
 
-$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+$require(MPR.path + 'Core/Fx/Fx.Tween.js');
+$require(MPR.path + 'Core/Fx/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
 $require(MPR.path + 'More/Fx.Slide/Fx.Slide.js');
  

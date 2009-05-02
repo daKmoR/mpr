@@ -299,17 +299,40 @@
 		<script type="text/javascript">
 			var MPR = {};
 			MPR.path = '';
+
+var MPR = MPR || {};
+if ( typeof(MPR.path) === 'undefined' )
+	MPR.path = 'MPR/';
+
+if ( typeof(MPR.files) === 'undefined' )
+	MPR.files = [];
+	
+function $require(source) { return true }
+
+var Asset = Asset || {};
+Asset.styles = function(rules, media) {
+	var media = media || 'screen';
+	if( Browser.Engine.trident ) {
+		var obj = new Element('style', { type: 'text/css', media: media }).inject( document.head );
+		obj.styleSheet.cssText = rules;
+	} else 
+		new Element('style', {type: 'text/css', media: media, text: rules}).inject( document.head );
+}
+MPR.files[MPR.path+"Tools/Asset.Styles/Asset.Styles.js"]=1;
+		
 		</script>
 		
-		<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
-		
 		<?php
+			//<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
 			//<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
 			require_once 'Mpr/Php/class.Mpr.php';
 			$localMPR = new MPR( $MprOptions );
-			echo $localMPR->getScriptTagInlineCss(
-				'$require(MPR.path + \'More/Fx.Accordion/Fx.Accordion.js\');
-				$require(MPR.path + \'Core/Fx.Tween/Fx.Tween.js\');' .
+			echo $localMPR->getScriptTagInlineCss('
+				$require(MPR.path + \'Core/Utilities/Utilities.DomReady.js\');
+				$require(MPR.path + \'Core/Utilities/Utilities.Selectors.js\');
+				$require(MPR.path + \'Core/Request/Request.js\');
+				$require(MPR.path + \'More/Fx.Accordion/Fx.Accordion.js\');
+				$require(MPR.path + \'Core/Fx/Fx.Tween.js\');' .
 				$js
 			);
 		?>
@@ -317,8 +340,11 @@
 		<?php echo $header; ?>
 		
 		<script type="text/javascript">
+			$require(MPR.path + 'Core/Utilities/Utilities.DomReady.js');
+			$require(MPR.path + 'Core/Utilities/Utilities.Selectors.js');
+			$require(MPR.path + 'Core/Request/Request.js');
 			$require(MPR.path + 'More/Fx.Accordion/Fx.Accordion.js');
-			$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
+			$require(MPR.path + 'Core/Fx/Fx.Tween.js');
 			
 			window.addEvent('domready', function() {
 				var current = 0;

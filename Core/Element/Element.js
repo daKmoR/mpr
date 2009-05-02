@@ -7,6 +7,13 @@ License:
 	MIT-style license.
 */
 
+$require(MPR.path + 'Core/Core/Core.Browser.js');
+$require(MPR.path + 'Core/Native/Native.Array.js');
+$require(MPR.path + 'Core/Native/Native.Function.js');
+$require(MPR.path + 'Core/Native/Native.Hash.js');
+$require(MPR.path + 'Core/Native/Native.Number.js');
+$require(MPR.path + 'Core/Native/Native.String.js');
+
 var Element = new Native({
 
 	name: 'Element',
