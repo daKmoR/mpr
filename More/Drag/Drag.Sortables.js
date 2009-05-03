@@ -9,7 +9,7 @@ Script: Sortables.js
 		Tom Occhino
 */
 
-$require(MPR.path + 'More/Drag.Move/Drag.Move.js');
+$require(MPR.path + 'More/Drag/Drag.Move.js');
 
 var Sortables = new Class({
 

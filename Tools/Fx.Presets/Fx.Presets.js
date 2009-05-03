@@ -5,7 +5,7 @@
 	Released under MIT License http://www.opensource.org/licenses/mit-license.php
 */
 
-$require(MPR.path + 'Core/Element.Style/Element.Style.js');
+$require(MPR.path + 'Core/Element/Element.Style.js');
 
 $require(MPR.path + 'More/Fx.Elements/Fx.Elements.js');
 

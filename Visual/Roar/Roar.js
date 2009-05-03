@@ -12,9 +12,9 @@
  
 $require(MPR.path + 'Visual/Roar/Resources/Roar.css');
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
-$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
 var Roar = new Class({
 

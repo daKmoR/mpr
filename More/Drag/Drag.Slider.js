@@ -9,9 +9,9 @@ Script: Slider.js
 		Valerio Proietti
 */
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
 
-$require(MPR.path + 'More/Class.Binds/Class.Binds.js');
+$require(MPR.path + 'More/Class/Class.Binds.js');
 $require(MPR.path + 'More/Drag/Drag.js');
 
 var Slider = new Class({

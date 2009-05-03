@@ -111,7 +111,7 @@ class MPR extends Options {
 		
 		$fileList = $this->getFileList( $jsCode );
 		$content = '';
-		$js = '';
+		$js = $jsCode !== '' ? file_get_contents('Mpr/MprCore.js') : '';
 		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)

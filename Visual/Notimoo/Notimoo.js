@@ -40,8 +40,8 @@ Inspiration:
 
 */
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
-$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx/Fx.Tween.js');
 
 $require(MPR.path + 'Visual/Notimoo/Resources/css/Notimoo.css');
 

@@ -9,8 +9,8 @@ Script: Element.Position.js
 		Aaron Newton
 */
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
-$require(MPR.path + 'More/Element.Measure/Element.Measure.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require(MPR.path + 'More/Element/Element.Measure.js');
 
 (function(){
 

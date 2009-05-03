@@ -10,8 +10,8 @@
  
 $require(MPR.path + 'Layout/FlowWindows/Resources/FlowWindow.css');
 
-$require(MPR.path + 'More/Drag.Move/Drag.Move.js');
-$require(MPR.path + 'More/Element.Position/Element.Position.js');
+$require(MPR.path + 'More/Drag/Drag.Move.js');
+$require(MPR.path + 'More/Element/Element.Position.js');
 
 var FlowWindow = {};
 

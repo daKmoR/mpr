@@ -299,27 +299,8 @@
 		<script type="text/javascript">
 			var MPR = {};
 			MPR.path = '';
-
-var MPR = MPR || {};
-if ( typeof(MPR.path) === 'undefined' )
-	MPR.path = 'MPR/';
-
-if ( typeof(MPR.files) === 'undefined' )
-	MPR.files = [];
-	
-function $require(source) { return true }
-
-var Asset = Asset || {};
-Asset.styles = function(rules, media) {
-	var media = media || 'screen';
-	if( Browser.Engine.trident ) {
-		var obj = new Element('style', { type: 'text/css', media: media }).inject( document.head );
-		obj.styleSheet.cssText = rules;
-	} else 
-		new Element('style', {type: 'text/css', media: media, text: rules}).inject( document.head );
-}
-MPR.files[MPR.path + 'Tools/Asset.Styles/Asset.Styles.js'] = 1;
-		
+			
+			MenuPath = '<?php echo $path[1]; ?>';
 		</script>
 		
 		<?php

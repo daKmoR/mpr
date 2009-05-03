@@ -6,7 +6,7 @@ $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 window.addEvent('domready', function() {
 	var current = 0;
 	$$('#menu h4').each( function(el, i) {
-		if( el.get('text') == '<?php echo $path[1]; ?>')
+		if( el.get('text') == MenuPath )
 			current = i;
 	});
 
