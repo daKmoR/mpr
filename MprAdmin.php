@@ -83,6 +83,12 @@
 		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 		
+		require_once 'Mpr/Php/class.Mpr.php';
+		$localMPR = new MPR( $MprOptions );
+		$scriptTag = $localMPR->getScriptTagInlineCss(
+			file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
+			$js
+		);
 	
 	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
@@ -306,12 +312,7 @@
 		<?php
 			//<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
 			//<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
-			require_once 'Mpr/Php/class.Mpr.php';
-			$localMPR = new MPR( $MprOptions );
-			echo $localMPR->getScriptTagInlineCss(
-				file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
-				$js
-			);
+			echo $scriptTag;
 		?>
 		
 		<?php echo $header; ?>
