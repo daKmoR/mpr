@@ -37,10 +37,6 @@ class MprAdmin extends Options {
 	 */
 	public function MprAdmin($options = null) {
 		$this->setOptions($options);
-		
-		$this->files = Helper::getFiles( $this->options->path, 1 );
-		unset( $this->files['.git'] );
-		unset( $this->files['Mpr'] );
 	}
 	
 	/**
@@ -51,6 +47,10 @@ class MprAdmin extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function render() {
+		$this->files = Helper::getFiles( $this->options->path, 1 );
+		unset( $this->files['.git'] );
+		unset( $this->files['Mpr'] );
+	
 		$content = '';
 		foreach( $this->files as $dir => $subdir ) {
 			$category = '';
@@ -66,6 +66,35 @@ class MprAdmin extends Options {
 			$content .= Helper::wrap( $category, $this->options->categoryWrap );
 		}
 		return $content;
+	}
+	
+	public function getDocu( $markdownString ) {
+			// Get the classes:
+		require_once 'Mpr/Php/mdocs/markdown.php';
+		require_once 'Mpr/Php/mdocs/markdown.mdocs.php';
+		require_once 'Mpr/Php/mdocs/geshi.php';
+		require_once 'Mpr/Php/mdocs/geshi.mdocs.php';
+
+		$markdown = new MarkdownExtra_Parser_mDocs();
+		$markdown->maxlevel = 1;
+		$markdown->minlevel = 2;
+		$geshi = new GeSHi_mDocs();
+		$geshi->default_language = 'javascript';
+		$docu = $markdown->transform($markdownString);
+
+		// Apply GeSHi Syntax Highlighting:
+		return $geshi->parse_codeblocks($docu);
+	}
+	
+	public function install( $path ) {
+		$zip = new ZipArchive();
+		if ( $zip->open($path) === TRUE ) {
+			$zip->extractTo( $this->options->path );
+			$zip->close();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**

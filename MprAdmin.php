@@ -11,18 +11,14 @@
 		
 	$path = explode('/', $_REQUEST['file']);
 	
+	$MprAdmin = new MprAdmin();
+	
 	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
-	
-		$zip = new ZipArchive();
-		if ($zip->open( $_REQUEST['file'] ) === TRUE) {
-			$zip->extractTo('./');
-			$zip->close();
-			$_REQUEST['mode'] = 'admin_general';
-			unset($_REQUEST['file']);
-		} else {
-			$center .= 'Install failed';
-		}
+		
+		$status = $MprAdmin->install( $_REQUEST['file'] );
+		$center = $status ? 'Install successful' : 'Install failed';
+		
 	} elseif ( $_REQUEST['mode'] === 'uninstall' && $_REQUEST['file'] != '' ) {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
 	
@@ -66,9 +62,8 @@
 		$_REQUEST['mode'] = 'admin_general';
 	}
 	
-	$MprAdmin = new MprAdmin();
 	$left = $MprAdmin->render();
-		
+	
 	if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
 		
@@ -84,26 +79,10 @@
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 		
 	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
+		/*************************/
+		// DOCU
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
-
-		// Get the classes:
-		require_once 'Mpr/Php/mdocs/markdown.php';
-		require_once 'Mpr/Php/mdocs/markdown.mdocs.php';
-		require_once 'Mpr/Php/mdocs/geshi.php';
-		require_once 'Mpr/Php/mdocs/geshi.mdocs.php';
-
-		$doc = file_get_contents( $_REQUEST['file'] );
-		$markdown = new MarkdownExtra_Parser_mDocs();
-		$markdown->maxlevel = 1;
-		$markdown->minlevel = 2;
-		$geshi = new GeSHi_mDocs();
-		$geshi->default_language = 'javascript';
-		$doc = $markdown->transform($doc);
-
-		// Apply GeSHi Syntax Highlighting:
-		$doc = $geshi->parse_codeblocks($doc);
-		$center = $doc;
-		
+		$center = $MprAdmin->getDocu( file_get_contents($_REQUEST['file']) );
 		
 	} elseif ($_REQUEST['mode'] === 'spec')  {
 		$header = '
