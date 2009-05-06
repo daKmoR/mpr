@@ -15,6 +15,8 @@
 	if( is_file('USE_ADMIN_FUNCTIONS') )
 		$MprAdmin->options->admin = true;
 	
+	$MprAdmin->options->cachePath = $MprOptions['cachePath'];
+	
 	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
 		
 		$status = $MprAdmin->install( $_REQUEST['file'] );
@@ -30,13 +32,9 @@
 		$status = $MprAdmin->restore( $_REQUEST['file'] );
 		$center = $status ? 'Restore successful' : 'Restore failed';
 		
-	} elseif ( $_REQUEST['mode'] === 'clear_cache' ) {
-		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
-	
-		Helper::removeDir( $MprOptions['cachePath'] . 'css/' );
-		Helper::removeDir( $MprOptions['cachePath'] . 'js/' );
+	} elseif ( $_REQUEST['mode'] === 'clearCache' ) {
+		$MprAdmin->clearCache();
 		
-		$_REQUEST['mode'] = 'admin_general';
 	}
 	
 	$left = $MprAdmin->render();
@@ -71,53 +69,7 @@
 		$center = '<div id="jsspec_container"></div>';
 		
 	} elseif ($_REQUEST['mode'] === 'indexing') {
-		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
-		ini_set('include_path', 'Mpr/Php/');
-		require_once('Zend/Search/Lucene.php');
-		require_once('Mpr/Php/class.MprIndexedDocument.php');
-		
-    $index = Zend_Search_Lucene::create($indexPath);
-	
-		$files = Helper::getFiles( './', 1 );
-		unset( $files['.git'] );
-		unset( $files['Mpr'] );
-		
-		foreach($files as $category => $subdir) {
-			foreach( $subdir as $dir => $empty ) {
-				// docu indexing
-				$path = './' . $category . '/' . $dir . '/Docu/' . $dir . '.md';
-				if( is_file($path) ) {
-					$text = file_get_contents($path);
-					$teaser = explode("\n", substr($text, 0, 300) );
-					$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
-					$id = 'MprAdmin.php?mode=docu&file=' . $path;
-				
-					$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $dir, 'content' => $text);
-					
-					$doc = new MprIndexedDocument($curDoc);
-					$index->addDocument($doc);
-				}
-				
-				// demo indexing
-				$path = './' . $category . '/' . $dir . '/Demos/' . $dir . '.html';
-				if( is_file($path) ) {
-					$demoCode = file_get_contents( $path );
-					$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
-					$teaser = explode("\n", substr($text, 0, 300) );
-					$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
-					$id = 'MprAdmin.php?mode=demo&file=' . $path;
-					$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
-					$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
-
-					$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $dir, 'content' => $text);
-					$doc = new MprIndexedDocument($curDoc);
-					$index->addDocument($doc);
-				}
-				
-			}
-		}
-		$index->commit();
-		
+		$MprAdmin->newIndex();
 		
 	} elseif ( $_REQUEST['mode'] === 'search' && $_REQUEST['query'] != '' ) {
 		ini_set('include_path', 'Mpr/Php/');
@@ -171,7 +123,7 @@
 		$center .= '<div>
 			<h2>Maintenance</h2>
 				<a href="?mode=indexing">Recreate Search Index</a> <span class="note">This will complete erase your current search index (for Docs and Demos) and recreate it. (Might take some time)</span><br />
-				<a href="?mode=clear_cache">clear cache</a> <span class="note">This will clear the cache in ' . $MprOptions['cachePath'] . '.</span>
+				<a href="?mode=clearCache">clear cache</a> <span class="note">This will clear the cache in ' . $MprOptions['cachePath'] . '.</span>
 			</div>';
 		$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or Demos)</span>';
 		
@@ -223,7 +175,6 @@
 		file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
 		$js
 	);
-		
 
 ?>
 

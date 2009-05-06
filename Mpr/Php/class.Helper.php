@@ -31,16 +31,16 @@ class Helper {
 	 * @return void
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	public static function getFiles($path, $mode = 0, $depth = 2) {
+	public static function getFiles($path, $mode = 'both', $depth = 2) {
 		if (! is_dir($path)) return array();
 		$d = dir($path);
 		$files = array();
 		while (false !== ($dir = $d->read()) ) {
 			if ( ( $dir != "." && $dir != ".." ) ) {
 				if (is_dir($d->path . '/' . $dir) ) {
-					if ( ($depth >= 1) && ($mode != 2) )
+					if ( ($depth >= 1) && ($mode != 'files') )
 						$files[$dir] = Helper::getFiles($d->path . '/' . $dir, $mode, $depth-1);
-				} else if ($mode != 1) {
+				} else if ($mode != 'dirs') {
 					$files[] = $dir;
 				}
 			}

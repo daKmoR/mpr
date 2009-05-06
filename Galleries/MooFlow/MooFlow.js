@@ -13,13 +13,13 @@
  
 $require(MPR.path + 'Galleries/MooFlow/Resources/css/MooFlow.css');
  
-$require(MPR.path + 'More/Drag.Slider/Drag.Slider.js');
+$require(MPR.path + 'More/Drag/Drag.Slider.js');
 
 $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Utilities.Assets/Utilities.Assets.js');
+$require(MPR.path + 'More/Utilities/Utilities.Assets.js');
 
 var MooFlow = new Class({
 

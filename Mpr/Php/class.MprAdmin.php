@@ -24,7 +24,9 @@ class MprAdmin extends Options {
 		),
 		'path'				=> './',
 		'admin' => false,
-		'zipPath' => 'Mpr/MprZip/'
+		'zipPath' => 'Mpr/MprZip/',
+		'indexPath' => 'Mpr/MprIndex/',
+		'cachePath' => 'Mpr/MprCache/'
 	);
 	
 	private $files = array();
@@ -49,7 +51,7 @@ class MprAdmin extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function render() {
-		$this->files = Helper::getFiles( $this->options->path, 1 );
+		$this->files = Helper::getFiles( $this->options->path, 'dirs' );
 		unset( $this->files['.git'] );
 		unset( $this->files['Mpr'] );
 	
@@ -163,29 +165,76 @@ class MprAdmin extends Options {
 		return false;
 	}
 	
-	/**
-	 * DESCRIPTION
-	 *
-	 * @param string $input
-	 * @return void
-	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	public function renderPluginData( $plugin ) {
-		Helper::wrap( $this->getPluginData($this->options->path . $dir . '/' . $subdirdir), $this->options->pluginWrap );
-	  return;
+	public function clearCache() {
+		if( $this->checkPermission() ) {
+	
+			if( is_dir($this->options->cachePath . 'css/') )
+				Helper::removeDir( $this->options->cachePath . 'css/' );
+			if( is_dir($this->options->cachePath . 'js/') )
+				Helper::removeDir( $this->options->cachePath . 'js/' );
+			if( is_dir($this->options->cachePath . 'jsInlineCss/') )
+				Helper::removeDir( $this->options->cachePath . 'jsInlineCss/' );
+				
+		}
 	}
 	
-	/**
-	 * DESCRIPTION
-	 *
-	 * @param string $input
-	 * @return void
-	 * @author Thomas Allmer <at@delusionworld.com>
-	 */
-	public function getPluginData( $path ) {
-		return $path;
-	}
+	public function newIndex() {
+		ini_set('include_path', 'Mpr/Php/');
+		require_once('Zend/Search/Lucene.php');
+		require_once('class.MprIndexedDocument.php');
+		
+		$index = Zend_Search_Lucene::create($this->options->indexPath);
+	
+		$files = Helper::getFiles( './', 'dirs' );
+		unset( $files['.git'] );
+		unset( $files['Mpr'] );
+		
+		foreach($files as $category => $subdir) {
+			foreach( $subdir as $dir => $items ) {
+				$path = './' . $category . '/' . $dir . '/Docu/';
+				if( is_dir($path) ) {
+					$docuFiles = Helper::getFiles( $path, 'files' );
+					if( count($docuFiles) ) {
+						foreach( $docuFiles as $docu ) {
+							$text = file_get_contents($path . $docu);
+							$teaser = explode("\n", substr($text, 0, 300) );
+							$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
+							$id = 'MprAdmin.php?mode=docu&file=' . $path . $docu;
+						
+							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $dir, 'content' => $text);
+							
+							$doc = new MprIndexedDocument($curDoc);
+							$index->addDocument($doc);
+						}
+					}
+				}
+					
+				$path = './' . $category . '/' . $dir . '/Demos/';
+				if( is_dir($path) ) {
+					$demoFiles = Helper::getFiles( $path, 'files' );
+					if( count($demoFiles) ) {
+						foreach( $demoFiles as $demo ) {
+							$demoCode = file_get_contents( $path . $demo );
+							$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+							$teaser = explode("\n", substr($text, 0, 300) );
+							$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
+							$id = 'MprAdmin.php?mode=demo&file=' . $path . $demo;
+							$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
+							$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 
+							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $dir, 'content' => $text);
+							$doc = new MprIndexedDocument($curDoc);
+							$index->addDocument($doc);
+						}
+					
+					}
+				}
+				
+			}
+		}
+		$index->commit();
+	}
+	
 }
 
 ?>
