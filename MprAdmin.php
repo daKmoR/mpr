@@ -67,44 +67,8 @@
 		$MprAdmin->newIndex();
 		
 	} elseif ( $_REQUEST['mode'] === 'search' && $_REQUEST['query'] != '' ) {
-		ini_set('include_path', 'Mpr/Php/');
-    require_once('Zend/Search/Lucene.php');
- 
-    $index = Zend_Search_Lucene::open( $MprAdminOptions['indexPath'] );
-		$query = $_REQUEST['query'];
+		$center = $MprAdmin->search( $_REQUEST['query'] );
 
-		if( (strpos($query, '*') === false) AND (strpos($query, '"') === false) )
-			$query .= '*';
-		
-		try {
-			$hits = $index->find( $query );
-		} catch (Exception $e) {
-			echo 'Error: ' .  $e->getMessage();
-			die();
-		}
-		
-		if(count($hits) === 0) {
-			echo 'No Results';
-			die();
-		}
-		
-		$array = array();
-		if( $_REQUEST['json'] ) {
-			foreach ($hits as $hit)
-				$array[] = array('title' => $hit->title, 'category' => $hit->category, 'teaser' => $teaser, 'url' => $hit->url);
-				
-			echo json_encode($array);
-			die();
-		}
-		
-		foreach ($hits as $hit) {
-			$center .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . ' <span class="' . $hit->type . '">(' . $hit->type . ')</span></a></h3>';
-			$teaser = $hit->teaser;
-			if( strlen($teaser) > 100 )
-				$teaser = substr($teaser, 0, 100) . '...';
-			$center .= '<p>' . $teaser . '</p>';
-		}
-		
 		if( $_REQUEST['ajax'] ) {
 			echo $center;
 			die();

@@ -178,12 +178,51 @@ class MprAdmin extends Options {
 		}
 	}
 	
+	public function search( $query, $mode = 'html' ) {
+		ini_set('include_path', 'Mpr/Php/');
+		require_once('Zend/Search/Lucene.php');
+ 
+		$index = Zend_Search_Lucene::open( $this->options->indexPath );
+
+		if( (strpos($query, '*') === false) AND (strpos($query, '"') === false) )
+			$query .= '*';
+		
+		try {
+			$hits = $index->find( $query );
+		} catch (Exception $e) {
+			return 'Error: ' .  $e->getMessage();
+		}
+		
+		if(count($hits) === 0)
+			return 'No Results';
+			
+		$content = '';
+		if ( $mode === 'html' ) {
+			foreach ($hits as $hit) {
+				$content .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . ' <span class="' . $hit->type . '">(' . $hit->type . ')</span></a></h3>';
+				$teaser = $hit->teaser;
+				if( strlen($teaser) > 100 )
+					$teaser = substr($teaser, 0, 100) . '...';
+				$content .= '<p>' . $teaser . '</p>';
+			}
+		} elseif( $mode === 'json' ) {
+			$array = array();
+			foreach ($hits as $hit)
+				$array[] = array('title' => $hit->title, 'category' => $hit->category, 'teaser' => $teaser, 'url' => $hit->url);
+				
+			$content = json_encode($array);
+		}
+		
+		return $content;
+		
+	}
+	
 	public function newIndex() {
 		ini_set('include_path', 'Mpr/Php/');
 		require_once('Zend/Search/Lucene.php');
 		require_once('class.MprIndexedDocument.php');
 		
-		$index = Zend_Search_Lucene::create($this->options->indexPath);
+		$index = Zend_Search_Lucene::create( $this->options->indexPath );
 	
 		$files = Helper::getFiles( './', 'dirs' );
 		unset( $files['.git'] );

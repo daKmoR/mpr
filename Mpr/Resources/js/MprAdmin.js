@@ -30,9 +30,12 @@ window.addEvent('domready', function() {
 	SearchResult.fade('hide');
 	var SearchRequest = new Request({
 		url: 'MprAdmin.php',
+		onRequest: function() {
+			SearchResult.set('html', '<img src="Mpr/Resources/css/img/ajax-loader.gif" alt="loading..." class="spinner" />');
+			SearchResult.fade(1);
+		},
 		onComplete: function(els) {
 			SearchResult.set('html', els);
-			SearchResult.fade(1);
 			if( SearchResult.getStyle('opacity') == 1 )
 				SearchResult.highlight();
 		}
