@@ -83,13 +83,6 @@
 		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 		
-		require_once 'Mpr/Php/class.Mpr.php';
-		$localMPR = new MPR( $MprOptions );
-		$scriptTag = $localMPR->getScriptTagInlineCss(
-			file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
-			$js
-		);
-	
 	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
 		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
 
@@ -113,14 +106,13 @@
 		
 		
 	} elseif ($_REQUEST['mode'] === 'spec')  {
-				$header = '
+		$header = '
 			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
 			<script src="Mpr/Resources/js/JSSpec.js" type="text/javascript"></script>
 			<script src="Mpr/Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
 			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
 		';
 		$center = '<div id="jsspec_container"></div>';
-		
 		
 	} elseif ($_REQUEST['mode'] === 'indexing') {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
@@ -229,7 +221,6 @@
 		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . $path[0] . '^' . $path[1] . '.zip');
 		die();
 		
-		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div>
 			<h2>Maintenance</h2>
@@ -259,7 +250,6 @@
 			$center .= '<p class="notice">no Plugins to restore; pls check the directory "' . $zipPath . '" if it contains the needed backupfiles</p>';
 		$center .= '</div>';
 		$center .= '<div><h2>UnInstall</h2><p class="notice">for uninstalling pls use the Uninstall Option on the left</p></div>';
-
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
 		$files = Helper::getFiles('./', 1);
@@ -280,6 +270,13 @@
 			$center .= '<p class="notice">nothing to UnInstall?</p>';
 		$center .= '</div>';
 	}
+	
+	require_once 'Mpr/Php/class.Mpr.php';
+	$localMPR = new MPR( $MprOptions );
+	$scriptTag = $localMPR->getScriptTagInlineCss(
+		file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
+		$js
+	);
 		
 
 ?>
