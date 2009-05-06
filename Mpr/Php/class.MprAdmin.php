@@ -62,14 +62,18 @@ class MprAdmin extends Options {
 			if ( is_array($subdir) ) {
 				$plugin = '';
 				foreach( $subdir as $subdirdir => $subsubdir ) {
-					$this->plugins[] = new Plugin( $subdirdir, $this->options->path . $dir . '/' . $subdirdir, $this->options->plugin );
-					$plugin .= end($this->plugins)->render();
+					$this->plugins[$dir . '/' . $subdirdir] = new Plugin( $subdirdir, $this->options->path . $dir . '/' . $subdirdir, $this->options->plugin );
+					$plugin .= $this->plugins[$dir . '/' . $subdirdir]->render();
 				}
 				$category .= Helper::wrap( $plugin, $this->options->pluginListWrap );
 			}
 			$content .= Helper::wrap( $category, $this->options->categoryWrap );
 		}
 		return $content;
+	}
+	
+	public function showPluginDetails( $path ) {
+		return $this->plugins[$path]->renderDetail();
 	}
 	
 	public function getDocu( $markdownString ) {

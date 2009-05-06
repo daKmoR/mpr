@@ -10,6 +10,8 @@
 	require_once('Mpr/Php/class.MprAdmin.php');
 		
 	$path = explode('/', $_REQUEST['file']);
+	if( $path[0] !== '.' )
+		array_unshift($path, '.');
 	
 	$MprAdmin = new MprAdmin( $MprAdminOptions );
 	if( is_file('USE_ADMIN_FUNCTIONS') )
@@ -76,6 +78,9 @@
 		
 	} elseif ( $_REQUEST['mode'] === 'zip' && $_REQUEST['file'] != '' ) {
 		$MprAdmin->getZip( $_REQUEST['file'] );
+		
+	} elseif ( $_REQUEST['mode'] === 'pluginDetails' && $_REQUEST['file'] != '' ) {
+		$center = $MprAdmin->showPluginDetails( $_REQUEST['file'] );
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div>
