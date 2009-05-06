@@ -12,30 +12,19 @@
 	$path = explode('/', $_REQUEST['file']);
 	
 	$MprAdmin = new MprAdmin();
+	if( is_file('USE_ADMIN_FUNCTIONS') )
+		$MprAdmin->options->admin = true;
 	
 	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
-		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
 		
 		$status = $MprAdmin->install( $_REQUEST['file'] );
 		$center = $status ? 'Install successful' : 'Install failed';
 		
 	} elseif ( $_REQUEST['mode'] === 'uninstall' && $_REQUEST['file'] != '' ) {
-		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
-	
-		if( !is_dir($zipPath) )
-			mkdir($zipPath);
-			
-		require_once 'Mpr/Php/class.AdvZipArchive.php';
-		$myZip = new AdvZipArchive();
-		if( $myZip->open($zipPath . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
-			$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
-			$myZip->close();
-			
-			Helper::removeDir( $_REQUEST['file'] );
-			$_REQUEST['mode'] = 'admin_uninstall';
-			
-			unset($_REQUEST['file']);
-		}
+		
+		$status = $MprAdmin->uninstall( $_REQUEST['file'] );
+		$center = $status ? 'Uninstall successful' : 'Uninstall failed';
+
 	} elseif ( $_REQUEST['mode'] === 'restore' && $_REQUEST['file'] != '') {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
 	
