@@ -88,6 +88,33 @@ class MprAdmin extends Options {
 		return $geshi->parse_codeblocks($docu);
 	}
 	
+	public function createZip( $path ) {
+		if( !is_dir($this->options->zipPath) )
+			mkdir( $this->options->zipPath );
+			
+		$pathArray = explode('/', $path);
+			
+		require_once 'Mpr/Php/class.AdvZipArchive.php';
+		$myZip = new AdvZipArchive();
+		if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
+			$myZip->addDir( $path, $path );
+			$myZip->close();
+			return true;
+		}
+		
+		return false;
+	}
+
+	
+	public function getZip( $path ) {
+		if( $this->createZip( $path ) ) {
+			$pathArray = explode('/', $path);
+			header('Location: ' . Helper::getPageDIR() . '/' . $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip');
+			die();
+		}
+		return false;
+	}
+	
 	public function install( $path ) {
 		if( $this->checkPermission() ) {
 		
@@ -104,18 +131,8 @@ class MprAdmin extends Options {
 	
 	public function uninstall( $path ) {
 		if( $this->checkPermission() ) {
-	
-			if( !is_dir($this->options->zipPath) )
-				mkdir( $this->options->zipPath );
-				
-			$pathArray = explode('/', $path);
-				
-			require_once 'Mpr/Php/class.AdvZipArchive.php';
-			$myZip = new AdvZipArchive();
-			if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
-				$myZip->addDir( $path, $path );
-				$myZip->close();
-				
+		
+			if( $this->createZip($path) ) {
 				Helper::removeDir( $path );
 				return true;
 			}
@@ -124,6 +141,18 @@ class MprAdmin extends Options {
 		return false;
 	}
 	
+	public function restore( $path ) {
+		if( $this->checkPermission() ) {
+		
+			$fileInfo = explode('^', $path);
+			if( is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+				Helper::removeDir( $path );
+			
+			$this->install( $path );
+		
+		}
+		return false;
+	}
 	
 	private function checkPermission() {
 		if ( $this->options->admin )

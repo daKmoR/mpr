@@ -26,21 +26,9 @@
 		$center = $status ? 'Uninstall successful' : 'Uninstall failed';
 
 	} elseif ( $_REQUEST['mode'] === 'restore' && $_REQUEST['file'] != '') {
-		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
-	
-		$fileInfo = explode('^', $_REQUEST['file']);
-		if( is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
-			Helper::removeDir( $_REQUEST['file'] );
 		
-		$zip = new ZipArchive();
-		if ($zip->open( $_REQUEST['file'] ) === TRUE) {
-			$zip->extractTo('./');
-			$zip->close();
-			$_REQUEST['mode'] = 'admin_general';
-			unset($_REQUEST['file']);
-		} else {
-			$center .= 'Restore failed';
-		}
+		$status = $MprAdmin->restore( $_REQUEST['file'] );
+		$center = $status ? 'Restore successful' : 'Restore failed';
 		
 	} elseif ( $_REQUEST['mode'] === 'clear_cache' ) {
 		if( !is_file('USE_ADMIN_FUNCTIONS') ) die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
@@ -176,18 +164,8 @@
 		}
 		
 	} elseif ( $_REQUEST['mode'] === 'zip' && $_REQUEST['file'] != '' ) {
-		if( !is_dir($zipPath) )
-			mkdir($zipPath);
-		
-		require_once 'Mpr/Php/class.AdvZipArchive.php';
-		$myZip = new AdvZipArchive();
-		$myZip->open($zipPath . $path[0] . '^' . $path[1] . '.zip', ZIPARCHIVE::CREATE);
-
-		$myZip->addDir( $_REQUEST['file'], $_REQUEST['file'] );
-		$myZip->close();
-		
-		header('Location: ' . Helper::getPageDIR() . '/' . $zipPath . $path[0] . '^' . $path[1] . '.zip');
-		die();
+	
+		$MprAdmin->getZip( $_REQUEST['file'] );
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div>
