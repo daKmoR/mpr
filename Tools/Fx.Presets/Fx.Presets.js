@@ -7,7 +7,7 @@
 
 $require(MPR.path + 'Core/Element/Element.Style.js');
 
-$require(MPR.path + 'More/Fx.Elements/Fx.Elements.js');
+$require(MPR.path + 'More/Fx/Fx.Elements.js');
 
 Fx.Elements.Preset = new Class({
 	Extends: Fx.Elements,

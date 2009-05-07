@@ -17,7 +17,7 @@ $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Fx.Slide/Fx.Slide.js');
+$require(MPR.path + 'More/Fx/Fx.Slide.js');
  
 FlowGallery = new Class({
 	Implements: [Options, Events],

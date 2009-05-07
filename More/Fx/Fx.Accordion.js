@@ -9,7 +9,7 @@ Script: Fx.Accordion.js
 		Valerio Proietti
 */
 
-$require(MPR.path + 'More/Fx.Elements/Fx.Elements.js');
+$require(MPR.path + 'More/Fx/Fx.Elements.js');
 
 var Accordion = Fx.Accordion = new Class({
 
