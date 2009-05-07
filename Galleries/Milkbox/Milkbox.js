@@ -8,13 +8,13 @@
 
 $require(MPR.path + 'Galleries/Milkbox/Resources/css/Milkbox.css');
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
 
-$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
+$require(MPR.path + 'Core/Fx/Fx.Tween.js');
+$require(MPR.path + 'Core/Fx/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Utilities.Assets/Utilities.Assets.js');
+$require(MPR.path + 'More/Utilities/Utilities.Assets.js');
 
 var Milkbox = new Class({
 

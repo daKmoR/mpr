@@ -10,12 +10,12 @@
  * @copyright	Author
  */
 
-$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx.Morph/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require(MPR.path + 'Core/Fx/Fx.Tween.js');
+$require(MPR.path + 'Core/Fx/Fx.Morph.js');
+$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
 
-$require(MPR.path + 'More/Drag.Move/Drag.Move.js');
+$require(MPR.path + 'More/Drag/Drag.Move.js');
 
 $require(MPR.path + 'Galleries/ReMooz/Resources/ReMooz.css');
 
