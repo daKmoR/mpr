@@ -143,7 +143,7 @@ class MPR extends Options {
 				$css = CssMin::minify($css);
 			}
 			if ($what === 'jsInlineCss' && $css !== '')
-				$content .= PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
+				$content .= PHP_EOL . file_get_contents('Tools/Asset.Styles/Asset.Styles.js') . PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
 			else
 				$content .= $css;
 		}
