@@ -9,9 +9,7 @@ Script: Assets.js
 		Valerio Proietti
 */
 
-var Asset = Asset || {};
-
-$extend(Asset, {
+var Asset = {
 
 	javascript: function(source, properties){
 		properties = $extend({
@@ -75,23 +73,29 @@ $extend(Asset, {
 		return element.set(properties);
 	},
 
-  images: function(sources, options){
-    options = $merge({
-      onComplete: $empty,
-      onProgress: $empty
-    }, options);
-    sources = $splat(sources);
-    var images = [];
-    var counter = 0;
-    return new Elements(sources.map(function(source){
-      return Asset.image(source, {
-        onload: function(){
-          options.onProgress.call(this, counter, sources.indexOf(source));
-          counter++;
-          if (counter == sources.length) options.onComplete();
-        }
-      });
-    }));
-  }
+	images: function(sources, options){
+			options = $merge({
+			onComplete: $empty,
+			onProgress: $empty,
+			onError: $empty
+		}, options);
+		sources = $splat(sources);
+		var images = [];
+		var counter = 0;
+		return new Elements(sources.map(function(source){
+			return Asset.image(source, {
+				onload: function(){
+				options.onProgress.call(this, counter, sources.indexOf(source));
+				counter++;
+				if (counter == sources.length) options.onComplete();
+			},
+			onerror: function(){
+				options.onError.call(this, counter, sources.indexOf(source));
+				counter++;
+				if (counter == sources.length) options.onComplete();
+			}
+			});
+		}));
+	}
 
-});
+};
