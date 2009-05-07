@@ -7,7 +7,7 @@ License:
 */
 
 $require(MPR.path + 'Core/Element/Element.js');
-$require(MPR.path + 'Core/Native/Native.Event.js');
+$require(MPR.path + 'Core/Native/Event.js');
 
 Element.Properties.events = {set: function(events){
 	this.addEvents(events);

@@ -11,7 +11,7 @@
 
 $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Utilities/Utilities.Json.js');
+$require(MPR.path + 'Core/Utilities/Json.js');
  
 $require(MPR.path + 'More/Class/Class.Occlude.js');
 
