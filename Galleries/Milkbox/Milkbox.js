@@ -14,7 +14,7 @@ $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Utilities/Utilities.Assets.js');
+$require(MPR.path + 'More/Utilities/Assets.js');
 
 var Milkbox = new Class({
 
