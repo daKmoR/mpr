@@ -27,7 +27,9 @@ class Plugin extends Options {
 		'dokuItemWrap' => '<li>|</li>',
 		'dokuWrap' => '<h2>Available Documentation</h2><ul>|</ul>',
 		'demoItemWrap' => '<li>|</li>',
-		'demoWrap' => '<h2>Available Demos</h2><ul>|</ul>'
+		'demoWrap' => '<h2>Available Demos</h2><ul>|</ul>',
+		'sourceWrap' => '<h2>Sourcecode</h2><ul>|</ul>',
+		'sourceItemWrap' => '<li>|</li>'
 	);
 	
 	/**
@@ -108,6 +110,14 @@ class Plugin extends Options {
 			}
 			$content .= Helper::wrap($docus, $this->options->dokuWrap);
 		}
+		
+		foreach( $PluginFiles as $source ) {
+			if ( !is_array($source) ) {
+				$sources .= Helper::wrap('<a href="?mode=source&amp;file=' . $this->options->path . '/' . $source . '">' . $source . '</a>', $this->options->sourceItemWrap );
+			}
+		}
+		if( $sources )
+			$content .= Helper::wrap($sources, $this->options->sourceWrap);
 	
 		return $content;
 	}

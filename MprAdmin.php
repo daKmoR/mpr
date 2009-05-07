@@ -82,6 +82,11 @@
 	} elseif ( $_REQUEST['mode'] === 'pluginDetails' && $_REQUEST['file'] != '' ) {
 		$center = $MprAdmin->showPluginDetails( $_REQUEST['file'] );
 		
+	} elseif ( $_REQUEST['mode'] === 'source' && $_REQUEST['file'] != '' ) {
+	
+		$center = '<h1>' . $path[3] . '</h1>';
+		$center .= $MprAdmin->highlight( file_get_contents( $_REQUEST['file'] ) );
+	
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div>
 			<h2>Maintenance</h2>

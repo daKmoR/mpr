@@ -94,6 +94,13 @@ class MprAdmin extends Options {
 		return $geshi->parse_codeblocks($docu);
 	}
 	
+	public function highlight( $source, $language = 'javascript' ) {
+		require_once 'Mpr/Php/mdocs/geshi.php';
+		
+		$geshi = new GeSHi($source, $language);
+		return $geshi->parse_code();		
+	}
+	
 	public function createZip( $path ) {
 		if( !is_dir($this->options->zipPath) )
 			mkdir( $this->options->zipPath );
