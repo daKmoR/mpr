@@ -9,7 +9,9 @@ Script: Assets.js
 		Valerio Proietti
 */
 
-var Asset = {
+var Asset = Asset || {};
+
+$extend(Asset, {
 
 	javascript: function(source, properties){
 		properties = $extend({
@@ -98,4 +100,4 @@ var Asset = {
 		}));
 	}
 
-};
+});
