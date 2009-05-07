@@ -251,7 +251,7 @@ class MprAdmin extends Options {
 							$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
 							$id = 'MprAdmin.php?mode=docu&file=' . $path . $docu;
 						
-							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $dir, 'content' => $text);
+							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $docu , 'content' => $text);
 							
 							$doc = new MprIndexedDocument($curDoc);
 							$index->addDocument($doc);
@@ -272,7 +272,7 @@ class MprAdmin extends Options {
 							$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
 							$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 
-							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $dir, 'content' => $text);
+							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $demo, 'content' => $text);
 							$doc = new MprIndexedDocument($curDoc);
 							$index->addDocument($doc);
 						}
