@@ -16,45 +16,6 @@
 		
 		<title>Your Local MPR (MooTools Plugin Repository)</title>
 		
-		<script type="text/javascript">
-			var MPR = {};
-			MPR.path = '';
-		</script>
-		
-		<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
-		<script src="MprJs.php?mode=noCore" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />
-		
-		<script type="text/javascript">
-			$require(MPR.path + 'Core/Fx.Tween/Fx.Tween.js');
-		
-			window.addEvent('domready', function() {
-				var SearchResult = $('searchResult');
-				
-				SearchResult.fade('hide');
-				var SearchRequest = new Request({
-					url: 'MprAdmin.php',
-					onComplete: function(els) {
-						SearchResult.set('html', els);
-						SearchResult.fade(1);
-						if( SearchResult.getStyle('opacity') == 1 )
-							SearchResult.highlight();
-					}
-				});
-				
-				$('searchForm').addEvent('submit', function(e) {
-					e.stop();
-					SearchRequest.get( {ajax: 1, mode: 'search', query: $('searchInput').get('value')} );
-				});
-				
-				document.addEvent('click', function(e){
-					if (e.target != SearchResult && !SearchResult.hasChild(e.target) ) 
-						SearchResult.fade(0);
-				});
-				
-			});
-		</script>
-		
 		<style type="text/css">
 			h4 { margin: 15px 0 5px 0; }
 		</style>
@@ -67,14 +28,6 @@
 			<form action="" method="get" id="searchForm">
 				<div id="header">
 					<h2 style="border: none; margin-bottom: 10px;"><a href="./MprAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
-					<div id="search">
-						<input type="text" name="query" id="searchInput" />
-						<input type="hidden" name="mode" value="search" />
-						<div id="searchResult">
-							<h3><a href="MprAdmin.php?mode=doc&amp;file=./Core/Element.Style/Doc/Element.Style.md">Core / Element.Style</a></h3>
-							<p>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $....</p>
-						</div>
-					</div>
 				</div>
 			</form>
 			
