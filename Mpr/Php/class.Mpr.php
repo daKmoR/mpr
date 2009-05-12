@@ -19,6 +19,7 @@ class MPR extends Options {
 		'externalFiles' => true,
 		'cache' => true,
 		'cachePath' => 'Mpr/MprCache/',
+		'jsMinPath' => 'class.JsMin.php',
 		'compress' => 'minify' //[none, minify]
 	);
 	
@@ -31,6 +32,7 @@ class MPR extends Options {
 
 	public function __construct($options = null) {
 		$this->setOptions($options);
+		$this->options->cachePath = $this->options->pathToMpr . $this->options->cachePath;
 	}
 	
 	/**
@@ -42,6 +44,7 @@ class MPR extends Options {
 	 */	
 	public function getScriptTagInlineCss($text) {
 		$code = $this->prepareContent($text, 'jsInlineCss', &$name);
+		if ($code === '') return false;
 
 		if( $this->options->externalFiles === true )
 			return '<script type="text/javascript" src="' . $this->options->cachePath . 'jsInlineCss/' . $name . '"></script>';
@@ -73,8 +76,8 @@ class MPR extends Options {
 				$result = $result[1];
 				$resultInfo = pathinfo($result);
 				if ( $resultInfo['extension'] === 'js' ) {
-					if( $mode == 'loadRequire' ) 
-						$scripts[] = $this->loadUrl($result);
+					if( $mode == 'loadRequire' )
+						$scripts[] = $this->loadUrl( $this->options->pathToMpr . $result);
 					$fileList['js'][] = $result;
 				}
 
@@ -111,21 +114,21 @@ class MPR extends Options {
 		
 		$fileList = $this->getFileList( $jsCode );
 		$content = '';
-		$js = $jsCode !== '' ? file_get_contents('Mpr/Mpr.js') : '';
+		$js = (count($fileList['js']) != 0 AND count($fileList['css'] != 0) )  ? file_get_contents($this->options->pathToMpr . 'Mpr/Mpr.js') : '';
 		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
 					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
 			foreach( $fileList['js'] as $file ) {
-				if( is_file($file) ) {
-					$js .= file_get_contents($file) . PHP_EOL;
+				if( is_file($this->options->pathToMpr . $file) ) {
+					$js .= file_get_contents($this->options->pathToMpr . $file) . PHP_EOL;
 					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				} else
 					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
 			if ( $this->options->compress === 'minify' ) {
-				require_once 'class.JsMin.php';
+				require_once $this->options->jsMinPath;
 				$js = JsMin::minify($js);
 			}
 			$content .= $js;
@@ -134,7 +137,7 @@ class MPR extends Options {
 		$css = '';
 		if ($what === 'css' || $what === 'jsInlineCss') {
 			foreach( $fileList['css'] as $file ) {
-				$raw = file_get_contents($file);
+				$raw = file_get_contents($this->options->pathToMpr . $file);
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
 				$css .= $raw . PHP_EOL;
 			}
