@@ -20,7 +20,8 @@ class MPR extends Options {
 		'cache' => true,
 		'cachePath' => 'Mpr/MprCache/',
 		'jsMinPath' => 'class.JsMin.php',
-		'compress' => 'minify' //[none, minify]
+		'compressJs' => 'minify', //[none, minify]
+		'compressCss' => 'minify' //[none, minify]
 	);
 	
 	/**
@@ -127,7 +128,7 @@ class MPR extends Options {
 				} else
 					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
-			if ( $this->options->compress === 'minify' ) {
+			if ( $this->options->compressJs === 'minify' ) {
 				require_once $this->options->jsMinPath;
 				$js = JsMin::minify($js);
 			}
@@ -141,7 +142,7 @@ class MPR extends Options {
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
 				$css .= $raw . PHP_EOL;
 			}
-			if ( $this->options->compress === 'minify' ) {
+			if ( $this->options->compressCss === 'minify' ) {
 				require_once 'class.CssMin.php';
 				$css = CssMin::minify($css);
 			}
