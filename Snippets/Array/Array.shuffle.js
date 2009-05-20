@@ -5,3 +5,13 @@ Array.implement({
 		return v;
   }
 }); 
+
+// differnt implementation?
+/*
+Array.implement({
+	shuffle:function() {
+		this.sort(function (x,y) { return Math.floor(Math.random()*3)-1; });
+		return this;
+	}
+});
+*/
