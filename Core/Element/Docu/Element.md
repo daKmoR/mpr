@@ -1444,6 +1444,30 @@ Retrieves a value from the Elements storage.
 	$('element').retrieve('someProperty'); // returns someValue (see example above)
 
 
+Element Method: eliminate {#Element:eliminate}
+--------------------------------------------
+
+Eliminates a key from the Elements storage.
+
+
+### Syntax:
+
+	myElement.retrieve(key);
+
+### Arguments:
+
+1. key - (*string*) The key you want to eliminate from the storage.
+
+### Returns:
+
+* (*mixed*) The element/window/document.
+
+### Example:
+
+	$('element').eliminate('someProperty');
+
+
+
 
 
 Hash: Element.Properties {#Element-Properties}
@@ -1685,7 +1709,7 @@ Creates an IFrame HTML Element and extends its window and document with MooTools
 
 ### Notes:
 
-- If the IFrame is from the same domain as the "host", its document and window will be extended with MooTools functionalities, allowing you to fully use MooTools within it.
+- If the IFrame is from the same domain as the "host" or running locally, its document and window will be extended with MooTools functionalities, allowing you to fully use MooTools within it.
 - If the IFrame already exists and has a different name than id, the name will be made the same as the id.
 - If the IFrame is from a different domain, its window and document will not be extended with MooTools methods.
 
@@ -1769,7 +1793,7 @@ It also works like [Array:filter](/Native/Array/#Array:filter), by filtering col
 [$$]: #dollars
 
 [Array]: /core/Native/Array
-[Selectors]: /core/Selectors/Selectors
+[Selectors]: /core/Utilities/Selectors
 
 [Element]: #Element
 [Elements]: #Elements
