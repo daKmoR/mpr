@@ -1,0 +1,139 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require(MPR.path + 'More/Element/Element.Forms.js');
+
+window.addEvent('domready', function() {
+
+	var textArea = $('textArea');
+	var update = function() {
+		$('between').set('html', textArea.getTextInRange(10, 20) );
+		$('selected').set('html', textArea.getSelectedText() );
+		$('start').set('html', textArea.getSelectionStart() );
+		$('end').set('html', textArea.getSelectionEnd() );
+		$('range').set('html', '[' + textArea.getSelectedRange().start + ', ' + textArea.getSelectedRange().end + ']' );
+		$('carrot').set('html', textArea.getCaretPosition() );
+	}
+	
+	textArea.addEvent('select', update);
+	textArea.addEvent('keydown', update);
+	textArea.addEvent('click', update);
+	
+	$('setCarrot').addEvent('click', function(e) {
+		e.stop();
+		textArea.setCaretPosition(10);
+		update();
+	});
+	
+	$('selectRange').addEvent('click', function(e) {
+		e.stop();
+		textArea.selectRange(10, 20);
+		update();
+	});	
+	
+	$('insert').addEvent('click', function(e) {
+		e.stop();
+		textArea.insertAtCursor('<====()=0', false);
+		update();
+	});	
+	
+	$('insertAround').addEvent('click', function(e) {
+		e.stop();
+		textArea.insertAroundCursor({before: '<<', after: '>>', defaultMiddle: ''});
+		update();
+	});
+	
+	update(); // call it once so it has some values after starting
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+#statistic { line-height: 1.5em; }
+	#statistic span { border: 1px solid #ccc; margin-left: 10px; padding: 1px;  }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Element.Forms</h1>
+<h2>Introduction</h2>
+<p>
+	It's easier than you think to select specific part of an input field (or textarea)
+</p>
+<h3>Some Statistics about the Textarea</h3>
+<div id="statistic">
+Text between character 10 and 20: <span id="between"></span><br />
+Selected Text: <span id="selected"></span><br />
+Selection started here: <span id="start"></span><br />
+Selection ended here: <span id="end"></span><br />
+Selection's Range is: <span id="range"></span><br />
+Carrot Position is: <span id="carrot"></span><br />
+</div>
+
+<br /> <br />
+<textarea cols="30" rows="10" id="textArea">Here you see some TEXT. To be more precise it's text only, as this is just a textarea and nothing special. It only here to show you howto use some of the nice MooTools More Element.Forms Functions.</textarea>
+<br />
+<a href="#" id="setCarrot">set Carrot to Position 10</a> <br />
+<a href="#" id="selectRange">set selection to 10-20</a> <br />
+<a href="#" id="insert">insert text at the cursors position</a> (replaces text) ['<====()=0']<br />
+<a href="#" id="insertAround">insert text around cursors position</a> ['<<', '>>'] <br />
+
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
