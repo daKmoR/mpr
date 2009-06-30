@@ -1,0 +1,136 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require(MPR.path + 'More/Class/Class.Binds.js');
+
+window.addEvent('domready', function() {
+
+	var MyClass = new Class({
+		initialize: function(element, message){
+			this.el = $(element);
+			this.message = message;
+			this.monitor();
+		},
+		monitor: function(){
+			this.boundSay = this.say.bind(this); //we must store this copy
+			this.el.addEvent('click', this.boundSay); //then add it
+		},
+		stopMonitoring: function(){
+			this.el.removeEvent('click', this.boundSay); //so we can remove it later
+		},
+		say: function(e){
+			e.stop();
+			$('logger').adopt( new Element('p', {'html': this.message }) );
+		}
+	});
+	var myObject = new MyClass($('manual'), 'you clicked the manual binder');
+	
+	
+	var MyBinderClass = new Class({
+		Binds: ['say'],
+		initialize: function(element, message){
+			this.el = $(element);
+			this.message = message;
+			this.monitor();
+		},
+		monitor: function(){
+			this.el.addEvent('click', this.say); //say is already bound to 'this'
+		},
+		stopMonitoring: function(){
+			this.el.removeEvent('click', this.say);
+		},
+		say: function(e){
+			e.stop();
+			$('logger').adopt( new Element('p', {'html': this.message }) );
+		}
+	});	
+	var myBinderObject = new MyBinderClass($('mutator'), 'you clicked the MUTATOR :)');
+	
+	$('stop').addEvent('click', function() {
+		myObject.stopMonitoring();
+		myBinderObject.stopMonitoring();
+	});
+	
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Class.Binds</h1>
+<h2>Introduction</h2>
+<p>
+	A basic example on how the Binds Mutator can ease your life.
+</p>
+<h3>Use a simple class to monitor clicks</h3>
+<p>if you wish to save an event (for later unbinding) you would have to do this manually by assigning it to an variable.</p>
+<p>If you use the Bind Mutator you can just define the function in Binds: [ function1, function2, ... ]</p>
+
+<a href="#" id="manual">manual Binding</a><br />
+<a href="#" id="mutator">Binding Mutator</a><br />
+<a href="#" id="stop">stop Monitoring</a>
+
+<h3>Log</h3>
+<div id="logger"></div>
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
