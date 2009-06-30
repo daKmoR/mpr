@@ -23,18 +23,18 @@ var InputValidator = new Class({
 	},
 
 	test: function(field, props){
-		if ($(field)) return this.options.test($(field), props||this.getProps(field));
+		if (document.id(field)) return this.options.test(document.id(field), props||this.getProps(field));
 		else return false;
 	},
 
 	getError: function(field, props){
 		var err = this.options.errorMsg;
-		if ($type(err) == 'function') err = err($(field), props||this.getProps(field));
+		if ($type(err) == 'function') err = err(document.id(field), props||this.getProps(field));
 		return err;
 	},
 
 	getProps: function(field){
-		if (!$(field)) return {};
+		if (!document.id(field)) return {};
 		return field.get('validatorProps');
 	}
 
@@ -108,12 +108,12 @@ var FormValidator = new Class({
 
 	initialize: function(form, options){
 		this.setOptions(options);
-		this.element = $(form);
+		this.element = document.id(form);
 		this.element.store('validator', this);
 		this.warningPrefix = $lambda(this.options.warningPrefix)();
 		this.errorPrefix = $lambda(this.options.errorPrefix)();
 		if (this.options.evaluateOnSubmit) this.element.addEvent('submit', this.onSubmit);
-		if (this.options.evaluateFieldsOnBlur) this.watchFields(this.getFields());
+		if (this.options.evaluateFieldsOnBlur || this.options.evaluateFieldsOnChange) this.watchFields(this.getFields());
 	},
 
 	toElement: function(){
@@ -126,6 +126,7 @@ var FormValidator = new Class({
 
 	watchFields: function(fields){
 		fields.each(function(el){
+			if (this.options.evaluateFieldsOnBlur)
 				el.addEvent('blur', this.validationMonitor.pass([el, false], this));
 			if (this.options.evaluateFieldsOnChange)
 				el.addEvent('change', this.validationMonitor.pass([el, true], this));
@@ -158,7 +159,7 @@ var FormValidator = new Class({
 
 	validateField: function(field, force){
 		if (this.paused) return true;
-		field = $(field);
+		field = document.id(field);
 		var passed = !field.hasClass('validation-failed');
 		var failed, warned;
 		if (this.options.serial && !force){
@@ -202,7 +203,7 @@ var FormValidator = new Class({
 
 	test: function(className, field, warn){
 		var validator = this.getValidator(className);
-		field = $(field);
+		field = document.id(field);
 		if (field.hasClass('ignoreValidation')) return true;
 		warn = $pick(warn, false);
 		if (field.hasClass('warnOnly')) warn = true;
@@ -215,14 +216,14 @@ var FormValidator = new Class({
 	isVisible : function(field){
 		if (!this.options.ignoreHidden) return true;
 		while(field != document.body){
-			if ($(field).getStyle('display') == 'none') return false;
+			if (document.id(field).getStyle('display') == 'none') return false;
 			field = field.getParent();
 		}
 		return true;
 	},
 
 	resetField: function(field){
-		field = $(field);
+		field = document.id(field);
 		if (field){
 			field.className.split(' ').each(function(className){
 				if (className.test('^warn-')) className = className.replace(/^warn-/, '');
@@ -245,7 +246,7 @@ var FormValidator = new Class({
 	},
 
 	ignoreField: function(field, warn){
-		field = $(field);
+		field = document.id(field);
 		if (field){
 			this.enforceField(field);
 			if (warn) field.addClass('warnOnly');
@@ -255,7 +256,7 @@ var FormValidator = new Class({
 	},
 
 	enforceField: function(field){
-		field = $(field);
+		field = document.id(field);
 		if (field) field.removeClass('warnOnly').removeClass('ignoreValidation');
 		return this;
 	}
@@ -349,7 +350,7 @@ FormValidator.addAllThese([
 	['validate-integer', {
 		errorMsg: FormValidator.getMsg.pass('integer'),
 		test: function(element){
-			return FormValidator.getValidator('IsEmpty').test(element) || (/^-?[1-9]\d*$/).test(element.get('value'));
+			return FormValidator.getValidator('IsEmpty').test(element) || (/^(-?[1-9]\d*|0)$/).test(element.get('value'));
 		}
 	}],
 
@@ -439,7 +440,7 @@ FormValidator.addAllThese([
 	['validate-one-required', {
 		errorMsg: FormValidator.getMsg.pass('oneRequired'),
 		test: function(element, props){
-			var p = $(props['validate-one-required']) || element.parentNode;
+			var p = document.id(props['validate-one-required']) || element.parentNode;
 			return p.getElements('input').some(function(el){
 				if (['checkbox', 'radio'].contains(el.get('type'))) return el.get('checked');
 				return el.get('value');

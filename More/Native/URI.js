@@ -41,7 +41,7 @@ var URI = new Class({
 	},
 
 	merge: function(bits, base){
-		if (!bits.scheme && !base.scheme) return false;
+		if ((!bits || !bits.scheme) && (!base || !base.scheme)) return false;
 		if (base){
 			this.parts.every(function(part){
 				if (bits[part]) return false;
@@ -80,6 +80,8 @@ var URI = new Class({
 			if (scheme) scheme = scheme[1];
 			if (scheme && !$defined(this.schemes[scheme.toLowerCase()])) this.parsed = { scheme: scheme, value: value };
 			else this.parsed = this.parse(value, (base || this).parsed) || (scheme ? { scheme: scheme, value: value } : { value: value });
+		} else if (part == 'data') {
+			this.setData(value);
 		} else {
 			this.parsed[part] = value;
 		}
@@ -138,7 +140,7 @@ URI.regs = {
 	directoryDot: /\.\/|\.$/
 };
 
-URI.base = new URI($$('base[href]').getLast(), { base: document.location });
+URI.base = new URI(document.getElements('base[href]', true).getLast(), { base: document.location });
 
 String.implement({
 

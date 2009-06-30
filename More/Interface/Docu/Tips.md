@@ -25,6 +25,8 @@ Tips Method: constructor {#Tips:constructor}
 
 ### Options:
 
+* onShow        - (*function*: defaults to `function(tip){ tip.setStyle('visibility', 'visible'); }`) The default function for the show event.
+* onHide        - (*function*: defaults to `function(tip){ tip.setStyle('visibility', 'hidden'); }`)  The default function for the hide event.
 * showDelay     - (*number*: defaults to 100) The delay the show event is fired.
 * hideDelay     - (*number*: defaults to 100) The delay the hide hide is fired.
 * title			- (*string|function*: defaults to title) The property of the element to be used for the tip-title. If this option is a
@@ -182,5 +184,5 @@ You can also assign tips titles and contents via [Element Storage](/Element/Elem
 If you use tips storage you can use elements and / or html as tips title and text.
 
 
-[Events]: /docs/core/Class/Class.Extras#Events
-[Options]: /docs/core/Class/Class.Extras#Options
+[Events]: /core/Class/Class.Extras#Events
+[Options]: /core/Class/Class.Extras#Options

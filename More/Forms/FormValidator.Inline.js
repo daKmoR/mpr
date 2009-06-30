@@ -16,6 +16,7 @@ FormValidator.Inline = new Class({
 	options: {
 		scrollToErrorsOnSubmit: true,
 		scrollFxOptions: {
+			transition: 'quad:out',
 			offset: {
 				y: -20
 			}
@@ -39,7 +40,7 @@ FormValidator.Inline = new Class({
 
 	makeAdvice: function(className, field, error, warn){
 		var errorMsg = (warn)?this.warningPrefix:this.errorPrefix;
-				errorMsg += (this.options.useTitles) ? field.title || error:error;
+			errorMsg += (this.options.useTitles) ? field.title || error:error;
 		var cssClass = (warn) ? 'warning-advice' : 'validation-advice';
 		var advice = this.getAdvice(className, field);
 		if(advice) {
@@ -86,7 +87,7 @@ FormValidator.Inline = new Class({
 	},
 
 	resetField: function(field){
-		field = $(field);
+		field = document.id(field);
 		if (!field) return this;
 		this.parent(field);
 		field.className.split(' ').each(function(className){
@@ -121,34 +122,25 @@ FormValidator.Inline = new Class({
 		//Check for error position prop
 		var props = field.get('validatorProps');
 		//Build advice
-		if (!props.msgPos || !$(props.msgPos)){
+		if (!props.msgPos || !document.id(props.msgPos)){
 			if(field.type.toLowerCase() == 'radio') field.getParent().adopt(advice);
-			else advice.inject($(field), 'after');
+			else advice.inject(document.id(field), 'after');
 		} else {
-			$(props.msgPos).grab(advice);
+			document.id(props.msgPos).grab(advice);
 		}
 	},
 
 	validateField: function(field, force){
 		var result = this.parent(field, force);
 		if (this.options.scrollToErrorsOnSubmit && !result){
-			var failed = $(this).getElement('.validation-failed');
-			var par = $(this).getParent();
-			var isScrolled = function(p){
-				return p.getScrollSize().y != p.getSize().y;
-			};
-			var scrolls;
-			while (par != document.body && !isScrolled(par)){
+			var failed = document.id(this).getElement('.validation-failed');
+			var par = document.id(this).getParent();
+			while (par != document.body && par.getScrollSize().y == par.getSize().y){
 				par = par.getParent();
 			}
 			var fx = par.retrieve('fvScroller');
 			if (!fx && window.Fx && Fx.Scroll){
-				fx = new Fx.Scroll(par, {
-					transition: 'quad:out',
-					offset: {
-						y: -20
-					}
-				});
+				fx = new Fx.Scroll(par, this.options.scrollFxOptions);
 				par.store('fvScroller', fx);
 			}
 			if (failed){

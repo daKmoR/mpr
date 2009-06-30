@@ -64,10 +64,11 @@ var Tips = new Class({
 			if (option == null) return '';
 			return $type(option) == 'function' ? option(element) : element.get(option);
 		};
+		
 		$$(elements).each(function(element){
-			var title = read(this.options.title, element);
+			var title = read(this.options.title, element), text = read(this.options.text, element);
 			element.erase('title').store('tip:native', title).retrieve('tip:title', title);
-			element.retrieve('tip:text', read(this.options.text, element));
+			element.retrieve('tip:text', text);
 			
 			var events = ['enter', 'leave'];
 			if (!this.options.fixed) events.push('move');
@@ -111,7 +112,7 @@ var Tips = new Class({
 		this.timer = $clear(this.timer);
 		this.timer = this.show.delay(this.options.showDelay, this, element);
 		this.tip.setStyle('display', 'block');
-		this.position((!this.options.fixed) ? event : {page: element.getPosition()});
+		this.setPosition((!this.options.fixed) ? event : {page: element.getPosition()});
 	},
 
 	elementLeave: function(event, element){
@@ -121,7 +122,7 @@ var Tips = new Class({
 	},
 
 	elementMove: function(event){
-		this.position(event);
+		this.setPosition(event);
 	},
 
 	position: function(event){
