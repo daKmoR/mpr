@@ -1,4 +1,3 @@
-
 $require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
 $require(MPR.path + 'Core/Fx.Transitions/Fx.Transitions.js');
 
