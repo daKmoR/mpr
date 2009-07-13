@@ -1,0 +1,115 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require(MPR.path + 'More/Interface/Tips.js');
+
+window.addEvent('domready', function() {
+
+	var Tips1 = new Tips($$('.Tips1'), {
+		onHide: function(tip) {
+			$clear( this.autoHide );
+			tip.fade(0);
+		},
+		onShow: function(tip, el) {
+			tip.fade(1);
+			this.autoHide = this.hide.delay(4000, this, el);
+		}
+	});
+	console.log(Tips1);
+	
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Interface.Tips</h1>
+<h2>Introduction</h2>
+<p>
+	It's easier than you think to select specific part of an input field (or textarea)
+</p>
+<h3>Tips 1</h3>
+<img src="../Demos/Images/moo.png" alt="mooCow" class="Tips1" title="mooCow" rel="you do like the cow? don't you?" />
+
+<h3>Tips 2</h3>
+<a href="http://www.google.com" title="use this searchengine" class="Tips2">Links</a> with no rel tag will be have the have set the text to the url or the link. <br />
+You can create as many <span class="Tips2cus" title='<span class="left">&nbsp;</span><span class="right">&nbsp;</span><div class="content">costum tips</div>' rel='<span class="left">&nbsp;</span><span class="right">&nbsp;</span><div class="content">you just need to define the className</div>'>costum</span> tips as you would like.  
+	 
+<div style="margin-left: 20px;">
+	Der <a href="http://en.wikipedia.org/wiki/Dragon" class="TipsDescription" title="Dragon">Drache</a> regt sich, als er den kalten Wind spürt. <br />
+	[The dragon stirs as he feels the cold breeze.] <br />
+	Er trug den süssen <a href="http://de.wikipedia.org/wiki/Aroma" class="TipsDescription" title="Aroma">Duft</a> menschlichen Atems herbei. Aufgeregtes Geflüster drang aus dem <a href="http://en.wikipedia.org/wiki/Forest" title="Forest" class="TipsDescription">Wald</a>. <br />
+	[It brougt the sweet aroma of human breath. Excited whispering urge from the forest.] <br />
+</div>
+<a href="#" id="descriptionAdd">activate</a> / <a href="#" id="descriptionRemove">deactivate</a> Tips for above area
+
+<h3>Tips 3</h3>
+<div class="quote">
+	<p class="Tips3" title="de->en" rel='A boy had thrown a stone against the wall of his cave.'>Draussen hatte ein Junge einen Stein gegen seine Höhle geworfen.</p>
+	<p class="Tips3" id="setValues">Die Zeit schien stillzustehen. Atemlos verfolgten die Jungen, wie der Stein zu Boden polterte.</p>
+</div>
+
+<h3>Tips 4</h3>
+storing tips-title and tips-text inside the title tag. <br /> <br />
+<img src="../Demos/Images/moo.png" alt="mooCow" class="Tips4" title="Tips Title :: This is my tip content" />
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>

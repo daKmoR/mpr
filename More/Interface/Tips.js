@@ -10,6 +10,10 @@ Script: Tips.js
 		Christoph Pojer
 */
 
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+
+$require(MPR.path + 'More/Interface/Resources/css/Interface.Tips.css');
+
 var Tips = new Class({
 
 	Implements: [Events, Options],
@@ -112,17 +116,17 @@ var Tips = new Class({
 		this.timer = $clear(this.timer);
 		this.timer = this.show.delay(this.options.showDelay, this, element);
 		this.tip.setStyle('display', 'block');
-		this.setPosition((!this.options.fixed) ? event : {page: element.getPosition()});
+		this.position((!this.options.fixed) ? event : {page: element.getPosition()});
 	},
 
 	elementLeave: function(event, element){
 		$clear(this.timer);
-		this.tip.setStyle('display', 'none');
+		//this.tip.setStyle('display', 'none');
 		this.timer = this.hide.delay(this.options.hideDelay, this, element);
 	},
 
 	elementMove: function(event){
-		this.setPosition(event);
+		this.position(event);
 	},
 
 	position: function(event){
