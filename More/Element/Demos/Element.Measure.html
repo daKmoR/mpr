@@ -1,0 +1,137 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require(MPR.path + 'More/Element/Element.Measure.js');
+
+window.addEvent('domready', function() {
+
+	
+
+	Element.implement({
+		measureSize: function() {
+			return this.measure( function() {
+				var s = this.getComputedSize({mode: 'horizontal', styles: ['padding','border','margin']});
+				this.setStyle('width', this.getParent().getStyle('width').toInt() - s.computedLeft - s.computedRight);
+				return this.getSize();
+			});
+		}
+	});
+	$('getMySize').fade(0);
+
+	$('measure').addEvent('click', function(e) {
+		e.stop();
+		var bla = $('getMySize').measureSize();
+		console.log( bla );
+	});
+
+	var gu = new Fx.Tween($('myWrapper'), {
+		onComplete: function() {
+			$('getMySize').setStyle('display', 'block');
+			$('getMySize').fade(1);
+		}
+	});
+	
+	
+	$('show').addEvent('click', function(e) {
+		e.stop();
+		var bla = $('getMySize').measureSize();
+		$('myWrapper').setStyle('height', 0);
+		
+		gu.start('height', bla.y );
+		
+	});
+	
+	
+	
+
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+#myWrapper { width: 300px; border-left: 10px solid red; padding-left: 10px; background: green; }
+
+#getMySize { display: none; padding: 20px; background: orange; }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>Element.Measure</h1>
+<h2>Introduction</h2>
+<p>
+	It's easier than you think to select specific part of an input field (or textarea)
+</p>
+<h3>Measure</h3>
+<p>Usually you can't measure the size of a hidden element. But thx to measure which shortly "exposes" (display: 'block', position: 'absolute',	visibility: 'hidden') your element you can measure it's dimension and afterward the css get's set to the original value.</p>
+<a href="#" id="measure">measure</a><br />
+<a href="#" id="show">show</a>
+
+<div id="myWrapper">
+	<div id="getMySize">
+		Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+	</div>
+</div>
+
+here is some more text
+
+
+
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
