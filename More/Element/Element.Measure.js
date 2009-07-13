@@ -14,6 +14,8 @@ Script: Element.Measure.js
 
 */
 
+$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+
 Element.implement({
 
 	measure: function(fn){
