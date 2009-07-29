@@ -129,53 +129,35 @@ var FlexSlide = new Class({
 	content: [],
 	current: -1,
 	autotimer: $empty,
+	items: {},
 	
 	initialize: function(wrap, content, options) {
 		this.setOptions(options);
 
 		this.wrap = $(wrap);
 		this.wrap.set( this.options.ui.wrap );
-		
+		//this.content = $$(content);
+
 		this.build();
 		this.display( this.options.display );
 	},
 	
-	buildSelectWrap: function() {
-		return new Element('div', this.options.ui.selects).inject( this.wrap );
-	},
-	
-	buildNextWrap: function() {
-		return new Element('div', this.options.ui.next).inject( this.wrap );
-	},
-	
-	buildPreviousWrap: function() {
-		return new Element('div', this.options.ui.previous).inject( this.wrap );
-	},
-	
-	buildContentWrap: function() {
-		return new Element('div', this.options.ui.contents).inject( this.wrap );
-	},
-	
 	build: function() {
 		this.options.render.each( function(item) {
-			els = $$( this.options.selections[item] );
-			itemName = item.camelCase() + 'Wrap';
-			if( els.length > 0 ) {
-				if( item == 'previous' || item == 'next' ) {
-					this[itemName] = els[0];
-				} else if ( item == 'content' ) {
-					this[itemName] = this['build' + itemName.capitalize().camelCase()]();
-					els.each( function(el) {
-						this[itemName].grab(el);
-					}, this);
-					this.content = els;
-				}	else {
-					this[itemName] = els;
-				}
+			if (item == 'content') {
+				this.contentWrap = new Element('div', this.options.ui.contents).inject( this.wrap );
+			} else if(item == 'select') {
+				this.selectWrap = new Element('div', this.options.ui.selects).inject( this.wrap );
 			} else {
-				if( this.options.create.contains(item) ) {
-				  this[itemName] = this['build' + itemName.capitalize().camelCase()]();
-				}
+				this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
+			}
+			
+			var els = this.wrap.getElements( this.options.selections[item] );
+			if( els.length > 0 ) {
+				this.items[item] = els;
+				els.each( function(el) {
+					this[item + 'Wrap'].grab(el);
+				}, this);
 			}
 			
 		}, this);
@@ -198,13 +180,13 @@ var FlexSlide = new Class({
 	show: function(id, event) {
 		if( id != this.current) {
 			
-			this.reset( this.content[id] );
+			this.reset( this.items.content[id] );
 			
-			this.contentWrap.grab( this.content[id] );
-			this.prepare( this.content[id] );
+			this.contentWrap.grab( this.items.content[id] );
+			this.prepare( this.items.content[id] );
 			
 			tmp = this.options.effect.active.getRandom();
-			this.options.effects[tmp].call( this, this.content[this.current], this.content[id] );
+			this.options.effects[tmp].call( this, this.items.content[this.current], this.items.content[id] );
 			
 			this.current = id;
 			if( this.options.auto ) this.auto();
@@ -212,11 +194,11 @@ var FlexSlide = new Class({
 	},
 	
 	display: function(id) {
-		this.contentWrap.grab( this.content[id] );
-		this.content[id].setStyle('display', 'block');
+		this.contentWrap.grab( this.items.content[id] );
+		this.items.content[id].setStyle('display', 'block');
 		
 		if( this.options.autoHeight == true ) {
-			this.contentWrap.setStyle('height', this.content[id].getSize().y);
+			this.contentWrap.setStyle('height', this.items.content[id].getSize().y);
 		}
 		this.current = id;
 		if( this.options.auto ) this.auto();
@@ -234,11 +216,11 @@ var FlexSlide = new Class({
 			
 		if ( this.options.mode === 'random' ) {
 			do 
-				next = $random(0, this.content.length-1 );
+				next = $random(0, this.items.content.length-1 );
 			while ( next == this.current )
 		} else {
-			if ( this.current + step < this.content.length ) next = this.current + step;
-			if ( this.current + step < 0 )	next = this.content.length-1;
+			if ( this.current + step < this.items.content.length ) next = this.current + step;
+			if ( this.current + step < 0 )	next = this.items.content.length-1;
 		}
 		
 		this.show(next);

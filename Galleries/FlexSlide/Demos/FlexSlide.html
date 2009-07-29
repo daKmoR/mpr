@@ -31,7 +31,9 @@
 window.addEvent('domready', function() {
 
 	$require(MPR.path + 'Galleries/FlexSlide/FlexSlide.js');
-	var bla = new FlexSlide( $('myGallery'), $$('.pic'), { 'duration': 4000, auto: true } );
+	var bla = new FlexSlide( $('myGallery'), $$('#myGallery .fsContent'), { 'duration': 4000, auto: true } );
+	
+	var bla2 = new FlexSlide( $('myGallery2'), $$('#myGallery2 .fsContent'), { 'duration': 4000, auto: true } );
 				
 });
 /* ### Mpr.Js.End ### */
@@ -80,6 +82,31 @@ window.addEvent('domready', function() {
 		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
 	</div>
 </div>
+
+<div id="myGallery2">
+	<div class="fsSelect">
+		1
+	</div>
+	<div class="fsContent">
+		<p>asdf</p>
+	</div>
+	
+	<div class="fsSelect">
+		2
+	</div>
+	<div class="fsContent">
+		<p>jklö</p>
+	</div>
+	
+	<div class="fsSelect">
+		3
+	</div>
+	<div class="fsContent">
+		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
+	</div>
+</div>
+
+
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
