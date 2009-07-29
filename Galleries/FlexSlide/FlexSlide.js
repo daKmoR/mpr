@@ -93,38 +93,35 @@ var FlexSlide = new Class({
 		},
 		display: 0,
 		auto: true,
+		autoHeight: true,
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
-		onDeselect: function(image, title, container) {
-			title.removeClass('active');
-		},
-		onDisplay: function(container) {
-			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'show' );
-		},
-		onShow: function(container) {
-			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'in' );
-			//this.options.effects[this.options.effect.active.getRandom()]( image, 'in' );
-		},
-		onHide: function(container) { 
-			this.options.effects[this.options.effect.active.getRandom()].call( this, container, 'hide' );
-			//this.options.effects[this.options.effect.active.getRandom()].delay( this.options.duration, this, [image, 'hide'] );
-		},
 		effect: {
-			active: ['fade'],
+			active: ['slideRight', 'slideLeft', 'fade'],
 			options: {
 				fade: { duration: 1500 },
 				slide: { duration: 600 }
 			}
 		},
 		effects: {
-			fade: function(el, state) {
-				el.set('tween', this.options.effect.options.fade );
-				el.fade( state );
+			fade: function(current, next) {
+				this.prepare(next);
+				next.fade('hide');
+				next.fade(1);
+				current.fade(0);
 			},
-			slide: function(el, state) {
-				el.set('slide', this.options.effect.options.slide );
-				el.slide( state );
+			slideLeft: function(current, next) {
+				this.prepare(next);
+				next.setStyle('left', this.contentWrap.getSize().x);
+				next.tween('left', 0);
+				current.tween('left', this.contentWrap.getSize().x*-1);
+			},
+			slideRight: function(current, next) {
+				this.prepare(next);
+				next.setStyle('left', this.contentWrap.getSize().x*-1);
+				next.tween('left', 0);
+				current.tween('left', this.contentWrap.getSize().x);
 			}
 		}
 	},
@@ -132,8 +129,6 @@ var FlexSlide = new Class({
 	content: [],
 	current: -1,
 	autotimer: $empty,
-	
-	//		render: ['select', 'previousx', 'content', 'nextx', 'header', 'description'],
 	
 	initialize: function(wrap, content, options) {
 		this.setOptions(options);
@@ -182,49 +177,49 @@ var FlexSlide = new Class({
 				  this[itemName] = this['build' + itemName.capitalize().camelCase()]();
 				}
 			}
-			console.log( itemName );
 			
 		}, this);
 	},
 	
-	reset: function(id) {
-		this.content[id].set('style', '');
-		this.content[id].setStyle('display', 'none');
+	reset: function(el) {
+		el.set('style', '');
+		//el.setStyle('display', 'none');
+	},
+	
+	prepare: function(el) {
+		this.reset(el);
+		el.setStyle('display', 'block');
+		el.setStyle('width', this.contentWrap.getSize().x);
+		if( this.options.autoHeight == true ) {
+			this.contentWrap.tween('height', el.getSize().y);
+		}
 	},
 	
 	show: function(id, event) {
-		var event = event || 'onShow';
 		if( id != this.current) {
 			
-			this.reset(id);
-			this.content[id].setStyle('display', 'block');
-			// if( this.current >= 0 ) {
-				// this.deselect( this.current );
-			// }
-			
-			//this.selectWrap[id].addClass('active');
-			this.hide(id);
-			this.current = id;
-			
-			this.contentWrap.tween('height', this.content[id].getSize().y);
+			this.reset( this.content[id] );
 			
 			this.contentWrap.grab( this.content[id] );
+			this.prepare( this.content[id] );
 			
-			this.fireEvent(event, [ this.content[id] ]);
+			tmp = this.options.effect.active.getRandom();
+			this.options.effects[tmp].call( this, this.content[this.current], this.content[id] );
+			
+			this.current = id;
 			if( this.options.auto ) this.auto();
 		}
 	},
 	
 	display: function(id) {
-		this.show(id, 'onDisplay');
-	},
-	
-	deselect: function(id) {
-		this.fireEvent('onDeselect', [ this.images[id], this.titles[id], this.content[id] ]);
-	},
-	
-	hide: function(id) {
-		this.fireEvent('onHide', [ this.content[id] ]);
+		this.contentWrap.grab( this.content[id] );
+		this.content[id].setStyle('display', 'block');
+		
+		if( this.options.autoHeight == true ) {
+			this.contentWrap.setStyle('height', this.content[id].getSize().y);
+		}
+		this.current = id;
+		if( this.options.auto ) this.auto();
 	},
 	
 	auto: function() {

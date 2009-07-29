@@ -8,4 +8,4 @@
 		
 
 .ui-Contents { position: relative; background: orange; overflow: hidden; }
-	.ui-Contents div { position: absolute; left: 0; top: 0; background: #fff; display: none; }
+	.ui-Contents div { position: absolute; left: 0; top: 0; display: none; }
