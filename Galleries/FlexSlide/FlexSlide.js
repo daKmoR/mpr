@@ -69,7 +69,6 @@ $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Fx/Fx.Slide.js');
 $require(MPR.path + 'More/Class/Class.Binds.js');
  
 var FlexSlide = new Class({
@@ -86,11 +85,10 @@ var FlexSlide = new Class({
 		render: ['previous', 'content', 'next', 'select', 'header', 'description'],
 		create: ['select', 'previous', 'next'],
 		ui: {
-			selects: { 'class': 'ui-Selects' },
-			next: { 'class': 'ui-Next' },
-			contents: { 'class': 'ui-Contents' },
-			content: { 'class': 'ui-Content' },
-			previous: { 'class': 'ui-Previous' },
+			select: { 'class': 'ui-SelectWrap' },
+			next: { 'class': 'ui-NextWrap' },
+			content: { 'class': 'ui-ContentWrap' },
+			previous: { 'class': 'ui-PreviousWrap' },
 		},
 		display: 0,
 		auto: true,
@@ -99,10 +97,12 @@ var FlexSlide = new Class({
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
 		effect: {
-			active: ['slideRight', 'slideLeft', 'fade'],
+			active: ['slideRight', 'slideLeft', 'fade', 'slideLeftBounce'],
 			options: {
-				fade: { duration: 1500 },
-				slide: { duration: 600 }
+				fade: { },
+				slideLeft: { },
+				slideRight: { },
+				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeInOut }
 			}
 		},
 		effects: {
@@ -123,6 +123,9 @@ var FlexSlide = new Class({
 				next.setStyle('left', this.contentWrap.getSize().x*-1);
 				next.tween('left', 0);
 				current.tween('left', this.contentWrap.getSize().x);
+			},
+			slideLeftBounce: function(current, next) {
+				this.options.effects.slideLeft.call(this, current, next);
 			}
 		}
 	},
@@ -144,13 +147,8 @@ var FlexSlide = new Class({
 	
 	build: function() {
 		this.options.render.each( function(item) {
-			if (item == 'content') {
-				this.contentWrap = new Element('div', this.options.ui.contents).inject( this.wrap );
-			} else if(item == 'select') {
-				this.selectWrap = new Element('div', this.options.ui.selects).inject( this.wrap );
-			} else {
-				this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
-			}
+		
+			this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
 			
 			this.items[item] = this.wrap.getElements( this.options.selections[item] );
 			if( this.items[item].length > 0 ) {
@@ -197,13 +195,15 @@ var FlexSlide = new Class({
 	
 	show: function(id) {
 		if( id != this.current) {
-			
 			this.reset( this.items.content[id] );
 			
 			this.contentWrap.grab( this.items.content[id] );
 			this.prepare( this.items.content[id] );
 			
 			tmp = this.options.effect.active.getRandom();
+			
+			this.items.content[this.current].set('tween', this.options.effect.options[tmp]);
+			this.items.content[id].set('tween', this.options.effect.options[tmp]);
 			this.options.effects[tmp].call( this, this.items.content[this.current], this.items.content[id] );
 			
 			this.current = id;

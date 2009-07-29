@@ -7,9 +7,10 @@
 		.ui-GalleryPic img { }
 		
 
-.ui-Contents { position: relative; background: orange; overflow: hidden; }
-	.ui-Contents div { position: absolute; left: 0; top: 0; display: none; }
-	.ui-Selects span { width: 10px; height: 10px; background: orange; display: block; cursor: pointer; }
-		.ui-Selects span:hover { background: red; }
+.ui-ContentWrap { position: relative; background: orange; overflow: hidden; }
+	.ui-ContentWrap div { position: absolute; left: 0; top: 0; display: none; }
+	.ui-SelectWrap span { width: 10px; height: 10px; background: orange; display: block; cursor: pointer; }
+		.ui-SelectWrap span:hover { background: red; }
 		
-	.ui-Next { width: 10px; height: 20px; background: green; }
+	.ui-NextWrap { width: 10px; height: 20px; background: green; }
+	.ui-PreviousWrap { width: 10px; height: 20px; background: green; }
