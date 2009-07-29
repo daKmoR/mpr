@@ -1,0 +1,11 @@
+.ui-Gallery { position: relative; overflow: hidden; }
+	.ui-GalleryMenu { }
+		.ui-GalleryMenu h3 { float: left; cursor: pointer; margin: 0 10px 10px; font-size: 14px; }
+		.ui-GalleryMenu h3.active { color: #D53200; }
+	.ui-GalleryPics { height: 400px; }
+		.ui-GalleryPic { position: absolute; width: 100%; height: 100%; background: #fff; text-align: center; }
+		.ui-GalleryPic img { }
+		
+
+.ui-Contents { position: relative; background: orange; overflow: hidden; }
+	.ui-Contents div { position: absolute; left: 0; top: 0; background: #fff; display: none; }
