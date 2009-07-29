@@ -16,9 +16,7 @@ $require(MPR.path + 'More/Drag/Drag.js');
 
 var Slider = new Class({
 
-	Implements: [Events, Options],
-
-	Binds: ['clickedElement', 'draggedKnob', 'scrolledElement'],
+	Implements: [Events, Options, Class.Binds],
 
 	options: {/*
 		onTick: $empty(intPosition),
@@ -70,8 +68,8 @@ var Slider = new Class({
 			snap: 0,
 			limit: limit,
 			modifiers: modifiers,
-			onDrag: this.draggedKnob,
-			onStart: this.draggedKnob,
+			onDrag: this.bound('clickedElement'),
+			onStart: this.bound('draggedKnob'),
 			onBeforeStart: (function(){
 				this.isDragging = true;
 			}).bind(this),
@@ -91,15 +89,15 @@ var Slider = new Class({
 	},
 
 	attach: function(){
-		this.element.addEvent('mousedown', this.clickedElement);
-		if (this.options.wheel) this.element.addEvent('mousewheel', this.scrolledElement);
+		this.element.addEvent('mousedown', this.bound('clickedElement'));
+		if (this.options.wheel) this.element.addEvent('mousewheel', this.bound('scrolledElement'));
 		this.drag.attach();
 		return this;
 	},
 
 	detach: function(){
-		this.element.removeEvent('mousedown', this.clickedElement);
-		this.element.removeEvent('mousewheel', this.scrolledElement);
+		this.element.removeEvent('mousedown', this.bound('clickedElement'));
+		this.element.removeEvent('mousewheel', this.bound('scrolledElement'));
 		this.drag.detach();
 		return this;
 	},

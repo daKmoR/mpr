@@ -81,9 +81,7 @@ Element.Properties.validatorProps = {
 
 var FormValidator = new Class({
 
-	Implements:[Options, Events],
-
-	Binds: ['onSubmit'],
+	Implements:[Options, Events, Class.Binds],
 
 	options: {/*
 		onFormValidate: $empty(isValid, form, event),
@@ -112,7 +110,7 @@ var FormValidator = new Class({
 		this.element.store('validator', this);
 		this.warningPrefix = $lambda(this.options.warningPrefix)();
 		this.errorPrefix = $lambda(this.options.errorPrefix)();
-		if (this.options.evaluateOnSubmit) this.element.addEvent('submit', this.onSubmit);
+		if (this.options.evaluateOnSubmit) this.element.addEvent('submit', this.bound('onSubmit'));
 		if (this.options.evaluateFieldsOnBlur || this.options.evaluateFieldsOnChange) this.watchFields(this.getFields());
 	},
 
@@ -440,7 +438,7 @@ FormValidator.addAllThese([
 	['validate-one-required', {
 		errorMsg: FormValidator.getMsg.pass('oneRequired'),
 		test: function(element, props){
-			var p = document.id(props['validate-one-required']) || element.parentNode;
+			var p = document.id(props['validate-one-required']) || element.getParent();
 			return p.getElements('input').some(function(el){
 				if (['checkbox', 'radio'].contains(el.get('type'))) return el.get('checked');
 				return el.get('value');
