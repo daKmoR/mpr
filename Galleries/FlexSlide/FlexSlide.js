@@ -1,5 +1,5 @@
 /**
- * gives a simple Gallery
+ * FlexSlide - allows to create almost any Sliding Stuff (Galleries, Tabs...) with multiple effects
  *
  * @version		0.0.1
  *
@@ -34,30 +34,6 @@
 	<a href="#"><img src="" alt="" /></a>
 </div>
 
-
-
-selections: {
-	select: 'fsSelect',
-	previous: 'fsPrevious',
-	content: 'fsContent',
-	next: 'fsNext',
-	header: 'fsHeader',
-	description: 'fsDescription'
-}
-render: ['select', 'previous', 'content', 'next', 'header', 'description']
-
-
-render: ['select', 'previous', 'content', 'next']
-
-
-render: ['content', 'header', 'select']
-
-
-
-
-
-new FlexContent( $$('fsContent') );
-
 */
 
 $require(MPR.path + 'Galleries/FlexSlide/Resources/css/FlexSlide.css'); 
@@ -86,9 +62,11 @@ var FlexSlide = new Class({
 		create: ['select', 'previous', 'next'],
 		ui: {
 			select: { 'class': 'ui-SelectWrap' },
+			selectItem: { 'class': 'ui-Select' },
 			next: { 'class': 'ui-NextWrap' },
 			content: { 'class': 'ui-ContentWrap' },
-			previous: { 'class': 'ui-PreviousWrap' },
+			contentItem: { 'class': 'ui-Content' },
+			previous: { 'class': 'ui-PreviousWrap' }
 		},
 		display: 0,
 		auto: true,
@@ -96,7 +74,10 @@ var FlexSlide = new Class({
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
+		autoSelectCount: true,
 		effect: {
+			up: 'random', /* any availabele effect */
+			down: 'random', /* any availabele effect */
 			active: ['slideRight', 'slideLeft', 'fade', 'slideLeftBounce'],
 			options: {
 				fade: { },
@@ -130,12 +111,11 @@ var FlexSlide = new Class({
 		}
 	},
 	
-	content: [],
 	current: -1,
 	autotimer: $empty,
 	items: {},
 	
-	initialize: function(wrap, content, options) {
+	initialize: function(wrap, options) {
 		this.setOptions(options);
 
 		this.wrap = $(wrap);
@@ -156,6 +136,7 @@ var FlexSlide = new Class({
 					if( item == 'select' ) {
 						el.addEvent('click', this.show.bind(this, i) );
 					}
+					el.addClass( this.options.ui[item + 'Item']['class'] );
 					this[item + 'Wrap'].grab(el);
 				}, this);
 			}
@@ -164,10 +145,13 @@ var FlexSlide = new Class({
 		
 		if( this.items.select.length <= 0 ) {
 			this.items.content.each( function(el, i) {
-				this.items.select.push( new Element('span', this.options.ui.select)
+				var select = new Element('span', this.options.ui.selectItem)
 					.addEvent('click', this.show.bind(this, i))
-					.inject(this.selectWrap)
-				);
+					.inject(this.selectWrap);
+				if( this.options.autoSelectCount == true ) {
+					select.set('html', i+1);
+				}
+				this.items.select.push(select);
 			}, this);
 		}
 		
@@ -193,18 +177,24 @@ var FlexSlide = new Class({
 		}
 	},
 	
-	show: function(id) {
+	show: function(id, fx) {
 		if( id != this.current) {
 			this.reset( this.items.content[id] );
 			
 			this.contentWrap.grab( this.items.content[id] );
 			this.prepare( this.items.content[id] );
 			
-			tmp = this.options.effect.active.getRandom();
+			if( id > this.current && this.options.effect.up != 'random' ) {
+				fx = fx || this.options.effect.up;
+			} else if ( id < this.current && this.options.effect.down != 'random' )  {
+				fx = fx || this.options.effect.down;
+			} else {
+				fx = fx || this.options.effect.active.getRandom();
+			}
 			
-			this.items.content[this.current].set('tween', this.options.effect.options[tmp]);
-			this.items.content[id].set('tween', this.options.effect.options[tmp]);
-			this.options.effects[tmp].call( this, this.items.content[this.current], this.items.content[id] );
+			this.items.content[this.current].set('tween', this.options.effect.options[fx]);
+			this.items.content[id].set('tween', this.options.effect.options[fx]);
+			this.options.effects[fx].call( this, this.items.content[this.current], this.items.content[id] );
 			
 			this.current = id;
 			if( this.options.auto ) this.auto();

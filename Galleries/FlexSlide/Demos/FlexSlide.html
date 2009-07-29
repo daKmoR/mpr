@@ -31,10 +31,14 @@
 window.addEvent('domready', function() {
 
 	$require(MPR.path + 'Galleries/FlexSlide/FlexSlide.js');
-	var bla = new FlexSlide( $('myGallery'), $$('#myGallery .fsContent'), { 'duration': 4000, auto: true } );
+	var bla = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true } );
 	
-	var bla2 = new FlexSlide( $('myGallery2'), $$('#myGallery2 .fsContent'), { 'duration': 4000, auto: true } );
-				
+	var bla2 = new FlexSlide( $('myGallery2'), { 'duration': 3000, auto: true, 
+		autoHeight: true,
+		render: ['select', 'content']
+	});
+	
+		
 });
 /* ### Mpr.Js.End ### */
 </script>
@@ -42,8 +46,9 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#reset { cursor: pointer; text-decoration: underline; }
-#reset:hover { color: #aaa; }
+#myGallery2 .ui-ContentWrap { height: 200px; clear: both; }
+#myGallery2 .ui-Select { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 50px; padding: 0 10px; }
+#myGallery2 .ui-Select.active { border-bottom: none; padding-bottom: 1px; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -64,12 +69,14 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>FlowGallery</h1>
+<h1>FlexSlide</h1>
 <h2>Introduction</h2>
 <p>
 	a simple Gallery which allows to easily adopt the output.
 </p>
 <h3>Default FlowGallery</h3>
+
+<span id="but">buuuuuutttt</span>
 
 <div id="myGallery">
 	<div class="fsContent">
@@ -85,21 +92,21 @@ window.addEvent('domready', function() {
 
 <div id="myGallery2">
 	<div class="fsSelect">
-		1
+		Tab 1
 	</div>
 	<div class="fsContent">
 		<p>asdf</p>
 	</div>
 	
 	<div class="fsSelect">
-		2
+		Tab 2
 	</div>
 	<div class="fsContent">
 		<p>jklö</p>
 	</div>
 	
 	<div class="fsSelect">
-		3
+		Tab 3
 	</div>
 	<div class="fsContent">
 		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
