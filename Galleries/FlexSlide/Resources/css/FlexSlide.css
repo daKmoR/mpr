@@ -9,4 +9,7 @@
 
 .ui-Contents { position: relative; background: orange; overflow: hidden; }
 	.ui-Contents div { position: absolute; left: 0; top: 0; display: none; }
-	.ui-Selects span { display: block; width: 10px; height: 10px; }
+	.ui-Selects span { width: 10px; height: 10px; background: orange; display: block; cursor: pointer; }
+		.ui-Selects span:hover { background: red; }
+		
+	.ui-Next { width: 10px; height: 20px; background: green; }

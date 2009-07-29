@@ -70,6 +70,7 @@ $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
 $require(MPR.path + 'More/Fx/Fx.Slide.js');
+$require(MPR.path + 'More/Class/Class.Binds.js');
  
 var FlexSlide = new Class({
 	Implements: [Options, Events],
@@ -82,7 +83,7 @@ var FlexSlide = new Class({
 			header: '.fsHeader',
 			description: '.fsDescription'
 		},
-		render: ['select', 'previous', 'content', 'next', 'header', 'description'],
+		render: ['previous', 'content', 'next', 'select', 'header', 'description'],
 		create: ['select', 'previous', 'next'],
 		ui: {
 			selects: { 'class': 'ui-Selects' },
@@ -136,7 +137,6 @@ var FlexSlide = new Class({
 
 		this.wrap = $(wrap);
 		this.wrap.set( this.options.ui.wrap );
-		//this.content = $$(content);
 
 		this.build();
 		this.display( this.options.display );
@@ -152,20 +152,38 @@ var FlexSlide = new Class({
 				this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
 			}
 			
-			var els = this.wrap.getElements( this.options.selections[item] );
-			if( els.length > 0 ) {
-				this.items[item] = els;
-				els.each( function(el) {
+			this.items[item] = this.wrap.getElements( this.options.selections[item] );
+			if( this.items[item].length > 0 ) {
+				this.items[item].each( function(el, i) {
+					if( item == 'select' ) {
+						el.addEvent('click', this.show.bind(this, i) );
+					}
 					this[item + 'Wrap'].grab(el);
 				}, this);
 			}
 			
 		}, this);
+		
+		if( this.items.select.length <= 0 ) {
+			this.items.content.each( function(el, i) {
+				this.items.select.push( new Element('span', this.options.ui.select)
+					.addEvent('click', this.show.bind(this, i))
+					.inject(this.selectWrap)
+				);
+			}, this);
+		}
+		
+		if( this.nextWrap ) {
+			this.nextWrap.addEvent('click', this.next.bind(this, this.options.step) );
+		}
+		if( this.previousWrap ) {
+			this.previousWrap.addEvent('click', this.previous.bind(this, this.options.step) );
+		}
+		
 	},
 	
 	reset: function(el) {
 		el.set('style', '');
-		//el.setStyle('display', 'none');
 	},
 	
 	prepare: function(el) {
@@ -177,7 +195,7 @@ var FlexSlide = new Class({
 		}
 	},
 	
-	show: function(id, event) {
+	show: function(id) {
 		if( id != this.current) {
 			
 			this.reset( this.items.content[id] );
