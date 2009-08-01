@@ -11,15 +11,17 @@
  * @docmentation	http://outcut.de/MooFlow/Docmentation.html
  */ 
  
-$require(MPR.path + 'Galleries/MooFlow/Resources/css/MooFlow.css');
- 
-$require(MPR.path + 'More/Drag/Slider.js');
-
 $require(MPR.path + 'Core/Fx/Fx.Tween.js');
 $require(MPR.path + 'Core/Fx/Fx.Morph.js');
 $require(MPR.path + 'Core/Fx/Fx.Transitions.js');
 
 $require(MPR.path + 'More/Utilities/Assets.js');
+$require(MPR.path + 'More/Drag/Slider.js');
+
+$require(MPR.path + 'Snippets/Element/Element.Reflect.js');
+
+$require(MPR.path + 'Galleries/MooFlow/Fx.Value.js');
+$require(MPR.path + 'Galleries/MooFlow/Resources/css/MooFlow.css');
 
 var MooFlow = new Class({
 
@@ -36,17 +38,17 @@ var MooFlow = new Class({
 		reflection: 0.4,
 		heightRatio: 0.6,
 		offsetY: 0,
-		startIndex: 0,
+		startIndex: 'middle',
 		interval: 3000,
 		factor: 115,
 		bgColor: '#000',
-		useCaption: false,
-		useResize: false,
-		useSlider: false,
-		useWindowResize: false,
+		useCaption: true,
+		useResize: true,
+		useSlider: true,
+		useWindowResize: true,
 		useMouseWheel: true,
-		useKeyInput: false,
-		useViewer: false
+		useKeyInput: true,
+		useAutoPlay: true
 	},
 	
 	initialize: function(element, options){
@@ -172,7 +174,10 @@ var MooFlow = new Class({
 	},
 	
 	loaded: function(){
-		this.index = this.options.startIndex;
+		this.index = this.options.startIndex
+		if(this.index === 'middle') {
+			this.index = (this.master.images.length/2).round() - 1;
+		}
 		this.iL = this.master.images.length-1;
 		new Fx.Tween(this.loader, {
 			'duration': 800,
@@ -225,7 +230,7 @@ var MooFlow = new Class({
 		if(this.options.useSlider){	
 			this.slider.setStyle('width',this.slider.getParent().getSize().x-this.sliPrev.getSize().x-this.sliNext.getSize().x-1);
 			this.knob.setStyle('width',(this.slider.getSize().x/this.iL));
-			this.sli = new SliderEx(this.slider, this.knob, {steps: this.iL}).set(this.index);
+			this.sli = new Slider(this.slider, this.knob, {steps: this.iL}).set(this.index);
 			this.sli.addEvent('onChange', this.glideTo.bind(this));
 		}
 		this.glideTo(this.index);
@@ -372,73 +377,4 @@ var MooFlow = new Class({
 			x += foc;
 		});
 	}
-});
-
-var SliderEx = new Class({
-	Extends: Slider,
-	set: function(step){
-		this.step = Math.round(step);
-		this.fireEvent('tick', this.toPosition(this.step));
-		return this;
-    },
-	clickedElement: function(event){
-		var dir = this.range < 0 ? -1 : 1;
-		var position = event.page[this.axis] - this.element.getPosition()[this.axis] - this.half;
-		position = position.limit(-this.options.offset, this.full -this.options.offset);
-		this.step = Math.round(this.min + dir * this.toStep(position));
-		this.checkStep();
-		this.fireEvent('tick', position);
-	}
-});
-
-Fx.Value = new Class({
-	Extends: Fx,
-	compute: function(from, to, delta){
-		this.value = Fx.compute(from, to, delta);
-		this.fireEvent('motion', this.value);
-		return this.value;
-	},
-	get: function(){
-		return this.value || 0;
-	}
-});
-
-Element.implement({
-	reflect: function(arg){
-		i = arg.img.clone();
-		//forces absolute urls - needed for canvas
-		i.src = i.src;
-		if(Browser.Engine.trident){
-			i.style.filter = 'flipv progid:DXImageTransform.Microsoft.Alpha(opacity=20, style=1, finishOpacity=0, startx=0, starty=0, finishx=0, finishy='+100*arg.ref+')';
-			i.setStyles({'width':'100%', 'height':'100%'});
-			return new Element('div').adopt(i);
-		} else {
-			var can = new Element('canvas').setProperties({'width':arg.width, 'height':arg.height});
-			if(can.getContext){
-				var ctx = can.getContext("2d");
-				ctx.save();
-				ctx.translate(0,arg.height-1);
-				ctx.scale(1,-1);
-				ctx.drawImage(i, 0, 0, arg.width, arg.height);
-				ctx.restore();
-				ctx.globalCompositeOperation = "destination-out";
-				ctx.fillStyle = arg.color;
-				ctx.fillRect(0, arg.height*0.5, arg.width, arg.height);
-				var gra = ctx.createLinearGradient(0, 0, 0, arg.height*arg.ref);					
-				gra.addColorStop(1, "rgba(255, 255, 255, 1.0)");
-				gra.addColorStop(0, "rgba(255, 255, 255, "+(1-arg.ref)+")");
-				ctx.fillStyle = gra;
-				ctx.rect(0, 0, arg.width, arg.height);
-				ctx.fill();
-				delete ctx, gra;
-			}
-			return can;
-		}
-	}
-});
-
-window.addEvent('domready', function(){
-	$$('.MooFlowieze').each(function(mooflow){
-		new MooFlow(mooflow);
-	});
 });
