@@ -9,6 +9,7 @@ Script: Fx.Scroll.js
 		Valerio Proietti
 */
 
+$require('Core/Fx/Fx.js');
 $require('Core/Element/Element.Event.js');
 $require('Core/Element/Element.Dimensions.js');
 
