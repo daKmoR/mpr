@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Galleries/MooFlow/MooFlows.js');
+$require('Galleries/MooFlow/MooFlows.js');
 
 var Auto = Auto || {};
 

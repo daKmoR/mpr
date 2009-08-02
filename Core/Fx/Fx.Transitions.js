@@ -9,7 +9,7 @@ Credits:
 	Easing Equations by Robert Penner, <http://www.robertpenner.com/easing/>, modified and optimized to be used with MooTools.
 */
 
-$require(MPR.path + 'Core/Fx/Fx.js');
+$require('Core/Fx/Fx.js');
 
 Fx.implement({
 

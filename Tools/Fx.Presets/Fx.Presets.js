@@ -5,9 +5,9 @@
 	Released under MIT License http://www.opensource.org/licenses/mit-license.php
 */
 
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Element/Element.Style.js');
 
-$require(MPR.path + 'More/Fx/Fx.Elements.js');
+$require('More/Fx/Fx.Elements.js');
 
 Fx.Elements.Preset = new Class({
 	Extends: Fx.Elements,

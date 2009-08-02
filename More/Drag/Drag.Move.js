@@ -10,7 +10,7 @@ Script: Drag.Move.js
 		Tom Occhinno
 		Jan Kassens*/
 
-$require(MPR.path + 'More/Drag/Drag.js');
+$require('More/Drag/Drag.js');
 
 Drag.Move = new Class({
 

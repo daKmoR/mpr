@@ -8,9 +8,9 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Ui/Plain/Plain.js');
+$require('Ui/Plain/Plain.js');
 
-$require(MPR.path + 'Ui/Plain/Resources/Plain.Windows.css');
+$require('Ui/Plain/Resources/Plain.Windows.css');
 
 Ui.Plain.Windows = new Class({
 	Implements: [Options],

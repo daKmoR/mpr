@@ -1,5 +1,5 @@
 
-$require(MPR.path + 'Core/Native.Array/Native.Array.js');
+$require('Core/Native.Array/Native.Array.js');
 
 Array.implement({
 

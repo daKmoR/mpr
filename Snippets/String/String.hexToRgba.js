@@ -1,6 +1,6 @@
 
-$require(MPR.path + 'Core/Native.String/Native.String.js');
-$require(MPR.path + 'Snippets/Array/Array.hexToRgba.js');
+$require('Core/Native.String/Native.String.js');
+$require('Snippets/Array/Array.hexToRgba.js');
 
 String.implement({
 

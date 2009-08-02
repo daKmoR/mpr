@@ -9,7 +9,7 @@ Script: Fx.SmoothScroll.js
 		Valerio Proietti
 */
 
-$require(MPR.path + 'More/Fx/Fx.Scroll.js');
+$require('More/Fx/Fx.Scroll.js');
 
 var SmoothScroll = Fx.SmoothScroll = new Class({
 

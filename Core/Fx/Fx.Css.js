@@ -6,8 +6,8 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Fx/Fx.js');
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Fx/Fx.js');
+$require('Core/Element/Element.Style.js');
 
 Fx.CSS = new Class({
 

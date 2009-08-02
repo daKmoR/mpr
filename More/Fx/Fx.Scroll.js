@@ -9,8 +9,8 @@ Script: Fx.Scroll.js
 		Valerio Proietti
 */
 
-$require(MPR.path + 'Core/Element/Element.Event.js');
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require('Core/Element/Element.Event.js');
+$require('Core/Element/Element.Dimensions.js');
 
 Fx.Scroll = new Class({
 

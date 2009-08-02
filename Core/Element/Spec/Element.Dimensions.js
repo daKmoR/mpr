@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require('Core/Element.Dimensions/Element.Dimensions.js');
 
 (function(){
 	var div, relDiv, absDiv, scrollDiv, tallDiv;

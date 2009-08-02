@@ -1,4 +1,4 @@
-$require(MPR.path + 'Snippets/Array/Array.shuffle.js');
+$require('Snippets/Array/Array.shuffle.js');
 
 var ShuffleText = new Class({
 	Implements: [Events, Options],

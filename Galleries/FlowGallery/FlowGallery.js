@@ -8,16 +8,16 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Galleries/FlowGallery/Resources/css/FlowGallery.css'); 
+$require('Galleries/FlowGallery/Resources/css/FlowGallery.css'); 
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Element/Element.Style.js');
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Fx/Fx.Slide.js');
+$require('More/Fx/Fx.Slide.js');
  
 FlowGallery = new Class({
 	Implements: [Options, Events],

@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'More/Class/Class.Refactor.js');
+$require('More/Class/Class.Refactor.js');
  
 var Ui = new Class({
 	Implements: [Events, Options],

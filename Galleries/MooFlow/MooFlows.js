@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Galleries/MooFlow/MooFlow.js');
+$require('Galleries/MooFlow/MooFlow.js');
 
 var MooFlows = new Class({
 

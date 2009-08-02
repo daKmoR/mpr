@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Visual/Typewriter/Typewriter.js');
+$require('Visual/Typewriter/Typewriter.js');
 
 (function(){
 	var div, writer;

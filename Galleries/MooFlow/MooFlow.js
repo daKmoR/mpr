@@ -11,17 +11,17 @@
  * @docmentation	http://outcut.de/MooFlow/Docmentation.html
  */ 
  
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Utilities/Assets.js');
-$require(MPR.path + 'More/Drag/Slider.js');
+$require('More/Utilities/Assets.js');
+$require('More/Drag/Slider.js');
 
-$require(MPR.path + 'Snippets/Element/Element.Reflect.js');
+$require('Snippets/Element/Element.Reflect.js');
 
-$require(MPR.path + 'Galleries/MooFlow/Fx.Value.js');
-$require(MPR.path + 'Galleries/MooFlow/Resources/css/MooFlow.css');
+$require('Galleries/MooFlow/Fx.Value.js');
+$require('Galleries/MooFlow/Resources/css/MooFlow.css');
 
 var MooFlow = new Class({
 

@@ -25,15 +25,15 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-$require(MPR.path + 'Galleries/UvumiGallery/Resources/css/UvumiGallery.css');
+$require('Galleries/UvumiGallery/Resources/css/UvumiGallery.css');
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
 
-$require(MPR.path + 'More/Fx/Fx.Elements.js');
-$require(MPR.path + 'More/Fx/Fx.Scroll.js');
-$require(MPR.path + 'More/Utilities/Assets.js');
+$require('More/Fx/Fx.Elements.js');
+$require('More/Fx/Fx.Scroll.js');
+$require('More/Utilities/Assets.js');
 
 
 var UvumiGallery = new Class({

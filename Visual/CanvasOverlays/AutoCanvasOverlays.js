@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Visual/CanvasOverlays/CanvasOverlays.js');
+$require('Visual/CanvasOverlays/CanvasOverlays.js');
 
 var Auto = Auto || {};
 

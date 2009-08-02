@@ -9,8 +9,8 @@ Credits:
 	Based on the functions by Peter-Paul Koch (http://quirksmode.org).
 */
 
-$require(MPR.path + 'Core/Core/Browser.js');
-$require(MPR.path + 'Core/Class/Class.Extras.js');
+$require('Core/Core/Browser.js');
+$require('Core/Class/Class.Extras.js');
 
 var Cookie = new Class({
 

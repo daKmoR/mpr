@@ -10,7 +10,7 @@ Credits:
 	- Viewport dimensions based on [YUI](http://developer.yahoo.com/yui/) code, [BSD License](http://developer.yahoo.com/yui/license.html).
 */
 
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Element/Element.Style.js');
 
 (function(){
 

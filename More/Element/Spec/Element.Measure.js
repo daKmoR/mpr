@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'More/Element.Measure/Element.Measure.js');
+$require('More/Element.Measure/Element.Measure.js');
 
 (function(){
 	var div, parDiv;

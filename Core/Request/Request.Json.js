@@ -6,8 +6,8 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Request/Request.js');
-$require(MPR.path + 'Core/Utilities/Utilities.Json.js');
+$require('Core/Request/Request.js');
+$require('Core/Utilities/Utilities.Json.js');
 
 Request.JSON = new Class({
 

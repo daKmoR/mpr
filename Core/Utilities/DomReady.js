@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Element/Element.Event.js');
+$require('Core/Element/Element.Event.js');
 
 Element.Events.domready = {
 

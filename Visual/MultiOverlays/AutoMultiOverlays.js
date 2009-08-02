@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Visual/MultiOverlays/MultiOverlays.js');
+$require('Visual/MultiOverlays/MultiOverlays.js');
 
 var Auto = Auto || {};
 

@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Visual/MultiOverlays/MultiOverlay.js');
+$require('Visual/MultiOverlays/MultiOverlay.js');
 
 var MultiOverlays = new Class({
 

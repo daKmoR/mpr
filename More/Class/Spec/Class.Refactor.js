@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'More/Class.Refactor/Class.Refactor.js');
+$require('More/Class.Refactor/Class.Refactor.js');
 
 (function(){
 	var Test = new Class({

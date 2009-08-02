@@ -1,5 +1,5 @@
 
-$require(MPR.path + 'Core/Utilities/Json.js');
+$require('Core/Utilities/Json.js');
 
 Element.extend({
 	fromJSON: function(o){

@@ -24,6 +24,7 @@ var Asset = Asset || {};
 Asset.styles = Asset.styles || function() { alert('You need at least Tools/Asset.Styles/Asset.Styles.js if you want to include css inside js'); };
 	
 function $require(source) {
+	source = MPR.path + source;
 	if ( MPR.files[source] ) return true;
 	MPR.files[source] = 1;
 	

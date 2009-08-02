@@ -5,7 +5,7 @@ Script: Class.Binds.js
 License:
 	MIT-style license.
 */
-$require(MPR.path + 'More/Class.Binds/Class.Binds.js');
+$require('More/Class.Binds/Class.Binds.js');
 
 (function(){
 	var Tester = new Class({

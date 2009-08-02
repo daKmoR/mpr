@@ -1,2 +1,2 @@
-$require(MPR.path + 'Core/Utilities/DomReady.js');
-$require(MPR.path + 'Core/Utilities/Selectors.js');
+$require('Core/Utilities/DomReady.js');
+$require('Core/Utilities/Selectors.js');

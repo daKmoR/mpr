@@ -40,10 +40,10 @@ Inspiration:
 
 */
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Fx/Fx.Tween.js');
 
-$require(MPR.path + 'Visual/Notimoo/Resources/css/Notimoo.css');
+$require('Visual/Notimoo/Resources/css/Notimoo.css');
 
 var Notimoo = new Class({
 

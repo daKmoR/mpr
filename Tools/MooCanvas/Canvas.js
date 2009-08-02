@@ -40,8 +40,8 @@ Example:
 	[/javascript]
 */
 
-$require(MPR.path + 'Core/Element.Style/Element.Style.js');
-$require(MPR.path + 'Core/Element.Dimensions/Element.Dimensions.js');
+$require('Core/Element.Style/Element.Style.js');
+$require('Core/Element.Dimensions/Element.Dimensions.js');
 
 if (Browser.Engine.trident){
 	document.createStyleSheet().cssText = 

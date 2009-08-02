@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Mutators/Class/Initializers.js');
+$require('Mutators/Class/Initializers.js');
 
 Class.Mutators.Getters = function(secrets){
 	secrets = $splat(secrets);

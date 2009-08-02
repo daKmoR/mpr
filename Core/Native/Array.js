@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Core/Core.js');
+$require('Core/Core/Core.js');
 
 Array.implement({
 

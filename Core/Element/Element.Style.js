@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Element/Element.js');
+$require('Core/Element/Element.js');
 
 Element.Properties.styles = {set: function(styles){
 	this.setStyles(styles);

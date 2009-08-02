@@ -8,9 +8,9 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Tween.js');
  
-$require(MPR.path + 'More/Class/Class.Occlude.js');
+$require('More/Class/Class.Occlude.js');
 
 var MultiOverlay = new Class({
 	Implements: [Events, Options, Class.Occlude],

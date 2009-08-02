@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'More/Class.Occlude/Class.Occlude.js');
+$require('More/Class.Occlude/Class.Occlude.js');
 
 (function(){
 	var testDiv = new Element('div');

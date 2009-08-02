@@ -10,14 +10,14 @@
  * @copyright	Author
  */
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
+$require('Core/Element/Element.Dimensions.js');
 
-$require(MPR.path + 'More/Drag/Drag.Move.js');
+$require('More/Drag/Drag.Move.js');
 
-$require(MPR.path + 'Galleries/ReMooz/Resources/ReMooz.css');
+$require('Galleries/ReMooz/Resources/ReMooz.css');
 
 var ReMooz = new Class({
 

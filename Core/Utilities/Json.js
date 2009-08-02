@@ -9,11 +9,11 @@ See Also:
 	<http://www.json.org/>
 */
 
-$require(MPR.path + 'Core/Native/Array.js');
-$require(MPR.path + 'Core/Native/Function.js');
-$require(MPR.path + 'Core/Native/Hash.js');
-$require(MPR.path + 'Core/Native/Number.js');
-$require(MPR.path + 'Core/Native/String.js');
+$require('Core/Native/Array.js');
+$require('Core/Native/Function.js');
+$require('Core/Native/Hash.js');
+$require('Core/Native/Number.js');
+$require('Core/Native/String.js');
 
 var JSON = new Hash({
 

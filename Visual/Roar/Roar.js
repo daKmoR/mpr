@@ -10,11 +10,11 @@
  * @copyright	Author
  */
  
-$require(MPR.path + 'Visual/Roar/Resources/Roar.css');
+$require('Visual/Roar/Resources/Roar.css');
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
 var Roar = new Class({
 

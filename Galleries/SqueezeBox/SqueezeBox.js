@@ -16,14 +16,14 @@
  * @copyright	Author
  */
  
-$require(MPR.path + 'Galleries/SqueezeBox/Resources/css/SqueezeBox.css');
+$require('Galleries/SqueezeBox/Resources/css/SqueezeBox.css');
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Element/Element.Style.js');
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
 var SqueezeBox = {
 

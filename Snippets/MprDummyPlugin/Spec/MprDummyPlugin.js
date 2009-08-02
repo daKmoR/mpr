@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Snippets/MprDummyPlugin/MprDummyPlugin.js');
+$require('Snippets/MprDummyPlugin/MprDummyPlugin.js');
 
 (function(){
 	var div, p, dummy;

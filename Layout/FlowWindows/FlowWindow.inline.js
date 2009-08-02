@@ -8,10 +8,10 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Layout/FlowWindows/Resources/FlowWindow.css');
+$require('Layout/FlowWindows/Resources/FlowWindow.css');
 
-$require(MPR.path + 'More/Drag/Drag.Move.js');
-$require(MPR.path + 'More/Element/Element.Position.js');
+$require('More/Drag/Drag.Move.js');
+$require('More/Element/Element.Position.js');
 
 var FlowWindow = {};
 

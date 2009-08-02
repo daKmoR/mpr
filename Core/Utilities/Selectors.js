@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Element/Element.js');
+$require('Core/Element/Element.js');
 
 Native.implement([Document, Element], {
 

@@ -8,6 +8,6 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Ui/Ui/Ui.js');
+$require('Ui/Ui/Ui.js');
 
 Ui.Plain = {};

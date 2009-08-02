@@ -6,15 +6,15 @@
 	AND OF COURSE, SPECIAL THANKS TO THE MOOTOOLS DEVELOPERS
 */
 
-$require(MPR.path + 'Galleries/Milkbox/Resources/css/Milkbox.css');
+$require('Galleries/Milkbox/Resources/css/Milkbox.css');
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
+$require('Core/Element/Element.Dimensions.js');
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Utilities/Assets.js');
+$require('More/Utilities/Assets.js');
 
 var Milkbox = new Class({
 

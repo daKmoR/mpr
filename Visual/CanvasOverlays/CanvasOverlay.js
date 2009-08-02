@@ -9,11 +9,11 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Utilities/Json.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Utilities/Json.js');
  
-$require(MPR.path + 'More/Class/Class.Occlude.js');
+$require('More/Class/Class.Occlude.js');
 
 var CanvasOverlay = new Class({
 	Implements: [Events, Options, Class.Occlude],

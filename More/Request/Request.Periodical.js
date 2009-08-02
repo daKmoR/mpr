@@ -10,7 +10,7 @@ Script: Request.Periodical.js
 
 */
 
-$require(MPR.path + 'Core/Request/Request.js');
+$require('Core/Request/Request.js');
 
 Request.implement({
 

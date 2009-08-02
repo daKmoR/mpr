@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
  
-$require(MPR.path + 'Visual/CanvasOverlays/CanvasOverlay.js');
+$require('Visual/CanvasOverlays/CanvasOverlay.js');
 
 var CanvasOverlays = new Class({
 

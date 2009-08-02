@@ -8,10 +8,10 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Ui/Mocha/Mocha.js');
+$require('Ui/Mocha/Mocha.js');
 
-$require(MPR.path + 'Snippets/Css/Resources/clearfix.css');
-$require(MPR.path + 'Ui/Mocha/Resources/Mocha.Tabs.css');
+$require('Snippets/Css/Resources/clearfix.css');
+$require('Ui/Mocha/Resources/Mocha.Tabs.css');
 
 Ui.Mocha.Tabs = new Class({
 	Implements: [Options],

@@ -6,7 +6,7 @@ License:
 	MIT-style license.
 */
 
-$require(MPR.path + 'Core/Class/Class.js');
+$require('Core/Class/Class.js');
 
 var Chain = new Class({
 

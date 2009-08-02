@@ -8,9 +8,9 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require(MPR.path + 'Ui/Mocha/Mocha.js');
+$require('Ui/Mocha/Mocha.js');
 
-$require(MPR.path + 'Ui/Mocha/Resources/Mocha.Windows.css');
+$require('Ui/Mocha/Resources/Mocha.Windows.css');
 
 Ui.Mocha.Windows = new Class({
 	Implements: [Events, Options],
