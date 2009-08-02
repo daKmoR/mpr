@@ -30,7 +30,7 @@
 /* ### Mpr.Js.Start ### */
 window.addEvent('domready', function() {
 
-	$require(MPR.path + 'Galleries/FlexSlide/FlexSlide.js');
+	$require('Galleries/FlexSlide/FlexSlide.js');
 	var bla = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true } );
 	
 	var bla2 = new FlexSlide( $('myGallery2'), { 'duration': 3000, auto: true, 
@@ -74,9 +74,7 @@ window.addEvent('domready', function() {
 <p>
 	a simple Gallery which allows to easily adopt the output.
 </p>
-<h3>Default FlowGallery</h3>
-
-<span id="but">buuuuuutttt</span>
+<h3>Default FlexSlide</h3>
 
 <div id="myGallery">
 	<div class="fsContent">

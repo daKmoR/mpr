@@ -36,16 +36,16 @@
 
 */
 
-$require(MPR.path + 'Galleries/FlexSlide/Resources/css/FlexSlide.css'); 
+$require('Galleries/FlexSlide/Resources/css/FlexSlide.css'); 
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-$require(MPR.path + 'Core/Element/Element.Style.js');
+$require('Core/Element/Element.Dimensions.js');
+$require('Core/Element/Element.Style.js');
 
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'Core/Fx/Fx.Morph.js');
-$require(MPR.path + 'Core/Fx/Fx.Transitions.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
+$require('Core/Fx/Fx.Transitions.js');
 
-$require(MPR.path + 'More/Class/Class.Binds.js');
+$require('More/Class/Class.Binds.js');
  
 var FlexSlide = new Class({
 	Implements: [Options, Events],
@@ -195,6 +195,9 @@ var FlexSlide = new Class({
 			this.items.content[this.current].set('tween', this.options.effect.options[fx]);
 			this.items.content[id].set('tween', this.options.effect.options[fx]);
 			this.options.effects[fx].call( this, this.items.content[this.current], this.items.content[id] );
+			
+			this.items.select[this.current].removeClass('active');
+			this.items.select[id].addClass('active');
 			
 			this.current = id;
 			if( this.options.auto ) this.auto();
