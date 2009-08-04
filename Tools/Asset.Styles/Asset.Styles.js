@@ -4,6 +4,7 @@ Asset.styles = function(rules, media) {
 	if( Browser.Engine.trident ) {
 		var obj = new Element('style', { type: 'text/css', media: media }).inject( document.head );
 		obj.styleSheet.cssText = rules;
-	} else 
+	} else {
 		new Element('style', {type: 'text/css', media: media, text: rules}).inject( document.head );
+	}
 }
