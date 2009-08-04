@@ -73,7 +73,7 @@ var FlexSlide = new Class({
 		},
 		display: 0,
 		auto: true,
-		autoHeight: true,
+		autoHeight: false,
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
@@ -185,8 +185,8 @@ var FlexSlide = new Class({
 			
 			this.contentWrap.grab( this.items.content[id] );
 			
-			var fx = fx || this.options.effect.active.getRandom();
-			if(fx == 'random') fx = this.options.effect.active.getRandom();
+			var fx = fx || 'random';
+			if(fx === 'random') fx = this.options.effect.active.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
@@ -207,13 +207,13 @@ var FlexSlide = new Class({
 		this.contentWrap.grab( this.items.content[id] );
 		this.items.content[id].setStyle('display', 'block');
 		
-		if( this.options.autoHeight == true ) {
+		if( this.options.autoHeight === true ) {
 			this.contentWrap.setStyle('height', this.items.content[id].getSize().y);
 		}
 		
 		if( $chk(this.items.description) && this.items.description.length > 0 ) {
 			this.items.description[id].setStyle('display', 'block');
-			if( this.options.autoHeight == true ) {
+			if( this.options.autoHeight === true ) {
 				this.descriptionWrap.setStyle('height', this.items.description[id].getSize().y);
 			}
 		}
