@@ -68,7 +68,8 @@ var FlexSlide = new Class({
 			contentItem: { 'class': 'ui-Content' },
 			previous: { 'class': 'ui-PreviousWrap' },
 			description: { 'class': 'ui-DescriptionWrap' },
-			descriptionItem: { 'class': 'ui-Description' }
+			descriptionItem: { 'class': 'ui-Description' },
+			activeClass: 'ui-active'
 		},
 		display: 0,
 		auto: true,
@@ -91,6 +92,7 @@ var FlexSlide = new Class({
 				this.prepare(next);
 				next.fade('hide');
 				next.fade(1);
+				current.fade('show');
 				current.fade(0);
 			},
 			slideLeft: function(current, next) {
@@ -144,7 +146,7 @@ var FlexSlide = new Class({
 			
 		}, this);
 		
-		if( this.items.select.length <= 0 ) {
+		if( $chk(this.items.select) && this.items.select.length <= 0 ) {
 			this.items.content.each( function(el, i) {
 				var select = new Element('div', this.options.ui.selectItem)
 					.addEvent('click', this.show.bind(this, i))
@@ -227,10 +229,12 @@ var FlexSlide = new Class({
 	},
 	
 	process: function(id) {
-		if( this.current >= 0 ) {
-			this.items.select[this.current].removeClass('active');
+		if( $chk(this.items.select) ) {
+			if( this.current >= 0 ) {
+				this.items.select[this.current].removeClass( this.options.ui.activeClass );
+			}
+			this.items.select[id].addClass( this.options.ui.activeClass );
 		}
-		this.items.select[id].addClass('active');
 			
 		this.current = id;
 		if( this.options.auto ) this.auto();
@@ -252,7 +256,7 @@ var FlexSlide = new Class({
 			while ( next == this.current )
 		} else {
 			if ( this.current + step < this.items.content.length ) next = this.current + step;
-			if ( this.current + step < 0 )	next = this.items.content.length-1;
+			if ( this.current + step < 0 ) next = this.items.content.length-1;
 		}
 		
 		this.show(next);
