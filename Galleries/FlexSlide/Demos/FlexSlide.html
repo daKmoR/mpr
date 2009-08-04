@@ -30,6 +30,7 @@
 /* ### Mpr.Js.Start ### */
 window.addEvent('domready', function() {
 
+	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexSlide/FlexSlide.js');
 	var bla = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true } );
 	
@@ -77,36 +78,39 @@ window.addEvent('domready', function() {
 <h3>Default FlexSlide</h3>
 
 <div id="myGallery">
-	<div class="fsContent">
+	<div class="item">
 		<p>asdf</p>
+		<div class="description">my first Element</div>
 	</div>
-	<div class="fsContent">
+	<div class="item">
 		<p>jklö</p>
+		<div class="description">my second Element</div>
 	</div>
-	<div class="fsContent">
+	<div class="item">
 		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
+		<div class="description">my third Element</div>
 	</div>
 </div>
 
 <div id="myGallery2">
-	<div class="fsSelect">
+	<div class="select">
 		Tab 1
 	</div>
-	<div class="fsContent">
+	<div class="item">
 		<p>asdf</p>
 	</div>
 	
-	<div class="fsSelect">
+	<div class="select">
 		Tab 2
 	</div>
-	<div class="fsContent">
+	<div class="item">
 		<p>jklö</p>
 	</div>
 	
-	<div class="fsSelect">
+	<div class="select">
 		Tab 3
 	</div>
-	<div class="fsContent">
+	<div class="item">
 		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
 	</div>
 </div>

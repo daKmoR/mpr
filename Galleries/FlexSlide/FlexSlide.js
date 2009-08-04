@@ -40,25 +40,25 @@ $require('Galleries/FlexSlide/Resources/css/FlexSlide.css');
 
 $require('Core/Element/Element.Dimensions.js');
 $require('Core/Element/Element.Style.js');
+$require('Core/Utilities/Selectors.js');
 
 $require('Core/Fx/Fx.Tween.js');
 $require('Core/Fx/Fx.Morph.js');
 $require('Core/Fx/Fx.Transitions.js');
 
 $require('More/Class/Class.Binds.js');
- 
+
 var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
 		selections: {
-			select: '.fsSelect',
-			previous: '.fsPrevious',
-			content: '.fsContent',
-			next: '.fsNext',
-			header: '.fsHeader',
-			description: '.fsDescription'
+			select: '.select',
+			previous: '.previous',
+			content: '.item',
+			next: '.next',
+			description: '.description'
 		},
-		render: ['previous', 'content', 'next', 'select', 'header', 'description'],
+		render: ['previous', 'content', 'description', 'next', 'select'],
 		create: ['select', 'previous', 'next'],
 		ui: {
 			select: { 'class': 'ui-SelectWrap' },
@@ -66,7 +66,9 @@ var FlexSlide = new Class({
 			next: { 'class': 'ui-NextWrap' },
 			content: { 'class': 'ui-ContentWrap' },
 			contentItem: { 'class': 'ui-Content' },
-			previous: { 'class': 'ui-PreviousWrap' }
+			previous: { 'class': 'ui-PreviousWrap' },
+			description: { 'class': 'ui-DescriptionWrap' },
+			descriptionItem: { 'class': 'ui-Description' }
 		},
 		display: 0,
 		auto: true,
@@ -74,16 +76,14 @@ var FlexSlide = new Class({
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
-		autoSelectCount: true,
+		selectTemplate: '{text} [{id}]',
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
-			active: ['slideRight', 'slideLeft', 'fade', 'slideLeftBounce'],
+			active: ['fade', 'slideLeftBounce'],
+			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
-				fade: { },
-				slideLeft: { },
-				slideRight: { },
-				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeInOut }
+				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut }
 			}
 		},
 		effects: {
@@ -135,6 +135,7 @@ var FlexSlide = new Class({
 				this.items[item].each( function(el, i) {
 					if( item == 'select' ) {
 						el.addEvent('click', this.show.bind(this, i) );
+						el.set('html', this.options.selectTemplate.substitute( { id: i+1, text: el.get('html') } ) );
 					}
 					el.addClass( this.options.ui[item + 'Item']['class'] );
 					this[item + 'Wrap'].grab(el);
@@ -145,12 +146,11 @@ var FlexSlide = new Class({
 		
 		if( this.items.select.length <= 0 ) {
 			this.items.content.each( function(el, i) {
-				var select = new Element('span', this.options.ui.selectItem)
+				var select = new Element('div', this.options.ui.selectItem)
 					.addEvent('click', this.show.bind(this, i))
 					.inject(this.selectWrap);
-				if( this.options.autoSelectCount == true ) {
-					select.set('html', i+1);
-				}
+				
+				select.set('html', this.options.selectTemplate.substitute( { id: i+1 } ) );
 				this.items.select.push(select);
 			}, this);
 		}
@@ -171,9 +171,9 @@ var FlexSlide = new Class({
 	prepare: function(el) {
 		this.reset(el);
 		el.setStyle('display', 'block');
-		el.setStyle('width', this.contentWrap.getSize().x);
+		el.setStyle('width', el.getParent().getSize().x);
 		if( this.options.autoHeight == true ) {
-			this.contentWrap.tween('height', el.getSize().y);
+			el.getParent().tween('height', el.getSize().y);
 		}
 	},
 	
@@ -182,7 +182,7 @@ var FlexSlide = new Class({
 			this.reset( this.items.content[id] );
 			
 			this.contentWrap.grab( this.items.content[id] );
-			this.prepare( this.items.content[id] );
+			//this.prepare( this.items.content[id] );
 			
 			if( id > this.current && this.options.effect.up != 'random' ) {
 				fx = fx || this.options.effect.up;
@@ -192,15 +192,19 @@ var FlexSlide = new Class({
 				fx = fx || this.options.effect.active.getRandom();
 			}
 			
-			this.items.content[this.current].set('tween', this.options.effect.options[fx]);
-			this.items.content[id].set('tween', this.options.effect.options[fx]);
+			var newOptions = $unlink(this.options.effect.globalOptions);
+			$extend( newOptions, this.options.effect.options[fx] );
+			this.items.content[this.current].set('tween', newOptions);
+			this.items.content[id].set('tween', newOptions);
 			this.options.effects[fx].call( this, this.items.content[this.current], this.items.content[id] );
 			
-			this.items.select[this.current].removeClass('active');
-			this.items.select[id].addClass('active');
+			if( $chk(this.items.description) && this.items.description.length > 0 ) {
+				this.descriptionWrap.grab( this.items.description[id] );
+				//this.prepare( this.items.description[id] );
+				this.options.effects['fade'].call( this, this.items.description[this.current], this.items.description[id] );
+			}
 			
-			this.current = id;
-			if( this.options.auto ) this.auto();
+			this.process(id);
 		}
 	},
 	
@@ -211,6 +215,23 @@ var FlexSlide = new Class({
 		if( this.options.autoHeight == true ) {
 			this.contentWrap.setStyle('height', this.items.content[id].getSize().y);
 		}
+		
+		if( $chk(this.items.description) && this.items.description.length > 0 ) {
+			this.items.description[id].setStyle('display', 'block');
+			if( this.options.autoHeight == true ) {
+				this.descriptionWrap.setStyle('height', this.items.description[id].getSize().y);
+			}
+		}
+		
+		this.process(id);
+	},
+	
+	process: function(id) {
+		if( this.current >= 0 ) {
+			this.items.select[this.current].removeClass('active');
+		}
+		this.items.select[id].addClass('active');
+			
 		this.current = id;
 		if( this.options.auto ) this.auto();
 	},
