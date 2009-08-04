@@ -184,15 +184,9 @@ var FlexSlide = new Class({
 			this.reset( this.items.content[id] );
 			
 			this.contentWrap.grab( this.items.content[id] );
-			//this.prepare( this.items.content[id] );
 			
-			if( id > this.current && this.options.effect.up != 'random' ) {
-				fx = fx || this.options.effect.up;
-			} else if ( id < this.current && this.options.effect.down != 'random' )  {
-				fx = fx || this.options.effect.down;
-			} else {
-				fx = fx || this.options.effect.active.getRandom();
-			}
+			var fx = fx || this.options.effect.active.getRandom();
+			if(fx == 'random') fx = this.options.effect.active.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
@@ -202,7 +196,6 @@ var FlexSlide = new Class({
 			
 			if( $chk(this.items.description) && this.items.description.length > 0 ) {
 				this.descriptionWrap.grab( this.items.description[id] );
-				//this.prepare( this.items.description[id] );
 				this.options.effects['fade'].call( this, this.items.description[this.current], this.items.description[id] );
 			}
 			
@@ -259,7 +252,7 @@ var FlexSlide = new Class({
 			if ( this.current + step < 0 ) next = this.items.content.length-1;
 		}
 		
-		this.show(next);
+		this.show(next, (step > 0) ? this.options.effect.up : this.options.effect.down);
 	},
 	
 	previous: function(step) {
