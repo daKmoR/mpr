@@ -4,7 +4,7 @@ Element.implement({
 		//forces absolute urls - needed for canvas
 		i.src = i.src;
 		if(Browser.Engine.trident){
-			i.style.filter = 'flipv progid:DXImageTransform.Microsoft.Alpha(opacity=20, style=1, finishOpacity=0, startx=0, starty=0, finishx=0, finishy='+100*arg.ref+')';
+			i.style.filter = 'flipv progid:DXImageTransform.Microsoft.Alpha(opacity=40, style=1, finishOpacity=0, startx=0, starty=0, finishx=0, finishy='+100*arg.ref+')';
 			i.setStyles({'width':'100%', 'height':'100%'});
 			return new Element('div').adopt(i);
 		} else {
