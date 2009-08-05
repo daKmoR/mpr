@@ -2,7 +2,5 @@
 	.ui-Content, .ui-Description { position: absolute; left: 0; top: 0; display: none; }
 	
 	.ui-SelectWrap .ui-Select { display: block; cursor: pointer; }
-		
-		
-	.ui-NextWrap { width: 10px; height: 20px; background: green; }
-	.ui-PreviousWrap { width: 10px; height: 20px; background: green; }
+	.ui-NextWrap { width: 10px; height: 20px; cursor: pointer; }
+	.ui-PreviousWrap { width: 10px; height: 20px; cursor: pointer; }

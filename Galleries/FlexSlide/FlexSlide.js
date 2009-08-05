@@ -81,10 +81,13 @@ var FlexSlide = new Class({
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
-			active: ['fade', 'slideLeftBounce'],
+			active: ['fade', 'slideLeftBounce', 'slideRightBounce'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
-				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut }
+				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
+				slideRightBounce: { transition: Fx.Transitions.Bounce.easeOut },
+				slideLeftQuart: { transition: Fx.Transitions.Quart.easeInOut },
+				slideRightQuart: { transition: Fx.Transitions.Quart.easeInOut }
 			}
 		},
 		effects: {
@@ -109,6 +112,15 @@ var FlexSlide = new Class({
 			},
 			slideLeftBounce: function(current, next) {
 				this.options.effects.slideLeft.call(this, current, next);
+			},
+			slideRightBounce: function(current, next) {
+				this.options.effects.slideRight.call(this, current, next);
+			},
+			slideLeftQuart: function(current, next) {
+				this.options.effects.slideLeft.call(this, current, next);
+			},
+			slideRightQuart: function(current, next) {
+				this.options.effects.slideRight.call(this, current, next);
 			}
 		}
 	},
