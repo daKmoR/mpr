@@ -1,0 +1,108 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+window.addEvent('domready', function() {
+
+	$require('Core/Utilities/DomReady.js');
+	$require('Galleries/FlexSlide/FlexSlide.js');
+	var bla = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true } );
+		
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+#myGallery { height: 548px; width: 560px; background: #E5E5E5 url(img/slideshow.gif) no-repeat; }
+
+#myGallery .ui-ContentWrap { height: 400px; width: 500px; margin-left: 30px; margin-top: 19px; }
+#myGallery .ui-ContentWrap img { max-height: 400px; max-width: 500px; }
+#myGallery .ui-SelectWrap { margin: 5px 0; }
+	#myGallery .select { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; }
+
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>FlexSlide</h1>
+<h2>Introduction</h2>
+<p>
+	a simple Gallery which allows to easily adopt the output.
+</p>
+<h3>Default FlexSlide</h3>
+
+<div id="myGallery">
+	<div class="item">
+		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+		<div class="description">my first Element</div>
+		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	</div>
+	<div class="item">
+		<img src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+		<div class="description">my second Element</div>
+		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
+	</div>
+	<div class="item">
+		<img src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+		<div class="description">my third Element</div>
+		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+	</div>
+</div>
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
