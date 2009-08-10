@@ -6,6 +6,7 @@ License:
 	MIT-style license.
 */
 
+$require('Core/Utilities/DomReady.js');
 $require('Visual/Typewriter/Typewriter.js');
 
 (function(){
