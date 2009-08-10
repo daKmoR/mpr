@@ -65,6 +65,7 @@ var FlexSlide = new Class({
 			previous: { 'class': 'ui-PreviousWrap' },
 			description: { 'class': 'ui-DescriptionWrap' },
 			descriptionItem: { 'class': 'ui-Description' },
+			counter: { 'class': 'ui-CounterWrap' },
 			activeClass: 'ui-active'
 		},
 		display: 0,
@@ -74,7 +75,7 @@ var FlexSlide = new Class({
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
 		selectTemplate: '{text} [{id}]',
-		counterTemplate: '{id} / {count}',
+		counterTemplate: '{id}/{count}',
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
@@ -148,7 +149,9 @@ var FlexSlide = new Class({
 				this.items[item].each( function(el, i) {
 					if( item == 'select' ) {
 						el.addEvent('click', this.show.bind(this, i) );
-						el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
+						if( el.get('tag') !== 'img' ) {
+							el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
+						}
 					}
 					el.addClass( this.options.ui[item + 'Item']['class'] );
 					this[item + 'Wrap'].grab(el);
@@ -187,6 +190,7 @@ var FlexSlide = new Class({
 		this.reset(el);
 		el.setStyle('display', 'block');
 		el.setStyle('width', el.getParent().getSize().x);
+		el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
 		if( this.options.autoHeight == true ) {
 			el.getParent().tween('height', el.getSize().y);
 		}
@@ -218,14 +222,14 @@ var FlexSlide = new Class({
 	
 	display: function(id) {
 		this.contentWrap.grab( this.items.content[id] );
-		this.items.content[id].setStyle('display', 'block');
-		
+
+		this.prepare( this.items.content[id] );
 		if( this.options.autoHeight === true ) {
 			this.contentWrap.setStyle('height', this.items.content[id].getSize().y);
 		}
 		
 		if( $chk(this.items.description) && this.items.description.length > 0 ) {
-			this.items.description[id].setStyle('display', 'block');
+			this.prepare( this.items.description[id] );
 			if( this.options.autoHeight === true ) {
 				this.descriptionWrap.setStyle('height', this.items.description[id].getSize().y);
 			}

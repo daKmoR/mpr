@@ -32,8 +32,8 @@ window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexSlide/FlexSlide.js');
-	var bla = new FlexSlide( $('myGallery'), { 
-		'duration': 4000, 
+	var bla = new FlexSlide( $('myGallery'), {
+		duration: 10000,
 		auto: true,
 		render: ['previous', 'next', 'counter', 'description', 'content']
 	});
@@ -47,19 +47,15 @@ window.addEvent('domready', function() {
 
 #myGallery { height: 548px; position: relative; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px; line-height: 21px; } 
 
-
-#myGallery .ui-NextWrap, #myGallery .ui-PreviousWrap { border: 1px solid #E0E0E0; color: #AFB2B9; position: absolute; width: 25px; height: 15px; top: 20px; }
+#myGallery .ui-NextWrap, #myGallery .ui-PreviousWrap, #myGallery .ui-CounterWrap { border: 1px solid #E0E0E0; color: #AFB2B9; position: absolute; width: 25px; height: 15px; top: 20px; }
 
 #myGallery .ui-NextWrap { background: url(img/bigNext.gif) no-repeat 8px 1px; left: 30px;  }
 #myGallery .ui-PreviousWrap { background: url(img/bigPrevious.gif) no-repeat 8px 1px; }
+#myGallery .ui-CounterWrap { font-size: 10px; line-height: 10px; left: 60px; padding: 2px 3px; width: 22px; height: 11px; }
 
 #myGallery .ui-ContentWrap { height: 300px; width: 300px; float: left; border: 1px solid #AFB2B9; }
-#myGallery .ui-DescriptionWrap { width: 200px; height: 200px; float: left; clear: left; margin-top: 100px;  }
-/* 
-#myGallery .ui-ContentWrap img { height: 400px; width: 500px; }
-#myGallery .ui-SelectWrap { margin: 5px 0; }
-	#myGallery .select { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; }
-*/
+#myGallery .ui-DescriptionWrap { width: 200px; height: 100px; float: left; clear: left; margin-top: 100px; }
+
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -88,33 +84,30 @@ window.addEvent('domready', function() {
 <h3>Default FlexSlide</h3>
 
 <div id="myGallery">
-	<div class="item">
-		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-		<div class="description">
-			<p style="font-style: italic;">Requiem NN / Requiem NN</p>
-			<p>2007-2009</p>
-			<p>20x20in (50x50cm)</p>
-			<p>Digital C-Print</p>
-		</div>
+	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+	<div class="description">
+		<p style="font-style: italic;">Requiem NN / Requiem NN</p>
+		<p>2007-2009</p>
+		<p>20x20in (50x50cm)</p>
+		<p>Digital C-Print</p>
+		<p>released by Refial Inc.</p>
 	</div>
-	<div class="item">
-		<img src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-		<div class="description">
-			<p style="font-style: italic;">Renuable NN / Suberglue MM</p>
-			<p>2005-2006</p>
-			<p>40x20in (100x50cm)</p>
-			<p>Digital A-Print</p>
-		</div>
+	
+	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+	<div class="description">
+		<p style="font-style: italic;">Renuable NN / Suberglue MM</p>
+		<p>2005-2006</p>
+		<p>40x20in (100x50cm)</p>
 	</div>
-	<div class="item">
-		<img src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-		<div class="description">
-			<p style="font-style: italic;">Daniem NN / Obsession LL</p>
-			<p>2009-2010</p>
-			<p>20x40in (50x100cm)</p>
-			<p>Digital D-Print</p>
-		</div>
+	
+	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+	<div class="description">
+		<p style="font-style: italic;">Daniem NN / Obsession LL</p>
+		<p>2009-2010</p>
+		<p>20x40in (50x100cm)</p>
+		<p>Digital D-Print</p>
 	</div>
+	
 </div>
 
 
