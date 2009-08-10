@@ -71,10 +71,11 @@ var FlexSlide = new Class({
 		display: 0,
 		auto: true,
 		autoHeight: false,
+		autoCenter: true,
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
-		selectTemplate: '{text} [{id}]',
+		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
 		effect: {
 			up: 'random', /* any availabele effect */
@@ -186,13 +187,16 @@ var FlexSlide = new Class({
 		el.set('style', '');
 	},
 	
-	prepare: function(el) {
+	prepare: function(el, action) {
+		var action = action || 'tween';
 		this.reset(el);
 		el.setStyle('display', 'block');
 		el.setStyle('width', el.getParent().getSize().x);
-		el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
-		if( this.options.autoHeight == true ) {
-			el.getParent().tween('height', el.getSize().y);
+		if( this.options.autoCenter === true ) {
+			el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
+		}
+		if( this.options.autoHeight === true ) {
+			el.getParent()[action]('height', el.getSize().y);
 		}
 	},
 	
@@ -202,7 +206,7 @@ var FlexSlide = new Class({
 			
 			this.contentWrap.grab( this.items.content[id] );
 			
-			var fx = fx || 'random';
+			var fx = fx || (id > this.current) ? this.options.effect.up : this.options.effect.down;
 			if(fx === 'random') fx = this.options.effect.active.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
@@ -223,13 +227,13 @@ var FlexSlide = new Class({
 	display: function(id) {
 		this.contentWrap.grab( this.items.content[id] );
 
-		this.prepare( this.items.content[id] );
+		this.prepare( this.items.content[id], 'setStyle' );
 		if( this.options.autoHeight === true ) {
 			this.contentWrap.setStyle('height', this.items.content[id].getSize().y);
 		}
 		
 		if( $chk(this.items.description) && this.items.description.length > 0 ) {
-			this.prepare( this.items.description[id] );
+			this.prepare( this.items.description[id], 'setStyle' );
 			if( this.options.autoHeight === true ) {
 				this.descriptionWrap.setStyle('height', this.items.description[id].getSize().y);
 			}
