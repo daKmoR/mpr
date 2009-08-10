@@ -28,14 +28,20 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
+
 window.addEvent('domready', function() {
 
-	$require('Core/Utilities/DomReady.js');
-	$require('Galleries/FlexSlide/FlexSlide.js');
-	var bla = new FlexSlide( $('myGallery'), {
-		duration: 10000,
-		auto: true,
-		render: ['previous', 'next', 'counter', 'description', 'content']
+	var myFlexSlideTabs = new FlexSlide( $('myTabs'), { 
+		autoHeight: true,
+		autoCenter: false,
+		auto: false,
+		render: ['select', 'content'],
+		effect: { 
+			up: 'slideLeftQuart',
+			down: 'slideRightQuart'
+		}
 	});
 		
 });
@@ -45,16 +51,10 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#myGallery { height: 548px; position: relative; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px; line-height: 21px; } 
-
-#myGallery .ui-NextWrap, #myGallery .ui-PreviousWrap, #myGallery .ui-CounterWrap { border: 1px solid #E0E0E0; color: #AFB2B9; position: absolute; width: 25px; height: 15px; top: 20px; }
-
-#myGallery .ui-NextWrap { background: url(img/bigNext.gif) no-repeat 8px 1px; left: 30px;  }
-#myGallery .ui-PreviousWrap { background: url(img/bigPrevious.gif) no-repeat 8px 1px; }
-#myGallery .ui-CounterWrap { font-size: 10px; line-height: 10px; left: 60px; padding: 2px 3px; width: 22px; height: 11px; }
-
-#myGallery .ui-ContentWrap { height: 300px; width: 300px; float: left; border: 1px solid #AFB2B9; }
-#myGallery .ui-DescriptionWrap { width: 200px; height: 100px; float: left; clear: left; margin-top: 100px; }
+.ui-ContentWrap { height: 200px; clear: both; }
+.ui-Select { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 70px; padding: 0 10px; margin: 0; font-size: 12px; line-height: 25px; text-align: center; }
+.ui-Select.ui-active { border-bottom: none; padding-bottom: 1px; background: #eee; }
+.ui-Content { background: #eee; }
 
 
 /* ### Mpr.Css.End ### */
@@ -83,33 +83,25 @@ window.addEvent('domready', function() {
 </p>
 <h3>Default FlexSlide</h3>
 
-<div id="myGallery">
-	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	<div class="description">
-		<p style="font-style: italic;">Requiem NN / Requiem NN</p>
-		<p>2007-2009</p>
-		<p>20x20in (50x50cm)</p>
-		<p>Digital C-Print</p>
-		<p>released by Refial Inc.</p>
+<div id="myTabs">
+
+	<div class="item">
+		<h3 class="select">General</h3>
+		<p>You can define as many Tabs as you want to</p>
+		<p>you can choose what elements should be taken</p>
 	</div>
 	
-	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-	<div class="description">
-		<p style="font-style: italic;">Renuable NN / Suberglue MM</p>
-		<p>2005-2006</p>
-		<p>40x20in (100x50cm)</p>
+	<div class="item">
+		<h3 class="select">Style</h3>
+		<p>As you can completely define</p>
 	</div>
 	
-	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	<div class="description">
-		<p style="font-style: italic;">Daniem NN / Obsession LL</p>
-		<p>2009-2010</p>
-		<p>20x40in (50x100cm)</p>
-		<p>Digital D-Print</p>
+	<div class="item">
+		<h3 class="select">About</h3>
+		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
 	</div>
 	
 </div>
-
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
