@@ -9,6 +9,10 @@ Script: Scroller.js
 		Valerio Proietti
 */
 
+$require('Core/Class/Class.Extras.js');
+$require('Core/Element/Element.Event.js');
+$require('Core/Element/Element.Dimensions.js');
+
 var Scroller = new Class({
 
 	Implements: [Events, Options],
