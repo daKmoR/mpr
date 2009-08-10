@@ -52,11 +52,7 @@ var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
 		selections: {
-			select: '.select',
-			previous: '.previous',
-			content: '.item',
-			next: '.next',
-			description: '.description'
+			content: '.item'
 		},
 		render: ['previous', 'content', 'description', 'next', 'select'],
 		create: ['select', 'previous', 'next'],
@@ -78,6 +74,7 @@ var FlexSlide = new Class({
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
 		selectTemplate: '{text} [{id}]',
+		counterTemplate: '{id} / {count}',
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
@@ -141,15 +138,17 @@ var FlexSlide = new Class({
 	
 	build: function() {
 		this.options.render.each( function(item) {
-		
 			this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
 			
+			if( !$chk(this.options.selections[item]) ) {
+				this.options.selections[item] = '.' + item;
+			}
 			this.items[item] = this.wrap.getElements( this.options.selections[item] );
 			if( this.items[item].length > 0 ) {
 				this.items[item].each( function(el, i) {
 					if( item == 'select' ) {
 						el.addEvent('click', this.show.bind(this, i) );
-						el.set('html', this.options.selectTemplate.substitute( { id: i+1, text: el.get('html') } ) );
+						el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
 					}
 					el.addClass( this.options.ui[item + 'Item']['class'] );
 					this[item + 'Wrap'].grab(el);
@@ -164,10 +163,12 @@ var FlexSlide = new Class({
 					.addEvent('click', this.show.bind(this, i))
 					.inject(this.selectWrap);
 				
-				select.set('html', this.options.selectTemplate.substitute( { id: i+1 } ) );
+				select.set('html', this.options.selectTemplate.substitute({id: i+1}) );
 				this.items.select.push(select);
 			}, this);
 		}
+		
+		this.updateCounter(0);
 		
 		if( this.nextWrap ) {
 			this.nextWrap.addEvent('click', this.next.bind(this, this.options.step) );
@@ -233,6 +234,12 @@ var FlexSlide = new Class({
 		this.process(id);
 	},
 	
+	updateCounter: function(id) {
+		if( this.counterWrap ) {
+			this.counterWrap.set('html', this.options.counterTemplate.substitute({id: id+1, 'count': this.items.content.length}) );
+		}
+	},
+	
 	process: function(id) {
 		if( $chk(this.items.select) ) {
 			if( this.current >= 0 ) {
@@ -240,6 +247,8 @@ var FlexSlide = new Class({
 			}
 			this.items.select[id].addClass( this.options.ui.activeClass );
 		}
+		
+		this.updateCounter(id);
 			
 		this.current = id;
 		if( this.options.auto ) this.auto();
