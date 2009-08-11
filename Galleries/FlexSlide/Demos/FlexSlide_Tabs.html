@@ -37,7 +37,7 @@ window.addEvent('domready', function() {
 		autoHeight: true,
 		autoCenter: false,
 		auto: false,
-		render: ['select', 'content'],
+		render: ['select', 'item'],
 		effect: { 
 			up: 'slideLeftQuart',
 			down: 'slideRightQuart'
@@ -49,7 +49,7 @@ window.addEvent('domready', function() {
 		autoCenter: false,
 		auto: false,
 		selectTemplate: 'Tab {id}',
-		render: ['select', 'content'],
+		render: ['select', 'item'],
 		effect: {
 			up: 'slideLeftQuart',
 			down: 'slideRightQuart'
@@ -63,10 +63,10 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-.ui-ContentWrap { height: 200px; clear: both; background: #eee; }
+.ui-ItemWrap { height: 200px; clear: both; background: #eee; }
 .ui-Select { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 70px; padding: 0 10px; margin: 0; font-size: 12px; line-height: 25px; text-align: center; }
 .ui-Select.ui-active { border-bottom: none; padding-bottom: 1px; background: #eee; }
-.ui-Content { padding: 20px; }
+.ui-Item { padding: 20px; }
 
 /* ### Mpr.Css.End ### */
 </style>

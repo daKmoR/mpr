@@ -28,15 +28,21 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
+
 window.addEvent('domready', function() {
 
-	$require('Core/Utilities/DomReady.js');
-	$require('Galleries/FlexSlide/FlexSlide.js');
 	var leftControls = new FlexSlide( $('myGallery'), {
 		duration: 10000,
 		auto: true,
-		render: ['previous', 'next', 'counter', 'description', 'content'],
+		render: ['previous', 'next', 'counter', 'description', 'item'],
 		effect: { random: ['fade'] }
+	});
+	
+	// once you click on a picture it should go to the next
+	$$('#myGallery .item').addEvent('click', function() {
+		leftControls.next();
 	});
 		
 });
@@ -54,7 +60,8 @@ window.addEvent('domready', function() {
 #myGallery .ui-PreviousWrap { background: url(img/bigPrevious.gif) no-repeat 8px 1px; }
 #myGallery .ui-CounterWrap { font-size: 10px; line-height: 10px; left: 60px; padding: 2px 3px; width: 22px; height: 11px; }
 
-#myGallery .ui-ContentWrap { height: 300px; width: 300px; float: left; border: 1px solid #AFB2B9; }
+#myGallery .ui-ItemWrap { height: 300px; width: 300px; float: left; border: 1px solid #AFB2B9; }
+#myGallery .ui-Item { cursor: pointer; }
 #myGallery .ui-DescriptionWrap { width: 200px; height: 100px; float: left; clear: left; margin-top: 100px; }
 
 
