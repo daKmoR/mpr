@@ -52,7 +52,7 @@ var FlexSlide = new Class({
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
-			active: ['fade', 'slideLeftBounce', 'slideRightBounce'],
+			random: ['fade', 'slideLeftBounce', 'slideRightBounce'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
 				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
@@ -179,7 +179,7 @@ var FlexSlide = new Class({
 			this.contentWrap.grab( this.items.content[id] );
 			
 			var fx = fx || (id > this.current) ? this.options.effect.up : this.options.effect.down;
-			if(fx === 'random') fx = this.options.effect.active.getRandom();
+			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
