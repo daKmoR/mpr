@@ -1,5 +1,5 @@
-.ui-ContentWrap, .ui-DescriptionWrap { position: relative; overflow: hidden; }
-	.ui-Content, .ui-Description { position: absolute; left: 0; top: 0; display: none; }
+.ui-ItemWrap, .ui-DescriptionWrap { position: relative; overflow: hidden; }
+	.ui-Item, .ui-Description { position: absolute; left: 0; top: 0; display: none; }
 	
 	.ui-SelectWrap .ui-Select { display: block; cursor: pointer; }
 	.ui-NextWrap { width: 10px; height: 20px; cursor: pointer; }
