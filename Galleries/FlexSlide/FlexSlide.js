@@ -7,34 +7,6 @@
  * @author		Thomas Allmer <at@delusionworld.com>
  * @copyright Copyright belongs to the respective authors
  */
- 
-/* 
-<div class="fsPrevious"></div>
-<div class="fsWrap">
-	<div class="fsContent">
-		<a href="#"><img src="" alt="" /></a>
-	</div>
-	<div class="fsHeader">
-		Header
-	</div>
-	<div class="fsDescription">
-		Description
-	</div>
-	<div class="fsSelect">
-		<img src="thumb" alt="" />
-	</div>
-</div>
-<div class="fsNext"></div>
-
-
-<div class="fsContent">
-	<a href="#"><img src="" alt="" /></a>
-</div>
-<div class="fsContent">
-	<a href="#"><img src="" alt="" /></a>
-</div>
-
-*/
 
 $require('Galleries/FlexSlide/Resources/css/FlexSlide.css'); 
 
@@ -161,7 +133,7 @@ var FlexSlide = new Class({
 			
 		}, this);
 		
-		if( $chk(this.items.select) && this.items.select.length <= 0 ) {
+		if( $chk(this.items.select) && this.items.select.length <= 0 ) { //automatically build the select if no costum select items are found
 			this.items.content.each( function(el, i) {
 				var select = new Element('div', this.options.ui.selectItem)
 					.addEvent('click', this.show.bind(this, i))
@@ -191,7 +163,7 @@ var FlexSlide = new Class({
 		var action = action || 'tween';
 		this.reset(el);
 		el.setStyle('display', 'block');
-		el.setStyle('width', el.getParent().getSize().x);
+		el.setStyle('width', el.getParent().getSize().x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
 		if( this.options.autoCenter === true ) {
 			el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
 		}
@@ -274,7 +246,7 @@ var FlexSlide = new Class({
 			
 		if ( this.options.mode === 'random' ) {
 			do 
-				next = $random(0, this.items.content.length-1 );
+				next = $random(0, this.items.content.length-1);
 			while ( next == this.current )
 		} else {
 			if ( this.current + step < this.items.content.length ) next = this.current + step;
