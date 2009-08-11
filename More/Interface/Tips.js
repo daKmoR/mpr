@@ -10,20 +10,17 @@ Script: Tips.js
 		Christoph Pojer
 */
 
-$require(MPR.path + 'Core/Element/Element.Dimensions.js');
-
-$require(MPR.path + 'More/Interface/Resources/css/Interface.Tips.css');
-
 var Tips = new Class({
 
 	Implements: [Events, Options],
 
-	options: {
+	options: {/*
+		onAttach: $empty(tip, element),*/
 		onShow: function(tip){
-			tip.setStyle('visibility', 'visible');
+			this.tip.setStyle('display', 'block');
 		},
 		onHide: function(tip){
-			tip.setStyle('visibility', 'hidden');
+			this.tip.setStyle('display', 'none');
 		},
 		title: 'title',
 		text: function(el){
@@ -31,7 +28,7 @@ var Tips = new Class({
 		},
 		showDelay: 100,
 		hideDelay: 100,
-		className: null,
+		className: 'tip-wrap',
 		offset: {x: 16, y: 16},
 		fixed: false
 	},
@@ -73,6 +70,7 @@ var Tips = new Class({
 			var title = read(this.options.title, element), text = read(this.options.text, element);
 			element.erase('title').store('tip:native', title).retrieve('tip:title', title);
 			element.retrieve('tip:text', text);
+			this.fireEvent('attach', [this.tip, element]);
 			
 			var events = ['enter', 'leave'];
 			if (!this.options.fixed) events.push('move');
@@ -115,18 +113,16 @@ var Tips = new Class({
 		
 		this.timer = $clear(this.timer);
 		this.timer = this.show.delay(this.options.showDelay, this, element);
-		this.tip.setStyle('display', 'block');
-		this.position((!this.options.fixed) ? event : {page: element.getPosition()});
+		this.setPosition((!this.options.fixed) ? event : {page: element.getPosition()});
 	},
 
 	elementLeave: function(event, element){
 		$clear(this.timer);
-		//this.tip.setStyle('display', 'none');
 		this.timer = this.hide.delay(this.options.hideDelay, this, element);
 	},
 
 	elementMove: function(event){
-		this.position(event);
+		this.setPosition(event);
 	},
 
 	position: function(event){

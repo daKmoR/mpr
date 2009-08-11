@@ -20,9 +20,6 @@ MPR.files = MPR.files || [];
 // create a dummy function so it won't throw errors
 var Request = Request || function Request(){ alert('You need at least Core/Request/Request.js with it depences if you want to use the $require() function'); };
 
-var Asset = Asset || {};
-Asset.styles = Asset.styles || function() { alert('You need at least Tools/Asset.Styles/Asset.Styles.js if you want to include css inside js'); };
-	
 function $require(source) {
 	source = MPR.path + source;
 	if ( MPR.files[source] ) return true;
