@@ -32,24 +32,14 @@ window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexSlide/FlexSlide.js');
-	var bla = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true } );
+	var myFlexSlide = new FlexSlide( $('myGallery'), { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	
-	var bla2 = new FlexSlide( $('myGallery2'), { 'duration': 3000, auto: true, 
-		autoHeight: true,
-		render: ['select', 'content']
-	});
-	
-		
 });
 /* ### Mpr.Js.End ### */
 </script>
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
-
-#myGallery2 .ui-ContentWrap { height: 200px; clear: both; }
-#myGallery2 .ui-Select { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 50px; padding: 0 10px; }
-#myGallery2 .ui-Select.active { border-bottom: none; padding-bottom: 1px; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -79,43 +69,15 @@ window.addEvent('domready', function() {
 
 <div id="myGallery">
 	<div class="item">
-		<p>asdf</p>
-		<div class="description">my first Element</div>
+		<p>You can define whatever you want...</p>
 	</div>
 	<div class="item">
-		<p>jklö</p>
-		<div class="description">my second Element</div>
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</p>
 	</div>
 	<div class="item">
-		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
-		<div class="description">my third Element</div>
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 	</div>
 </div>
-
-<div id="myGallery2">
-	<div class="select">
-		Tab 1
-	</div>
-	<div class="item">
-		<p>asdf</p>
-	</div>
-	
-	<div class="select">
-		Tab 2
-	</div>
-	<div class="item">
-		<p>jklö</p>
-	</div>
-	
-	<div class="select">
-		Tab 3
-	</div>
-	<div class="item">
-		<p>hjk ajsdl gjaö sdfjakölsd jfkölas djfköa sdjfköa <br /> <br /> asdfjasökd fj <br /> <br /> asdf jköasdf sdjföl asdjfl</p>
-	</div>
-</div>
-
-
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
