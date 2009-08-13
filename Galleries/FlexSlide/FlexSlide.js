@@ -25,7 +25,6 @@ var FlexSlide = new Class({
 	options: {
 		selections: {}, /* item: '.myOtherItemClass' you can define your own css classes here */
 		render: ['previous', 'item', 'description', 'next', 'select'],
-		create: ['select', 'previous', 'next'],
 		ui: {
 			select: { 'class': 'ui-SelectWrap' },
 			selectItem: { 'class': 'ui-Select' },
@@ -79,18 +78,11 @@ var FlexSlide = new Class({
 				next.tween('left', 0);
 				current.tween('left', this.itemWrap.getSize().x);
 			},
-			slideLeftBounce: function(current, next) {
-				this.options.effects.slideLeft.call(this, current, next);
-			},
-			slideRightBounce: function(current, next) {
-				this.options.effects.slideRight.call(this, current, next);
-			},
-			slideLeftQuart: function(current, next) {
-				this.options.effects.slideLeft.call(this, current, next);
-			},
-			slideRightQuart: function(current, next) {
-				this.options.effects.slideRight.call(this, current, next);
-			}
+			display: function(current, next) { this.prepare(next); current.setStyle('display', 'none'); next.setStyle('display', 'block'); },
+			slideLeftBounce: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
+			slideRightBounce: function(current, next) { this.options.effects.slideRight.call(this, current, next); },
+			slideLeftQuart: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
+			slideRightQuart: function(current, next) { this.options.effects.slideRight.call(this, current, next); }
 		}
 	},
 	
