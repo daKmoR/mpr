@@ -1,0 +1,12 @@
+.flexBoxWrap { position: absolute; width: 250px; height: 250px; background: #fff; }
+	.flexBoxWrap .previous, .flexBoxWrap .next { display: none; height: 100%; position: absolute; width: 50%; cursor: pointer; z-index: 510; }
+		.flexBoxWrap .previous:hover { background: url('img/previous.gif') no-repeat left 30px; }
+	.flexBoxWrap .next { left: 50%; }
+		.flexBoxWrap .next:hover { background: url('img/next.gif') no-repeat right 30px; }
+		
+	.flexBoxWrap .content { overflow: hidden; width: 100%; height: 100%; position: relative; z-index: 500; }
+		/*.flexBoxWrap .content img { width: 100%; height: 100%; } */
+	
+	.flexBoxWrap .bottom { background: #fff; height: 45px; position: relative; display: none; z-index: 490; }
+	.flexBoxWrap .close { background: url('img/close.gif') no-repeat; cursor: pointer; display: block; float: right; height: 22px; width: 66px; }
+		
