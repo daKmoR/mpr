@@ -9,6 +9,12 @@ Script: URI.js
 		Sebastian Markbåge, Aaron Newton
 */
 
+$require('Core/Native/Function.js');
+$require('Core/Native/Array.js');
+$require('Core/Native/Hash.js');
+
+$require('More/Native/String.QueryString.js');
+
 var URI = new Class({
 
 	Implements: Options,

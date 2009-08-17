@@ -9,6 +9,9 @@ Script: String.QueryString.js
 		Sebastian Markbåge, Aaron Newton, Lennart Pilon, Valerio Proietti
 */
 
+$require('Core/Native/String.js');
+$require('Core/Native/Array.js');
+
 String.implement({
 
 	parseQueryString: function(){
