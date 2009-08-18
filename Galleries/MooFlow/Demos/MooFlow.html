@@ -29,7 +29,14 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 
-$require('Galleries/MooFlow/AutoMooFlows.js');
+$require('Galleries/MooFlow/MooFlow.js');
+
+window.addEvent('domready', function() {
+	var myMooFlow = new MooFlow( $$('.MooFlow')[0] );
+	myMooFlow.setScreen();
+	
+});
+
 
 /* ### Mpr.Js.End ### */
 </script>

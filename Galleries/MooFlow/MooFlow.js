@@ -52,7 +52,7 @@ var MooFlow = new Class({
 	},
 	
 	initialize: function(element, options){
-		this.MooFlow = element;
+		this.MooFlow = $(element);
 		this.setOptions(options);
 		this.foc = 150;
 		this.factor = this.options.factor;
