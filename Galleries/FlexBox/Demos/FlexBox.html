@@ -34,6 +34,7 @@ window.addEvent('domready', function() {
 	$require('Galleries/FlexBox/FlexBox.js');
 	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	var myFlexBox2 = new FlexBox( $$('a.FlexBox')[1], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
+	var myFlexBox3 = new FlexBox( $$('a.FlexBox')[2], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	
 });
 /* ### Mpr.Js.End ### */
@@ -77,6 +78,13 @@ body { background: #ccc; }
 	<a href="http://www.google.com" class="FlexBox">
 		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 	</a>
+	
+	<a href="#someContent" class="FlexBox">
+		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	</a>
+	
+	
+	<div id="someContent" style="display: none;">here we go with some text</div>
 	
 </div>
 

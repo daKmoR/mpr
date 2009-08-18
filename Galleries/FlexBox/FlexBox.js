@@ -16,7 +16,10 @@ $require('Core/Utilities/Selectors.js');
 
 $require('Core/Fx/Fx.Tween.js');
 $require('Core/Fx/Fx.Morph.js');
+
+
 $require('Core/Fx/Fx.Transitions.js');
+$require('More/Fx/Fx.Elements.js');
 
 $require('More/Utilities/Assets.js');
 $require('More/Native/URI.js');
@@ -53,64 +56,85 @@ var FlexBox = new Class({
 		this.anchor = $(anchor);
 		this.container = $(document.body);
 		
-		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
-		
-		this.build();
-		
-		this.setMode();
-		
 		this.anchor.addEvent('click', function(e) {
 			e.stop();
-			
-			this.coords = this.anchor.getElement('img').getCoordinates();
-			
-			this.wrap.setStyles( this.coords );
-			this.wrap.setStyle('display', 'block');
-			//if( this.contentWrap.get('html') == '' )
-				this.showContent();
-				
+			this.show();
 			
 		}.bind(this) );
 
 	},
+	
+	show: function() {
+		this.setMode();
+		//if( !this.anchor.retrieve('zoomSize') ) {
+		if( !$chk(this.contentWrap) || this.contentWrap.get('html') == '' ) {
+			this.build();
+			
+		} else {
+			this.open();
+		}
+	},
+	
+	open: function() {
+		var size = this.anchor.retrieve('zoomSize');
+		this.wrap.setStyle('display', 'block');
+		this.zoomRelativeTo( {x: size.x, y: size.y} );
+	},
 
 	close: function() {
-		this.bottomWrap.tween('top', -45).get('tween').chain( function() {
+		this.bottomWrap.tween('bottom', 0).get('tween').chain( function() {
+		
 			this.nextWrap.setStyle('display', 'none');
 			this.previousWrap.setStyle('display', 'none');
-		
-			this.wrap.morph( this.anchor.getElement('img').getCoordinates() ).get('morph').chain( function() {
+			
+			this.fx.start({
+				'0': {left: this.coords['left'] + 10, top: this.coords['top']},
+				'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
+			}).chain( function() {
 				this.wrap.setStyle('display', 'none');
 			}.bind(this) );
+			
+			//if( this.mode === 'image' ) {
+			//console.log( this.contentWrap.getElement('*') );
+			// if( 1 ) {
+				// //this.contentWrap.getElement('*').fade(0);
+				// this.contentWrap.morph( this.anchor.getElement('img').getCoordinates() ).get('morph').chain( function() {
+					// this.wrap.setStyle('display', 'none');
+					
+				// }.bind(this) );
+			// } /*else {
+				// this.contentWrap.fade(0).get('tween').chain( function() {
+					// this.wrap.morph( this.anchor.getElement('img').getCoordinates() ).get('morph').chain( function() {
+						// this.wrap.setStyle('display', 'none');
+						
+					// }.bind(this) );
+				// }.bind(this) );
+			// }*/
+			
 		}.bind(this) );
 		
 	},
 	
-	showContent: function() {
+	buildContent: function() {
 		if( this.mode == 'image' ) {
 			var image = new Asset.image(this.anchor.get('href'), {
 				onload: function() {
 					image.inject( this.contentWrap );
 					var size = image.getSize();
+					this.anchor.store('zoomSize', size);
 					image.setStyles({ width: '100%', height: '100%' });
 					
-					this.zoomRelativeTo( {x: size.x, y: size.y} );
+					this.open();
 				}.bind(this)
 			});
 			
 		} else if( this.mode == 'iframe') {
-			new Element('iframe', {
-				id: 'iFrame'+new Date().getTime(), 
-				width: 300,
-				height: 500,
-				src: this.anchor.get('href'),
-				frameborder: 0,
-				scrolling: 'auto'
-			}).inject( this.contentWrap );
-			this.zoomRelativeTo( this.options.defaultSize );
+			this.anchor.store('zoomSize', this.options.defaultSize);
+			this.open();
 			
 		} else if( this.mode == 'inline' ) {
-			$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').inject( this.contentWrap );
+			this.anchor.store('zoomSize', this.options.defaultSize);
+			this.open();
 			
 		} else if( this.mode == 'request') {
 			new Request.HTML(this.anchor.get('href'), {
@@ -119,6 +143,9 @@ var FlexBox = new Class({
 				evalScripts: true,
 				autoCancel: true
 			}).send();
+			
+			this.anchor.store('zoomSize', this.options.defaultSize);
+			this.open();
 			
 		} else {
 			// var obj = this.createEmbedObject().injectInside(this.contentContainer);
@@ -130,7 +157,25 @@ var FlexBox = new Class({
 	},
 	
 	build: function() {
+		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
 		this.builder( this.options.render, this.wrap );
+		
+		this.coords = this.anchor.getElement('img').getCoordinates();
+		
+		this.wrap.setStyles({
+			left: this.coords['left'], 
+			top: this.coords['top'],
+			display: 'block'
+		});
+		
+		this.contentWrap.setStyles( {width: this.coords['width'], height: this.coords['height']} );
+		
+		this.fx = new Fx.Elements( $$(this.wrap, this.contentWrap), {
+			// onComplete: function() {
+				// this.finishOpen();
+			// }.bind(this)
+		});
+		this.buildContent();
 	},
 	
 	buildElement: function(item, wrapper) {
@@ -235,13 +280,20 @@ var FlexBox = new Class({
 		};
 		//if (this.options.cutOut) this.element.setStyle('visibility', 'hidden');
 		//this.box.removeClass('remooz-loading');
-		var vars = {left: pos.x, top: pos.y, width: to.x, height: to.y};
+		var vars = {left: pos.x, top: pos.y};
+		var vars2 = {width: to.x, height: to.y, margin: 10};
 		if (this.options.opacityResize != 1) 
 			vars.opacity = [this.options.opacityResize, 1];
 		else 
 			this.wrap.set('opacity', 1);
+		
+		this.fx.start({
+			'0': vars,
+			'1': vars2
+		}).chain( this.finishOpen.bind(this) );
 			
-		this.wrap.morph( vars ).get('morph').chain( this.finishOpen.bind(this)  );
+		// this.wrap.morph( vars ).get('morph').chain( this.finishOpen.bind(this)  );
+		// this.contentWrap.morph( vars2 );
 		//this.tweens.box.start(vars).chain(this.finishOpen.bind(this));
 		this.fireEvent('onOpen');
 	},
@@ -252,59 +304,33 @@ var FlexBox = new Class({
 	
 		this.bottomWrap.setStyles({
 			'display': 'block',
-			'top': '-45px'
+			'bottom': '0'
 		});
-		this.bottomWrap.tween('top', 0);
-	},
+		this.bottomWrap.tween('bottom', -45);
+		
+		if( this.contentWrap.get('html') == '' ) {
+			switch( this.mode ) {
+				case 'iframe':
+					new Element('iframe', {
+						id: 'iFrame'+new Date().getTime(), 
+						width: 300,
+						height: 500,
+						src: this.anchor.get('href'),
+						frameborder: 0,
+						scrolling: 'auto'
+					}).inject( this.contentWrap );
+					break;
+				case 'inline':
+					$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').fade('hide').inject( this.contentWrap ).fade(1);
 
-	open: function(event, link){
-	
-		this.active = true;
-						
-		var size = window.getSize();
-		var scroll = window.getScroll();
-		var scrollSize = window.getScrollSize();
-		
-		/* The images should be 640x480(max). They're easily clipped at 1024x768,
-		 * so we get them as close as possible to the top of the window. */
-		var offset = Math.round((size.y < 768) ? size.y / 36 : size.y / 10);
-		
-		var top = scroll.y + offset;
-		
-		this.overlay.setStyles({
-			opacity: 0,
-			display: "block",
-			width: scrollSize.x,
-			height: scrollSize.y
-		});
-		this.wrap.setStyles({
-			display: "block",
-			top: top
-		});
-		this.fx.overlay.start(0.8);
-		this.startLoad(link);
-		return false;
-	},
-	
-	startLoad: function(link, preload){
-	
-		if(!link) return;
-		var image = new Asset.image(link.get("href"), {
-			onload: function(){
-				if(!preload) this.nextEffect();
-			}.bind(this)
-		});
-		if(!preload){
-			this.stage.addClass("loading");
-			this.stage.empty();
-			this.bottom.setStyle("opacity", 0);
-			this.prevLink.setStyle("display", "none");
-			this.nextLink.setStyle("display", "none");
-			this.currentCaption = link.retrieve("caption");
-			this.currentImage = image;
-			this.currentIndex = this.anchors.indexOf(link);
-			this.step = 1;
+					break;
+				default:
+			}
+		} else {
+			this.contentWrap.getElement('*').fade(1);
 		}
+		
+		this.fireEvent('onOpenFinish');
 	},
 
 	keyboardListener: function(event){
@@ -331,56 +357,7 @@ var FlexBox = new Class({
 		if(!link) return false;
 		for(var f in this.fx) this.fx[f].cancel();
 		this.startLoad(link);
-	},
-	
-	nextEffect: function(){
-	
-		switch(this.step++){
-		
-			case 1:
-				var w = this.currentImage.width + this.options.padding * 2;
-				var h = this.currentImage.height + this.options.padding * 2;
-				this.fx.resize.start({
-					width: w,
-					height: h,
-					marginLeft: -(this.currentImage.width/2)
-				});
-				break;
-			case 2:
-			
-				this.stage.removeClass("loading");
-				this.stage.setStyle("opacity", 0);
-				this.currentImage.setStyle("margin", this.options.padding);
-				this.currentImage.inject(this.stage);
-				this.fx.show.start(1);
-				break;
-			case 3:
-			
-				this.prevLink.setStyle("display", "block");
-				this.nextLink.setStyle("display", "block");
-				if(this.options.animateCaption){
-					if(this.options.counter){
-						var total = this.anchors.length;
-						var num = this.currentIndex + 1;
-						var counterText = this.options.counter;
-						counterText = counterText.replace(/\{NUM\}/, num);
-						counterText = counterText.replace(/\{TOTAL\}/, total);
-						this.counter.set("text", counterText);
-					}
-					this.caption.set("text", this.currentCaption);
-					var height = this.bottom.getStyle("height").toInt();
-					this.bottom.setStyles({
-						opacity: 1,
-						top: -height
-					});
-					this.fx.bottom.start(0);
-				}
-				break;
-			case 4:
-				this.startLoad(this.anchors[this.currentIndex-1], true);
-				this.startLoad(this.anchors[this.currentIndex+1], true);
-				break;
-		}
 	}
+	
 
 });
