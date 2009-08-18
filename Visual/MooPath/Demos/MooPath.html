@@ -1,0 +1,114 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Visual/MooPath/MooPath.js');
+
+window.addEvent('domready', function() {
+	
+	var myMooPath = new MooPath.Ellipse($$('#example1 a'), {
+		show: 0,
+		ellipse: {x: 600, y: 60},
+		factor: 0.4,
+		fxoptions: {
+			wait: false,
+			duration: 1000,
+			transition: Fx.Transitions.Quart.easeInOut
+		}
+	});
+	
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+div.container { position: relative; height: 500px; }
+div.container a { position: absolute; display: block; }
+div.container img { width: 100%; height: 100%; }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>FlexSlide</h1>
+<h2>Introduction</h2>
+<p>
+	a simple Gallery which allows to easily adopt the output.
+</p>
+<h3>Default FlexSlide</h3>
+
+<div id="example1">
+	<h2 class="example">Example 1 - Path == Ellipse</h2>
+	<div class="container">
+		<a href="a">
+			<img src="./images/ex.png" alt="" title="Click me" />
+		</a>
+		<a href="b">
+			<img src="./images/ex.png" alt="" title="Click me" />
+		</a>
+		<a href="c">
+			<img src="./images/ex.png" alt="" title="Click me" />
+		</a>
+		<a href="d">
+			<img src="./images/ex.png" alt="" title="Click me" />
+		</a>
+	</div>
+</div>
+
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
