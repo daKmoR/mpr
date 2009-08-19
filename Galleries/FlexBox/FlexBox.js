@@ -9,6 +9,7 @@
  */
 
 $require('Galleries/FlexBox/Resources/css/FlexBox.css');
+$require('Galleries/FlexSlide/FlexSlide.js');
 
 $require('Core/Element/Element.Dimensions.js');
 $require('Core/Element/Element.Style.js');
@@ -38,11 +39,24 @@ var FlexBox = new Class({
 		fixedSize: false, // {x: 640, y: 640}
 		counterTemplate: 'Image {id} of {count}',
 		descriptionTemplate: '<h5>{title}</h5><div>{text}</div>',
-		render: ['previous', 'next', 'content', { 'bottom' : ['description', 'counter', 'close'] }],
+		render: ['content'],
 		centered: false,
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
+		},
+		onOpenFinish: function() {
+			// this.bottomWrap.setStyles({
+				// 'display': 'block',
+				// 'bottom': '0'
+			// });
+			// this.bottomWrap.tween('bottom', -45);
+		},
+		onStartClose: function() {
+			// this.bottomWrap.tween('bottom', 0).get('tween').chain( function() {
+				// this.bottomWrap.setStyle('display', 'none');
+				// this.closeZoom();
+			// }.bind(this) );
 		}
 	},
 
@@ -76,39 +90,51 @@ var FlexBox = new Class({
 	},
 
 	close: function() {
-		this.bottomWrap.tween('bottom', 0).get('tween').chain( function() {
+		this.fireEvent('onStartClose');
+	},
+	
+	closeZoom: function() {
+		if( $defined(this.nextWrap) ) this.nextWrap.setStyle('display', 'none');
+		if( $defined(this.previousWrap) ) this.previousWrap.setStyle('display', 'none');
+		if( this.mode == 'iframe' ) {
+			this.contentWrap.getElement('*').setStyle('display', 'none');
+		}
+		if( this.mode != 'image') {
+			this.contentWrap.fade(0);
+		}
+		var vars = {left: this.coords['left'], top: this.coords['top']};
+		if (this.options.opacityResize != 1) 
+			vars.opacity = [1, this.options.opacityResize];
 		
-			this.nextWrap.setStyle('display', 'none');
-			this.previousWrap.setStyle('display', 'none');
-			if( this.mode == 'iframe' ) {
-				this.contentWrap.getElement('*').setStyle('display', 'none');
-			}
-			if( this.mode != 'image') {
-				//this.contentWrap.setStyle('opacity', 0);
-				this.contentWrap.fade(0);
-			}
-			var vars = {left: this.coords['left'], top: this.coords['top']};
-			if (this.options.opacityResize != 1) 
-				vars.opacity = [1, this.options.opacityResize];
-			
-			this.fx.start({
-				'0': vars,
-				'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
-			}).chain( function() {
-				this.wrap.setStyle('display', 'none');
-			}.bind(this) );
-			
+		this.fx.start({
+			'0': vars,
+			'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
+		}).chain( function() {
+			this.wrap.setStyle('display', 'none');
 		}.bind(this) );
 	},
 	
 	buildContent: function() {
 		if( this.mode == 'image' ) {
-			var image = new Asset.image(this.anchor.get('href'), {
-				onload: function() {
+			// var image = new Asset.image(this.anchor.get('href'), {
+				// onload: function() {
+					// image.inject( this.contentWrap );
+					// var size = image.getSize();
+					// this.anchor.store('zoomSize', size);
+					// image.setStyles({ width: '100%', height: '100%' });
+					// image.addClass('item');
+					
+					// this.open();
+				// }.bind(this)
+			// });
+			var image = new Asset.images([this.anchor.get('href'), '../mpr/Galleries/FlexBox/../Core/Resources/images/small-ice.jpg', '../mpr/Galleries/FlexBox/../Core/Resources/images/medium-sun.jpg'], {
+				onComplete: function() {
+					//console.log( images );
 					image.inject( this.contentWrap );
-					var size = image.getSize();
+					var size = image[0].getSize();
 					this.anchor.store('zoomSize', size);
-					image.setStyles({ width: '100%', height: '100%' });
+					//image.setStyles({ width: '100%', height: '100%' });
+					image.addClass('item');
 					
 					this.open();
 				}.bind(this)
@@ -286,18 +312,12 @@ var FlexBox = new Class({
 	},
 	
 	finishOpen: function() {
-		this.nextWrap.setStyle('display', 'block');
-		this.previousWrap.setStyle('display', 'block');
+		if( $defined(this.nextWrap) ) this.nextWrap.setStyle('display', 'block');
+		if( $defined(this.previousWrap) ) this.previousWrap.setStyle('display', 'block');
 		
 		if( this.mode != 'image' )
 			this.contentWrap.fade(1);
 	
-		this.bottomWrap.setStyles({
-			'display': 'block',
-			'bottom': '0'
-		});
-		this.bottomWrap.tween('bottom', -45);
-		
 		if( this.contentWrap.get('html') == '' ) {
 			switch( this.mode ) {
 				case 'iframe':
@@ -320,6 +340,21 @@ var FlexBox = new Class({
 			}
 			
 		}
+		
+		// console.log( $('mySecondTabs') );
+		// console.log(  );
+		
+		var myFlexSlideTabs = new FlexSlide( this.contentWrap, {
+			autoHeight: true,
+			autoCenter: false,
+			auto: false,
+			selectTemplate: 'Tab {id}',
+			render: ['previous', 'next', 'item'],
+			effect: {
+				up: 'fade',
+				down: 'slideRight'
+			}
+		});
 		
 		this.fireEvent('onOpenFinish');
 	},
