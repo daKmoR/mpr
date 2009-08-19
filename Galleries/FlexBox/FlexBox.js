@@ -17,12 +17,13 @@ $require('Core/Utilities/Selectors.js');
 $require('Core/Fx/Fx.Tween.js');
 $require('Core/Fx/Fx.Morph.js');
 
-
 $require('Core/Fx/Fx.Transitions.js');
 $require('More/Fx/Fx.Elements.js');
 
 $require('More/Utilities/Assets.js');
 $require('More/Native/URI.js');
+
+$require('Core/Request/Request.html.js');
 
 var FlexBox = new Class({
 
@@ -88,10 +89,13 @@ var FlexBox = new Class({
 			}
 			//this.contentWrap.setStyle('opacity', 0);
 			
-			//this.contentWrap.fade(0);
+			this.contentWrap.fade(0);
+			var vars = {left: this.coords['left'], top: this.coords['top']};
+			if (this.options.opacityResize != 1) 
+				vars.opacity = [1, this.options.opacityResize];
 			
 			this.fx.start({
-				'0': {left: this.coords['left'], top: this.coords['top']},
+				'0': vars,
 				'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
 			}).chain( function() {
 				this.wrap.setStyle('display', 'none');
@@ -122,12 +126,6 @@ var FlexBox = new Class({
 			this.open();
 			
 		} else if( this.mode == 'request') {
-			new Request.HTML(this.anchor.get('href'), {
-				method: 'get',
-				update: this.contentWrap,
-				evalScripts: true,
-				autoCancel: true
-			}).send();
 			
 			this.anchor.store('zoomSize', this.options.defaultSize);
 			this.open();
@@ -304,15 +302,26 @@ var FlexBox = new Class({
 					break;
 				case 'inline':
 					$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').fade('hide').inject( this.contentWrap ).fade(1);
-
 					break;
+				case 'request':
+					this.request = new Request.HTML({
+						url: this.anchor.get('href'),
+						method: 'get',
+						noCache: true,
+						update: this.contentWrap,
+						evalScripts: true,
+						autoCancel: true
+					}).send();
+					break;
+				
+				
 				default:
 			}
 		} else {
 			if( this.mode == 'iframe' ) {
 				this.contentWrap.getElement('*').setStyle('display', 'block');
 			} else {
-				this.contentWrap.getElement('*').fade(1);
+				this.contentWrap.fade(1);
 			}
 			
 			
