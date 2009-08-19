@@ -18,6 +18,8 @@ $require('Core/Fx/Fx.Tween.js');
 $require('Core/Fx/Fx.Morph.js');
 $require('Core/Fx/Fx.Transitions.js');
 
+$require('More/Fx/Fx.Elements.js');
+
 $require('More/Class/Class.Binds.js');
 
 var FlexSlide = new Class({
@@ -59,30 +61,28 @@ var FlexSlide = new Class({
 			}
 		},
 		effects: {
-			fade: function(current, next) {
-				this.prepare(next);
-				next.fade('hide');
-				next.fade(1);
-				current.fade('show');
-				current.fade(0);
+			fade: function(fxConfig, current, next, currentEl, nextEl) {
+				nextEl.setStyle('opacity', 0);
+				nextEl.setStyle('display', 'block');
+				fxConfig[current] = { 'opacity': [1, 0] };
+				fxConfig[next]    = { 'opacity': [0, 1] };
+				this.fx.start(fxConfig);
 			},
-			slideLeft: function(current, next) {
-				this.prepare(next);
-				next.setStyle('left', this.itemWrap.getSize().x);
-				next.tween('left', 0);
-				current.tween('left', this.itemWrap.getSize().x*-1);
+			slideLeft: function(fxConfig, current, next, currentEl, nextEl) {
+				fxConfig[current] = { 'left': [0, currentEl.getSize().x*-1]   };
+				fxConfig[next]    = { 'left': [this.wrap.getSize().x, 0] };
+				this.fx.start(fxConfig);
 			},
-			slideRight: function(current, next) {
-				this.prepare(next);
-				next.setStyle('left', this.itemWrap.getSize().x*-1);
-				next.tween('left', 0);
-				current.tween('left', this.itemWrap.getSize().x);
+			slideRight: function(fxConfig, current, next, currentEl, nextEl) {
+				fxConfig[current] = { 'right': [0, currentEl.getSize().x*-1]   };
+				fxConfig[next]    = { 'right': [this.wrap.getSize().x, 0] };
+				this.fx.start(fxConfig);
 			},
-			display: function(current, next) { this.prepare(next); current.setStyle('display', 'none'); next.setStyle('display', 'block'); },
-			slideLeftBounce: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
-			slideRightBounce: function(current, next) { this.options.effects.slideRight.call(this, current, next); },
-			slideLeftQuart: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
-			slideRightQuart: function(current, next) { this.options.effects.slideRight.call(this, current, next); }
+			// display: function(current, next) { this.prepare(next); current.setStyle('display', 'none'); next.setStyle('display', 'block'); },
+			// slideLeftBounce: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
+			// slideRightBounce: function(current, next) { this.options.effects.slideRight.call(this, current, next); },
+			// slideLeftQuart: function(current, next) { this.options.effects.slideLeft.call(this, current, next); },
+			// slideRightQuart: function(current, next) { this.options.effects.slideRight.call(this, current, next); }
 		}
 	},
 	
@@ -123,6 +123,11 @@ var FlexSlide = new Class({
 			
 		}, this);
 		
+		var tmp = [this.wrap];
+		tmp.extend( $unlink(this.els.item) )
+		
+		this.fx = new Fx.Elements( tmp )
+		
 		if( $chk(this.els.select) && this.els.select.length <= 0 ) { //automatically build the select if no costum select items are found
 			this.els.item.each( function(el, i) {
 				var select = new Element('div', this.options.ui.selectItem)
@@ -150,37 +155,59 @@ var FlexSlide = new Class({
 	},
 	
 	prepare: function(el, action) {
-		var action = action || 'tween';
-		this.reset(el);
-		el.setStyle('display', 'block');
-		el.setStyle('width', el.getParent().getSize().x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
-		if( this.options.autoCenter === true ) {
-			el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
-		}
-		if( this.options.autoHeight === true ) {
-			el.getParent()[action]('height', el.getSize().y);
-		}
+		//var action = action || 'tween';
+		//this.reset(el);
+		el.set('style', 'display: block;');
+		//el.setStyle('left', -10000);
+		//el.setStyle('display', 'block');
+		
+		
+		//el.setStyle('width', el.getParent().getSize().x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
+		
+		// if( this.options.autoCenter === true ) {
+			// el.setStyle('margin-top', (el.getParent().getSize().y - el.getSize().y) / 2 );
+		// }
+		// if( this.options.autoHeight === true ) {
+			// console.log( 'setting' );
+			// el.getParent()[action]('height', el.getSize().y);
+		// }
+		// el.getParent()[action]('width', el.getSize().x);
+		
 	},
 	
 	show: function(id, fx) {
 		if( id != this.current) {
-			this.reset( this.els.item[id] );
-			
-			this.itemWrap.grab( this.els.item[id] );
+			//this.reset( this.els.item[id] );
 			
 			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
 			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
-			this.els.item[this.current].set('tween', newOptions);
-			this.els.item[id].set('tween', newOptions);
-			this.options.effects[fx].call( this, this.els.item[this.current], this.els.item[id] );
+			// this.els.item[this.current].set('tween', newOptions);
+			// this.els.item[id].set('tween', newOptions);
 			
-			if( $chk(this.els.description) && this.els.description.length > 0 ) {
-				this.descriptionWrap.grab( this.els.description[id] );
-				this.options.effects['fade'].call( this, this.els.description[this.current], this.els.description[id] );
-			}
+			//this.prepare( this.els.item[id] );
+			
+			this.els.item[id].set('style', 'display: block; left: 10000px;');
+			
+			var fxConfig = {};
+			fxConfig[0] = {}
+			if( this.options.autoWidth )
+				$extend(fxConfig[0], {'width': this.els.item[id].getSize().x} );
+			if( this.options.autoHeight )
+				$extend(fxConfig[0], {'height': this.els.item[id].getSize().y} );
+			
+			this.els.item[id].set('style', '');
+				
+			this.options.effects[fx].call( this, fxConfig, this.current+1, id+1, this.els.item[this.current], this.els.item[id] );
+			
+			this.itemWrap.grab( this.els.item[id] );
+			
+			// if( $chk(this.els.description) && this.els.description.length > 0 ) {
+				// this.descriptionWrap.grab( this.els.description[id] );
+				// this.options.effects['fade'].call( this, this.els.description[this.current], this.els.description[id] );
+			// }
 			
 			this.process(id);
 		}
