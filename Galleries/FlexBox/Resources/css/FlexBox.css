@@ -8,5 +8,6 @@
 		/*.flexBoxWrap .content img { width: 100%; height: 100%; } */
 	
 	.flexBoxWrap .bottom { background: #fff; height: 45px; position: absolute; display: none; z-index: 490; bottom: 0; width: 100%; }
-	.flexBoxWrap .close { background: url('img/close.gif') no-repeat; cursor: pointer; display: block; float: right; height: 22px; width: 66px; margin-right: 10px; }
+		.flexBoxWrap .close { background: url('img/close.gif') no-repeat; cursor: pointer; display: block; float: right; height: 22px; width: 66px; margin-right: 10px; }
+		.flexBoxWrap .description { float: left; margin-left: 10px; }
 		

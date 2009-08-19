@@ -33,10 +33,11 @@ var FlexBox = new Class({
 		defaultSize: { x: 500, y: 500 },
 		margin: 0,
 		resizeFactor: 0.95,
-		opacityResize: 0,
+		opacityResize: 0.5,
 		resizeLimit: false, // {x: 640, y: 640}
 		fixedSize: false, // {x: 640, y: 640}
 		counterTemplate: 'Image {id} of {count}',
+		descriptionTemplate: '<h5>{title}</h5><div>{text}</div>',
 		render: ['previous', 'next', 'content', { 'bottom' : ['description', 'counter', 'close'] }],
 		centered: false,
 		ui: {
@@ -118,19 +119,25 @@ var FlexBox = new Class({
 			this.open();
 			
 		} else if( this.mode == 'inline' ) {
+			this.contentWrap.fade('hide');
+			$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').inject( this.contentWrap );
 			this.anchor.store('zoomSize', this.options.defaultSize);
 			this.open();
 			
 		} else if( this.mode == 'request') {
+			this.request = new Request.HTML({
+				url: this.anchor.get('href'),
+				method: 'get',
+				noCache: true,
+				autoCancel: true,
+				onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
+					this.contentWrap.set('html', responseHTML );
+					this.contentWrap.fade('hide');
+					this.anchor.store('zoomSize', this.options.defaultSize);
+					this.open();
+				}.bind(this)
+			}).send();
 			
-			this.anchor.store('zoomSize', this.options.defaultSize);
-			this.open();
-			
-		} else {
-			// var obj = this.createEmbedObject().injectInside(this.contentContainer);
-			// if(this.str != ''){
-				// $('MultiBoxMediaObject').innerHTML = this.str;
-			// }
 		}
 		
 	},
@@ -145,7 +152,8 @@ var FlexBox = new Class({
 		this.wrap.setStyles({
 			left: this.coords['left'], 
 			top: this.coords['top'],
-			display: 'block'
+			display: 'block',
+			opacity: this.options.opacityResize
 		});
 		
 		this.contentWrap.setStyles( {width: this.coords['width'], height: this.coords['height']} );
@@ -163,6 +171,14 @@ var FlexBox = new Class({
 			this[item + 'Wrap'].addEvent('click', function() {
 				this.close();
 			}.bind(this) );
+		} else if( item === 'description' ) {
+			var txt = this.anchor.get('title') || this.anchor.getElement('img').get('alt');
+			var parts = txt.split('::');
+			if( parts.length === 2 )
+				txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
+			if( txt.charAt(0) === '#' ) 
+				txt = $$(txt)[0].get('html');
+			this[item + 'Wrap'].set('html', txt);
 		}
 	},
 	
@@ -181,9 +197,9 @@ var FlexBox = new Class({
 	
 	setMode: function() {
 		var href = this.anchor.get('href')
-		var str = href.substr(href.lastIndexOf('.') + 1).toLowerCase();
+		var fileExt = href.substr(href.lastIndexOf('.') + 1).toLowerCase();
 		
-		switch( str ) {
+		switch( fileExt ) {
 			case 'jpg':
 			case 'gif':
 			case 'png':
@@ -254,8 +270,6 @@ var FlexBox = new Class({
 			x: scroll.x + ((box.x - to.x) / 2).toInt(),
 			y: scroll.y + ((box.y - to.y) / 2).toInt()
 		};
-		//if (this.options.cutOut) this.element.setStyle('visibility', 'hidden');
-		//this.box.removeClass('remooz-loading');
 		var vars = {left: pos.x, top: pos.y};
 		var vars2 = {width: to.x, height: to.y, margin: 10};
 		if (this.options.opacityResize != 1) 
@@ -296,21 +310,6 @@ var FlexBox = new Class({
 						scrolling: 'auto'
 					}).inject( this.contentWrap );
 					break;
-				case 'inline':
-					$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').fade('hide').inject( this.contentWrap ).fade(1);
-					break;
-				case 'request':
-					this.request = new Request.HTML({
-						url: this.anchor.get('href'),
-						method: 'get',
-						noCache: true,
-						update: this.contentWrap,
-						evalScripts: true,
-						autoCancel: true
-					}).send();
-					break;
-				
-				
 				default:
 			}
 		} else {
@@ -319,8 +318,6 @@ var FlexBox = new Class({
 			} else {
 				this.contentWrap.fade(1);
 			}
-			
-			
 			
 		}
 		
