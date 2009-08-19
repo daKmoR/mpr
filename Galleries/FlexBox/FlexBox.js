@@ -34,11 +34,10 @@ var FlexBox = new Class({
 		initialWidth: 250,
 		initialHeight: 250,
 		defaultSize: { x: 500, y: 500 },
-		padding: 10,
-		margin: 20,
+		margin: 0,
 		animateCaption: true,
 		resizeFactor: 0.95,
-		opacityResize: 1,
+		opacityResize: 0,
 		resizeLimit: false, // {x: 640, y: 640}
 		counter: "Image {NUM} of {TOTAL}",
 		render: ['previous', 'next', 'content', { 'bottom' : ['description', 'counter', 'close'] }],
@@ -66,10 +65,8 @@ var FlexBox = new Class({
 	
 	show: function() {
 		this.setMode();
-		//if( !this.anchor.retrieve('zoomSize') ) {
 		if( !$chk(this.contentWrap) || this.contentWrap.get('html') == '' ) {
 			this.build();
-			
 		} else {
 			this.open();
 		}
@@ -86,33 +83,21 @@ var FlexBox = new Class({
 		
 			this.nextWrap.setStyle('display', 'none');
 			this.previousWrap.setStyle('display', 'none');
+			if( this.mode == 'iframe' ) {
+				this.contentWrap.getElement('*').setStyle('display', 'none');
+			}
+			//this.contentWrap.setStyle('opacity', 0);
+			
+			//this.contentWrap.fade(0);
 			
 			this.fx.start({
-				'0': {left: this.coords['left'] + 10, top: this.coords['top']},
+				'0': {left: this.coords['left'], top: this.coords['top']},
 				'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
 			}).chain( function() {
 				this.wrap.setStyle('display', 'none');
 			}.bind(this) );
 			
-			//if( this.mode === 'image' ) {
-			//console.log( this.contentWrap.getElement('*') );
-			// if( 1 ) {
-				// //this.contentWrap.getElement('*').fade(0);
-				// this.contentWrap.morph( this.anchor.getElement('img').getCoordinates() ).get('morph').chain( function() {
-					// this.wrap.setStyle('display', 'none');
-					
-				// }.bind(this) );
-			// } /*else {
-				// this.contentWrap.fade(0).get('tween').chain( function() {
-					// this.wrap.morph( this.anchor.getElement('img').getCoordinates() ).get('morph').chain( function() {
-						// this.wrap.setStyle('display', 'none');
-						
-					// }.bind(this) );
-				// }.bind(this) );
-			// }*/
-			
 		}.bind(this) );
-		
 	},
 	
 	buildContent: function() {
@@ -161,6 +146,7 @@ var FlexBox = new Class({
 		this.builder( this.options.render, this.wrap );
 		
 		this.coords = this.anchor.getElement('img').getCoordinates();
+		this.coords.left += 1;
 		
 		this.wrap.setStyles({
 			left: this.coords['left'], 
@@ -170,11 +156,7 @@ var FlexBox = new Class({
 		
 		this.contentWrap.setStyles( {width: this.coords['width'], height: this.coords['height']} );
 		
-		this.fx = new Fx.Elements( $$(this.wrap, this.contentWrap), {
-			// onComplete: function() {
-				// this.finishOpen();
-			// }.bind(this)
-		});
+		this.fx = new Fx.Elements( $$(this.wrap, this.contentWrap) );
 		this.buildContent();
 	},
 	
@@ -292,15 +274,15 @@ var FlexBox = new Class({
 			'1': vars2
 		}).chain( this.finishOpen.bind(this) );
 			
-		// this.wrap.morph( vars ).get('morph').chain( this.finishOpen.bind(this)  );
-		// this.contentWrap.morph( vars2 );
-		//this.tweens.box.start(vars).chain(this.finishOpen.bind(this));
 		this.fireEvent('onOpen');
 	},
 	
 	finishOpen: function() {
 		this.nextWrap.setStyle('display', 'block');
 		this.previousWrap.setStyle('display', 'block');
+		
+		if( this.mode != 'image' )
+			this.contentWrap.fade(1);
 	
 		this.bottomWrap.setStyles({
 			'display': 'block',
@@ -327,7 +309,14 @@ var FlexBox = new Class({
 				default:
 			}
 		} else {
-			this.contentWrap.getElement('*').fade(1);
+			if( this.mode == 'iframe' ) {
+				this.contentWrap.getElement('*').setStyle('display', 'block');
+			} else {
+				this.contentWrap.getElement('*').fade(1);
+			}
+			
+			
+			
 		}
 		
 		this.fireEvent('onOpenFinish');
