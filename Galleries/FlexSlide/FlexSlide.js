@@ -168,7 +168,7 @@ var FlexSlide = new Class({
 			
 			this.itemWrap.grab( this.els.item[id] );
 			
-			var fx = fx || (id > this.current) ? this.options.effect.up : this.options.effect.down;
+			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
 			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
@@ -242,7 +242,6 @@ var FlexSlide = new Class({
 			if ( this.current + step < this.els.item.length ) next = this.current + step;
 			if ( this.current + step < 0 ) next = this.els.item.length-1;
 		}
-		
 		this.show(next, (step > 0) ? this.options.effect.up : this.options.effect.down);
 	},
 	
