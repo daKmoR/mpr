@@ -30,17 +30,13 @@ var FlexBox = new Class({
 	Implements: [Options, Events],
 
 	options: {
-		resizeDuration: 600,
-		resizeTransition: Fx.Transitions.Circ.easeOut,
-		initialWidth: 250,
-		initialHeight: 250,
 		defaultSize: { x: 500, y: 500 },
 		margin: 0,
-		animateCaption: true,
 		resizeFactor: 0.95,
 		opacityResize: 0,
 		resizeLimit: false, // {x: 640, y: 640}
-		counter: "Image {NUM} of {TOTAL}",
+		fixedSize: false, // {x: 640, y: 640}
+		counterTemplate: 'Image {id} of {count}',
 		render: ['previous', 'next', 'content', { 'bottom' : ['description', 'counter', 'close'] }],
 		centered: false,
 		ui: {
@@ -48,7 +44,6 @@ var FlexBox = new Class({
 			content: { 'class': 'content' }
 		}
 	},
-	
 
 	initialize: function(anchor, options){
 		this.setOptions(options);
@@ -87,9 +82,10 @@ var FlexBox = new Class({
 			if( this.mode == 'iframe' ) {
 				this.contentWrap.getElement('*').setStyle('display', 'none');
 			}
-			//this.contentWrap.setStyle('opacity', 0);
-			
-			this.contentWrap.fade(0);
+			if( this.mode != 'image') {
+				//this.contentWrap.setStyle('opacity', 0);
+				this.contentWrap.fade(0);
+			}
 			var vars = {left: this.coords['left'], top: this.coords['top']};
 			if (this.options.opacityResize != 1) 
 				vars.opacity = [1, this.options.opacityResize];
@@ -198,7 +194,7 @@ var FlexBox = new Class({
 				break;
 			case 'flv':
 				this.mode = 'flashVideo';
-				this.contentObj.xH = 70;
+				//this.contentObj.xH = 70;
 				break;
 			case 'mov':
 				this.mode = 'quicktime';
@@ -213,8 +209,8 @@ var FlexBox = new Class({
 				break;
 			case 'mp3':
 				this.mode = 'flashMp3';
-				this.contentObj.width = 320;
-				this.contentObj.height = 70;
+				// this.contentObj.width = 320;
+				// this.contentObj.height = 70;
 				break;
 			default:
 				if( href.charAt(0) === '#' ) {
@@ -247,7 +243,7 @@ var FlexBox = new Class({
 	},
 
 	zoomTo: function(to) {
-		//to = this.options.fixedSize || to;
+		to = this.options.fixedSize || to;
 		var box = this.container.getSize(), scroll = this.container.getScroll();
 		var pos = (!this.options.centered) ? {
 			x: (this.coords.left + (this.coords.width / 2) - to.x / 2).toInt()
