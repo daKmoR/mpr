@@ -29,7 +29,9 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 $require('Core/Utilities/DomReady.js');
-$require('Visual/MooPath/MooPath.js');
+$require('Visual/MooPath/MooPath.Ellipse.js');
+
+$require('More/Utilities/Assets.js');
 
 window.addEvent('domready', function() {
 	
@@ -50,8 +52,8 @@ window.addEvent('domready', function() {
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
-div.container { position: relative; height: 500px; }
-div.container a { position: absolute; display: block; }
+div.container { position: relative; height: 200px; }
+div.container a { position: absolute; display: block; line-height: 0; }
 div.container img { width: 100%; height: 100%; }
 
 /* ### Mpr.Css.End ### */
