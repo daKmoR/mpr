@@ -90,6 +90,7 @@ var FlexSlide = new Class({
 	},
 	
 	current: -1,
+	running: false,
 	autotimer: $empty,
 	els: {},
 	fxConfig: {},
@@ -128,8 +129,12 @@ var FlexSlide = new Class({
 			
 		}, this);
 		
-		this.fx = new Fx.Elements( this.els.item );
-		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap], this.options.effect.wrapFxOptions );
+		this.fx = new Fx.Elements( this.els.item, {
+			onComplete: function() {
+				this.running = false;
+			}.bind(this)
+		});
+		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
 		if( $chk(this.els.select) && this.els.select.length <= 0 ) { //automatically build the select if no costum select items are found
 			this.els.item.each( function(el, i) {
@@ -154,7 +159,7 @@ var FlexSlide = new Class({
 	},
 	
 	show: function(id, fx) {
-		if( id != this.current || this.current === -1 ) {
+		if( (id != this.current || this.current === -1) && this.running === false ) {
 			if( this.current === -1 )
 				this.current = id;
 
@@ -198,10 +203,9 @@ var FlexSlide = new Class({
 			
 			this.itemWrap.grab( this.els.item[id] );
 			
+			this.running = true;
 			this.fx.start(this.fxConfig);
 			this.wrapFx.start(this.wrapFxConfig);
-			
-			
 			
 			// if( $chk(this.els.description) && this.els.description.length > 0 ) {
 				// this.descriptionWrap.grab( this.els.description[id] );
