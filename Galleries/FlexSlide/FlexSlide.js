@@ -166,10 +166,6 @@ var FlexSlide = new Class({
 			
 			this.els.item[id].set('style', '');
 			this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
-			
-			// if( this.options.autoCenter === true ) {
-				// this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
-			// }
 
 			this.els.item[this.current].set('style', 'display: block;');
 			this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
@@ -185,6 +181,11 @@ var FlexSlide = new Class({
 					tmp[i] = el[0];
 				});
 				this.els.item[id].setStyles(tmp);
+			}
+			
+			if( this.options.autoCenter === true ) {
+				this.els.item[this.current].setStyle('margin-top', (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2 );
+				this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
 			}
 			
 			this.wrapFxConfig[0] = {};
