@@ -44,7 +44,7 @@ var FlexSlide = new Class({
 		autoHeight: false,
 		autoWidth: false,
 		autoCenter: true,
-		autoWrap: false,
+		centerContainer: false,
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
@@ -53,10 +53,10 @@ var FlexSlide = new Class({
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
-			random: ['fade', 'slideLeftBounce', 'slideRightBounce'],
+			random: ['fade', 'slideLeftQuart', 'slideRightQuart'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
-				slideLeftBounce: { duration: 0 },
+				zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideRightBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideLeftQuart: { transition: Fx.Transitions.Quart.easeInOut },
@@ -74,13 +74,20 @@ var FlexSlide = new Class({
 				this.fxConfig[next]    = { 'left': [currentEl.getSize().x, 0] };
 			},
 			slideRight: function(current, next, currentEl, nextEl) {
-				this.fxConfig[current] = { 'left': [0, currentEl.getSize().x]   };
-				this.fxConfig[next]    = { 'left': [currentEl.getSize().x*-1, 0] };
+				this.fxConfig[current] = { 'right': currentEl.getSize().x*-1   };
+				this.fxConfig[next]    = { 'right': [currentEl.getSize().x, 0] };
 			},
 			display: function(current, next, currentEl, nextEl) {
 				this.wrapFx.setOptions({ duration: 0 });
 				currentEl.setStyle('display', 'none');
 				nextEl.setStyle('display', 'block');
+			},
+			zoom: function(current, next, currentEl, nextEl) {
+				this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+				this.fxConfig[next] = {
+					'width': [currentEl.getSize().x, nextEl.getSize().x],
+					'height': [currentEl.getSize().y, nextEl.getSize().y]
+				};
 			},
 			slideLeftBounce:  function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
 			slideRightBounce: function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); },
@@ -172,24 +179,16 @@ var FlexSlide = new Class({
 			this.wrapFx.setOptions( this.options.effect.wrapFxOptions );
 			
 			this.els.item[id].set('style', 'display: block;');
-			this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
+			//this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
 
 			this.els.item[this.current].set('style', 'display: block;');
-			this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
+			//this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
 			
 			
 			this.fxConfig = {};
 			this.wrapFxConfig = {};
 			this.options.effects[fx].call( this, this.current, id, this.els.item[this.current], this.els.item[id] );
 
-			var tmp = {'display' : 'block'};
-			if( $defined(this.fxConfig[id]) ) {
-				$each( this.fxConfig[id], function(el, i) {
-					tmp[i] = el[0];
-				});
-				this.els.item[id].setStyles(tmp);
-			}
-			
 			if( this.options.autoCenter === true ) {
 				this.els.item[this.current].setStyle('margin-top', (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2 );
 				this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
@@ -200,6 +199,22 @@ var FlexSlide = new Class({
 				$extend(this.wrapFxConfig[0], {'width': this.els.item[id].getSize().x} );
 			if( this.options.autoHeight )
 				$extend(this.wrapFxConfig[0], {'height': this.els.item[id].getSize().y} );
+				
+			//this.container = $(document.body);
+			this.container = this.wrap.getParent();
+			
+			this.centerContainer(id);
+				
+				
+			var tmp = {'display' : 'block'};
+			if( $defined(this.fxConfig[id]) ) {
+				$each( this.fxConfig[id], function(el, i) {
+					tmp[i] = el[0];
+				});
+				this.els.item[id].setStyles(tmp);
+			}
+				
+				
 			
 			this.itemWrap.grab( this.els.item[id] );
 			
@@ -214,6 +229,17 @@ var FlexSlide = new Class({
 			
 			this.process(id);
 		}
+	},
+	
+	centerContainer: function(id) {
+		var diff = this.wrap.getSize().x - this.els.item[this.current].getSize().x;
+		if( diff < 0 ) diff = 0;
+		
+		this.wrapFxConfig[1] = {};
+		$extend(this.wrapFxConfig[1], {
+			'left': (this.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
+			'top': (this.container.getSize().y - this.els.item[id].getSize().y - diff) / 2
+		});
 	},
 	
 	display: function(id) {
