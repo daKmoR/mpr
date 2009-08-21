@@ -154,8 +154,10 @@ var FlexSlide = new Class({
 	},
 	
 	show: function(id, fx) {
-		//if( id != this.current ) {
-		if( 1 ) {
+		if( id != this.current || this.current === -1 ) {
+			if( this.current === -1 )
+				this.current = id;
+
 			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
 			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
@@ -164,7 +166,7 @@ var FlexSlide = new Class({
 			this.fx.setOptions( newOptions );
 			this.wrapFx.setOptions( this.options.effect.wrapFxOptions );
 			
-			this.els.item[id].set('style', '');
+			this.els.item[id].set('style', 'display: block;');
 			this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
 
 			this.els.item[this.current].set('style', 'display: block;');
@@ -211,7 +213,6 @@ var FlexSlide = new Class({
 	},
 	
 	display: function(id) {
-		this.current = id;
 		this.show(id, 'display');
 	},
 	
