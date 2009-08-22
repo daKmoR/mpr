@@ -35,6 +35,7 @@ var FlexSlide = new Class({
 		selections: {}, /* item: '.myOtherItemClass' you can define your own css classes here */
 		render: ['previous', 'item', 'description', 'next', 'select'],
 		ui: {
+			wrap: { 'class': 'ui-Wrap', 'style': 'width: auto; height: auto;' },
 			select: { 'class': 'ui-SelectWrap' },
 			selectItem: { 'class': 'ui-Select' },
 			next: { 'class': 'ui-NextWrap' },
@@ -48,6 +49,7 @@ var FlexSlide = new Class({
 			activeClass: 'ui-active'
 		},
 		display: 0,
+		container: null,
 		auto: true,
 		autoHeight: false,
 		autoWidth: false,
@@ -66,6 +68,7 @@ var FlexSlide = new Class({
 			random: ['fade', 'slideLeftQuart', 'slideRightQuart'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
+				display: { duration: 0 },
 				zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 				dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
@@ -127,9 +130,12 @@ var FlexSlide = new Class({
 		this.setOptions(options);
 
 		this.wrap = $(wrap);
-		this.wrap.set( this.options.ui.wrap );
 
 		this.build();
+		this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
+		this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
+		
+		this.wrap.set( this.options.ui.wrap );
 		this.display( this.options.display );
 	},
 	
@@ -210,11 +216,11 @@ var FlexSlide = new Class({
 			this.wrapFx.setOptions( this.options.effect.wrapFxOptions );
 			
 			this.els.item[id].set('style', 'display: block;');
-			//this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
-
 			this.els.item[this.current].set('style', 'display: block;');
-			//this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
-			
+			if( !this.options.autoWidth ) {
+				this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
+				this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
+			}
 			
 			this.fxConfig = {};
 			this.wrapFxConfig = {};
@@ -231,11 +237,7 @@ var FlexSlide = new Class({
 			if( this.options.autoHeight )
 				$extend(this.wrapFxConfig[0], {'height': this.els.item[id].getSize().y} );
 				
-			//this.container = $(document.body);
-			this.container = this.wrap.getParent();
-			
 			this.centerContainer(id);
-				
 				
 			var tmp = {'display' : 'block'};
 			if( $defined(this.fxConfig[id]) ) {
@@ -286,13 +288,14 @@ var FlexSlide = new Class({
 	},
 	
 	centerContainer: function(id) {
-		var diff = this.wrap.getSize().x - this.els.item[this.current].getSize().x;
-		if( diff < 0 ) diff = 0;
+		if( !$defined(this.options.container) ) this.options.container = this.wrap.getParent();
+		
+		var diff = this.wrap.getSize().x - this.itemWrap.getSize().x;
 		
 		this.wrapFxConfig[1] = {};
 		$extend(this.wrapFxConfig[1], {
-			'left': (this.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
-			'top': (this.container.getSize().y - this.els.item[id].getSize().y - diff) / 2
+			'left': (this.options.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
+			'top': (this.options.container.getSize().y - this.els.item[id].getSize().y - diff) / 2
 		});
 	},
 	
