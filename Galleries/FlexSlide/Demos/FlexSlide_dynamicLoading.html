@@ -38,10 +38,11 @@ window.addEvent('domready', function() {
 		autoWidth: true,
 		autoCenter: false,
 		auto: false,
+		dynamicLoading: true,
 		centerContainer: true,
 		render: ['item', 'next', 'previous'],
 		effect: {
-			random: ['dezoom']
+			random: ['fade']
 		}
 	});
 		
@@ -94,10 +95,15 @@ window.addEvent('domready', function() {
 <div id="globalContainer">
 
 	<div id="myGallery">
-		<img class="item" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+		<a href="../../Core/Resources/images/medium-meadow.jpg" class="item">
+			<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+		</a>
+		<a href="../../Core/Resources/images/medium-ice.jpg" class="item">
+			<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
+		</a>
+		<a href="../../Core/Resources/images/medium-sun.jpg" class="item">
+			<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+		</a>
 	</div>
 
 </div>

@@ -22,6 +22,13 @@ $require('More/Fx/Fx.Elements.js');
 
 $require('More/Class/Class.Binds.js');
 
+// Lightbox needed
+$require('More/Utilities/Assets.js');
+$require('More/Native/URI.js');
+
+$require('Core/Request/Request.html.js');
+
+
 var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
@@ -37,6 +44,7 @@ var FlexSlide = new Class({
 			description: { 'class': 'ui-DescriptionWrap' },
 			descriptionItem: { 'class': 'ui-Description' },
 			counter: { 'class': 'ui-CounterWrap' },
+			loader: { 'class': 'ui-Loader ui-Item' },
 			activeClass: 'ui-active'
 		},
 		display: 0,
@@ -45,6 +53,8 @@ var FlexSlide = new Class({
 		autoWidth: false,
 		autoCenter: true,
 		centerContainer: false,
+		dynamicLoading: false,
+		preLoading: { previous: 2, next: 2 },
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
@@ -57,6 +67,7 @@ var FlexSlide = new Class({
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
 				zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
+				dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideRightBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideLeftQuart: { transition: Fx.Transitions.Quart.easeInOut },
@@ -89,6 +100,15 @@ var FlexSlide = new Class({
 					'height': [currentEl.getSize().y, nextEl.getSize().y]
 				};
 			},
+			dezoom: function(current, next, currentEl, nextEl) {
+				this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+				this.fxConfig[current] = {
+					'width': [currentEl.getSize().x, nextEl.getSize().x],
+					'height': [currentEl.getSize().y, nextEl.getSize().y]
+				};
+				currentEl.setStyle('zIndex', 100);
+				nextEl.setStyle('zIndex', 50);
+			},
 			slideLeftBounce:  function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
 			slideRightBounce: function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); },
 			slideLeftQuart:   function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
@@ -114,6 +134,9 @@ var FlexSlide = new Class({
 	},
 	
 	build: function() {
+		this.loader = new Element('div', this.options.ui.loader).fade('hide');
+		this.loader.set('tween', { duration: 100 });
+		
 		this.options.render.each( function(item) {
 			this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
 			
@@ -166,10 +189,18 @@ var FlexSlide = new Class({
 	},
 	
 	show: function(id, fx) {
+		if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
+			this.dynamicLoading(id);
+		} else {
+			this._show(id, fx);
+		}
+	},
+	
+	_show: function(id, fx) {
 		if( (id != this.current || this.current === -1) && this.running === false ) {
 			if( this.current === -1 )
 				this.current = id;
-
+				
 			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
 			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
@@ -213,8 +244,6 @@ var FlexSlide = new Class({
 				});
 				this.els.item[id].setStyles(tmp);
 			}
-				
-				
 			
 			this.itemWrap.grab( this.els.item[id] );
 			
@@ -228,6 +257,31 @@ var FlexSlide = new Class({
 			// }
 			
 			this.process(id);
+		}
+	},
+	
+	dynamicLoading: function(id, fx) {
+		if( this.els.item[id].get('tag') === 'a' && this.options.dynamicLoading === true ) {
+			var href = this.els.item[id].get('href');
+			this.setMode( href );
+			
+			this.els.item[id].destroy();
+			
+			this.itemWrap.grab( this.loader );
+			this.loader.fade(0.5);
+			
+			if( this.mode === 'image' ) {
+				var image = new Asset.image(href, {
+					onload: function() {
+						this.loader.fade(0);
+						image.addClass('ui-Item');
+						this.els.item[id] = this.fx.elements[id] = image;
+						this.itemWrap.grab( image );
+						this._show(id, fx);
+					}.delay(1000, this)
+				});
+			}
+			
 		}
 	},
 	
@@ -289,6 +343,49 @@ var FlexSlide = new Class({
 	
 	previous: function(step) {
 		this.next( step * -1 );
+	},
+	
+	setMode: function(href) {
+		var fileExt = href.substr(href.lastIndexOf('.') + 1).toLowerCase();
+		
+		switch( fileExt ) {
+			case 'jpg':
+			case 'gif':
+			case 'png':
+				this.mode = 'image';
+				break;
+			case 'swf':
+				this.mode = 'flash';
+				break;
+			case 'flv':
+				this.mode = 'flashVideo';
+				//this.contentObj.xH = 70;
+				break;
+			case 'mov':
+				this.mode = 'quicktime';
+				break;
+			case 'wmv':
+				this.mode = 'windowsMedia';
+				break;
+			case 'rv':
+			case 'rm':
+			case 'rmvb':
+				this.mode = 'real';
+				break;
+			case 'mp3':
+				this.mode = 'flashMp3';
+				// this.contentObj.width = 320;
+				// this.contentObj.height = 70;
+				break;
+			default:
+				if( href.charAt(0) === '#' ) {
+					this.mode = 'inline'
+				} else if( document.location.host === href.toURI().get('host') ) {
+					this.mode = 'request'
+				} else {
+					this.mode = 'iframe';
+				}
+		}
 	}
 	
 });
