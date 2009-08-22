@@ -35,7 +35,7 @@ var FlexSlide = new Class({
 		selections: {}, /* item: '.myOtherItemClass' you can define your own css classes here */
 		render: ['previous', 'item', 'description', 'next', 'select'],
 		ui: {
-			wrap: { 'class': 'ui-Wrap', 'style': 'width: auto; height: auto;' },
+			wrap: { 'class': 'ui-Wrap' },
 			select: { 'class': 'ui-SelectWrap' },
 			selectItem: { 'class': 'ui-Select' },
 			next: { 'class': 'ui-NextWrap' },
@@ -135,8 +135,12 @@ var FlexSlide = new Class({
 		this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
 		this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
 		
-		this.wrap.set( this.options.ui.wrap );
-		this.display( this.options.display );
+		this.wrap.addClass( this.options.ui.wrap['class'] );
+		this.wrap.setStyles({
+			width: 'auto',
+			height: 'auto'
+		});
+		this.show( this.options.display );
 	},
 	
 	build: function() {
@@ -204,8 +208,11 @@ var FlexSlide = new Class({
 	
 	_show: function(id, fx) {
 		if( (id != this.current || this.current === -1) && this.running === false ) {
-			if( this.current === -1 )
+			var currentEl = this.els.item[this.current];
+			if( this.current === -1 ) {
 				this.current = id;
+				currentEl = this.itemWrap;
+			}
 				
 			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
 			if(fx === 'random') fx = this.options.effect.random.getRandom();
@@ -224,7 +231,7 @@ var FlexSlide = new Class({
 			
 			this.fxConfig = {};
 			this.wrapFxConfig = {};
-			this.options.effects[fx].call( this, this.current, id, this.els.item[this.current], this.els.item[id] );
+			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
 
 			if( this.options.autoCenter === true ) {
 				this.els.item[this.current].setStyle('margin-top', (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2 );
@@ -236,8 +243,9 @@ var FlexSlide = new Class({
 				$extend(this.wrapFxConfig[0], {'width': this.els.item[id].getSize().x} );
 			if( this.options.autoHeight )
 				$extend(this.wrapFxConfig[0], {'height': this.els.item[id].getSize().y} );
-				
-			this.centerContainer(id);
+			
+			if( this.options.centerContainer )
+				this.centerContainer(id);
 				
 			var tmp = {'display' : 'block'};
 			if( $defined(this.fxConfig[id]) ) {
@@ -252,6 +260,11 @@ var FlexSlide = new Class({
 			this.running = true;
 			this.fx.start(this.fxConfig);
 			this.wrapFx.start(this.wrapFxConfig);
+			
+			// this.wrapFx.start(this.wrapFxConfig).chain( function() {
+				// this.fx.start(this.fxConfig)
+			// }.bind(this) );
+
 			
 			// if( $chk(this.els.description) && this.els.description.length > 0 ) {
 				// this.descriptionWrap.grab( this.els.description[id] );
@@ -280,7 +293,7 @@ var FlexSlide = new Class({
 						this.els.item[id] = this.fx.elements[id] = image;
 						this.itemWrap.grab( image );
 						this._show(id, fx);
-					}.delay(1000, this)
+					}.bind(this)
 				});
 			}
 			

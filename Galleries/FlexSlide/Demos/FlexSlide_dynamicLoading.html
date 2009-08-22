@@ -64,7 +64,8 @@ window.addEvent('domready', function() {
 .ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
 
 #globalContainer { position: relative; width: 650px; height: 650px; background: #ccc; }
-#myGallery { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; }
+#myGallery { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; width: 300px; height: 300px; }
+.item { width: 300px; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -95,12 +96,18 @@ window.addEvent('domready', function() {
 <div id="globalContainer">
 
 	<div id="myGallery">
+		<div class="item">
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		</div>
 		<a href="../../Core/Resources/images/medium-meadow.jpg" class="item">
 			<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 		</a>
-		<a href="../../Core/Resources/images/medium-ice.jpg" class="item">
+		<a href="../../Core/Resources/images/tiny-ice.jpg" class="item">
 			<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
 		</a>
+		<div class="item">
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		</div>
 		<a href="../../Core/Resources/images/medium-sun.jpg" class="item">
 			<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
 		</a>
