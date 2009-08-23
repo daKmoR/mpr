@@ -48,7 +48,7 @@ var FlexSlide = new Class({
 			loader: { 'class': 'ui-Loader ui-Item' },
 			activeClass: 'ui-active'
 		},
-		display: 0,
+		show: 0,
 		container: null,
 		auto: true,
 		autoHeight: false,
@@ -140,7 +140,8 @@ var FlexSlide = new Class({
 			width: 'auto',
 			height: 'auto'
 		});
-		this.show( this.options.display );
+		if( this.options.show >= 0 )
+			this.show( this.options.show );
 	},
 	
 	build: function() {
@@ -200,7 +201,7 @@ var FlexSlide = new Class({
 	
 	show: function(id, fx) {
 		if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
-			this.dynamicLoading(id);
+			this.dynamicLoading(id, fx);
 		} else {
 			this._show(id, fx);
 		}
@@ -208,14 +209,15 @@ var FlexSlide = new Class({
 	
 	_show: function(id, fx) {
 		if( (id != this.current || this.current === -1) && this.running === false ) {
+			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
+			if(fx === 'random') fx = this.options.effect.random.getRandom();
+			
 			var currentEl = this.els.item[this.current];
 			if( this.current === -1 ) {
 				this.current = id;
-				currentEl = this.itemWrap;
+				currentEl = fx !== 'display' ? this.itemWrap : this.els.item[this.current];
 			}
 				
-			var fx = fx || ( (id > this.current) ? this.options.effect.up : this.options.effect.down);
-			if(fx === 'random') fx = this.options.effect.random.getRandom();
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
@@ -238,7 +240,8 @@ var FlexSlide = new Class({
 				this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
 			}
 			
-			this.wrapFxConfig[0] = {};
+			if( this.options.autoWidth || this.options.autoHeight )
+				this.wrapFxConfig[0] = {};
 			if( this.options.autoWidth )
 				$extend(this.wrapFxConfig[0], {'width': this.els.item[id].getSize().x} );
 			if( this.options.autoHeight )
@@ -359,6 +362,10 @@ var FlexSlide = new Class({
 	
 	previous: function(step) {
 		this.next( step * -1 );
+	},
+	
+	toElement: function() {
+		return this.wrap;
 	},
 	
 	setMode: function(href) {
