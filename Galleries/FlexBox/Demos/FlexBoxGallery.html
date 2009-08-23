@@ -32,7 +32,7 @@ window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexBox/FlexBox.js');
-	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
+	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], $$('a.FlexBox'), { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	
 	$('start').addEvent('click', function() {
 		myFlexBox.close();
@@ -56,6 +56,10 @@ body { background: #ccc; }
 .ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
 
 #ui-Wrap { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; }
+
+.ui-RequestItem { width: 500px; }
+
+.flexBoxWrap { background: #fff; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -86,14 +90,14 @@ body { background: #ccc; }
 
 
 <div id="myGallery">
-	<a href="../../Core/Resources/images/medium-meadow.jpg" class="FlexBox">
+	<a href="./data/text.html" class="FlexBox">
 		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 	</a>
-	<a href="../../Core/Resources/images/medium-ice.jpg" class="FlexBox">
-		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	<a href="../../Core/Resources/images/small-ice.jpg" class="FlexBox">
+		<img src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
 	</a>
-	<a href="../../Core/Resources/images/medium-sun.jpg" class="FlexBox">
-		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	<a href="./data/text.html" class="FlexBox">
+		<img src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
 	</a>
 	
 </div>

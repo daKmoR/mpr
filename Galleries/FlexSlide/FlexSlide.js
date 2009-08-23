@@ -56,6 +56,7 @@ var FlexSlide = new Class({
 		autoCenter: true,
 		centerContainer: false,
 		dynamicLoading: false,
+		dynamicMode: '',
 		preLoading: { previous: 2, next: 2 },
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
@@ -201,7 +202,6 @@ var FlexSlide = new Class({
 				this.current = id;
 				currentEl = fx !== 'display' ? this.itemWrap : this.els.item[this.current];
 			}
-				
 			
 			var newOptions = $unlink(this.options.effect.globalOptions);
 			$extend( newOptions, this.options.effect.options[fx] );
@@ -272,16 +272,33 @@ var FlexSlide = new Class({
 			this.itemWrap.grab( this.loader );
 			this.loader.fade(0.5);
 			
-			if( this.mode === 'image' ) {
-				var image = new Asset.image(href, {
-					onload: function() {
-						this.loader.fade(0);
-						image.addClass('ui-Item');
-						this.els.item[id] = this.fx.elements[id] = image;
-						this.itemWrap.grab( image );
-						this._show(id, fx);
-					}.bind(this)
-				});
+			switch( this.options.dynamicMode ) {
+				case 'image':
+					var image = new Asset.image(href, {
+						onload: function() {
+							this.loader.fade(0);
+							image.addClass('ui-Item');
+							this.els.item[id] = this.fx.elements[id] = image;
+							this.itemWrap.grab( image );
+							this._show(id, fx);
+						}.bind(this)
+					});
+					break;
+				case 'request':
+					this.request = this.request || new Request.HTML({ method: 'get', noCache: true,	autoCancel: true,
+						onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
+							this.loader.fade(0);
+							var div = new Element('div', { 'class': 'ui-RequestItem ui-Item' });
+							div.set('html', responseHTML);
+							this.els.item[id] = this.fx.elements[id] = div;
+							this.itemWrap.grab(div);
+							this._show(id, fx);
+						}.bind(this)
+					});
+					this.request.setOptions({ url: href }).send();
+					break;
+				case 'inline':
+					break;
 			}
 			
 		}
@@ -359,38 +376,38 @@ var FlexSlide = new Class({
 			case 'jpg':
 			case 'gif':
 			case 'png':
-				this.mode = 'image';
+				this.options.dynamicMode = 'image';
 				break;
 			case 'swf':
-				this.mode = 'flash';
+				this.options.dynamicMode = 'flash';
 				break;
 			case 'flv':
-				this.mode = 'flashVideo';
+				this.options.dynamicMode = 'flashVideo';
 				//this.contentObj.xH = 70;
 				break;
 			case 'mov':
-				this.mode = 'quicktime';
+				this.options.dynamicMode = 'quicktime';
 				break;
 			case 'wmv':
-				this.mode = 'windowsMedia';
+				this.options.dynamicMode = 'windowsMedia';
 				break;
 			case 'rv':
 			case 'rm':
 			case 'rmvb':
-				this.mode = 'real';
+				this.options.dynamicMode = 'real';
 				break;
 			case 'mp3':
-				this.mode = 'flashMp3';
+				this.options.dynamicMode = 'flashMp3';
 				// this.contentObj.width = 320;
 				// this.contentObj.height = 70;
 				break;
 			default:
 				if( href.charAt(0) === '#' ) {
-					this.mode = 'inline'
+					this.options.dynamicMode = 'inline'
 				} else if( document.location.host === href.toURI().get('host') ) {
-					this.mode = 'request'
+					this.options.dynamicMode = 'request'
 				} else {
-					this.mode = 'iframe';
+					this.options.dynamicMode = 'iframe';
 				}
 		}
 	}

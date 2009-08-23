@@ -1,5 +1,5 @@
 /**
- * FlexBox - allows to create almost any Sliding Stuff (Galleries, Tabs...) with multiple effects
+ * FlexBox - let you use FlexSlide as a LighBox with zoom effect
  *
  * @version		0.0.1
  *
@@ -8,23 +8,9 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require('Galleries/FlexBox/Resources/css/FlexBox.css');
 $require('Galleries/FlexSlide/FlexSlide.js');
 
-$require('Core/Element/Element.Dimensions.js');
-$require('Core/Element/Element.Style.js');
-$require('Core/Utilities/Selectors.js');
-
-$require('Core/Fx/Fx.Tween.js');
-$require('Core/Fx/Fx.Morph.js');
-
-$require('Core/Fx/Fx.Transitions.js');
-$require('More/Fx/Fx.Elements.js');
-
-$require('More/Utilities/Assets.js');
-$require('More/Native/URI.js');
-
-$require('Core/Request/Request.html.js');
+$require('Galleries/FlexBox/Resources/css/FlexBox.css');
 
 var FlexBox = new Class({
 
@@ -37,9 +23,6 @@ var FlexBox = new Class({
 		opacityResize: 0.5,
 		resizeLimit: false, // {x: 640, y: 640}
 		fixedSize: false, // {x: 640, y: 640}
-		counterTemplate: 'Image {id} of {count}',
-		descriptionTemplate: '<h5>{title}</h5><div>{text}</div>',
-		render: ['content'],
 		centered: false,
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
@@ -47,11 +30,12 @@ var FlexBox = new Class({
 		}
 	},
 
-	initialize: function(anchor, options){
+	initialize: function(anchor, anchors, options){
 		this.setOptions(options);
-		
 		this.anchor = $(anchor);
-		this.container = $(document.body);
+		this.anchors = $$(anchors);
+		
+		this.current = this.anchors.indexOf(this.anchor);
 		
 		this.anchor.addEvent('click', function(e) {
 			e.stop();
@@ -81,13 +65,27 @@ var FlexBox = new Class({
 				auto: false,
 				dynamicLoading: true,
 				centerContainer: true,
-				show: -1,
-				render: ['item'],
-				effect: { random: ['zoom'] }
+				effect: { random: ['zoom'] },
+				effects: {
+					zoom: function(current, next, currentEl, nextEl) {
+						this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+						this.fxConfig[next] = {
+							'width': [currentEl.getSize().x, nextEl.getSize().x],
+							'height': [currentEl.getSize().y, nextEl.getSize().y]
+						};
+					}
+				}
 			});
 		
 			this.flexSlide.current = -1;
-			this.flexSlide.show(0);
+			this.flexSlide.show( this.current );
+			
+			(function() {
+				this.flexSlide.setOptions({
+					effect: { random: ['slideLeftBounce'] }
+				});
+			}).delay(1000, this);
+			
 		} else {
 			this.build();
 		}
@@ -95,20 +93,20 @@ var FlexBox = new Class({
 	
 	build: function() {
 		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
-		this.wrap.grab( this.anchor.clone().addClass('item') );
+		
+		this.anchors.each(function(el) {
+			this.wrap.grab( el.clone().addClass('item') );
+		}, this);
 		
 		this.flexSlide = new FlexSlide( this.wrap, {
 			show: -1,
-			render: ['item']
+			render: ['item', 'next']
 		});
 		this.show();
 	},
 	
 	close: function() {
-		var width = this.coords.width;
-		var height = this.coords.height;
-		
-		var localCoords = this.coords;
+		var localCoords = this.anchors[this.flexSlide.current].getElement('img').getCoordinates();
 		
 		this.flexSlide.setOptions({
 			autoWidth: false,
@@ -136,8 +134,9 @@ var FlexBox = new Class({
 				}
 			}
 		});
+		var tmp = this.flexSlide.current;
 		this.flexSlide.current = -1;
-		this.flexSlide.show(0);
+		this.flexSlide.show( tmp );
 	},
 	
 	buildElement: function(item, wrapper) {
