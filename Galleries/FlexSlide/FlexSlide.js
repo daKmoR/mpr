@@ -155,11 +155,7 @@ var FlexSlide = new Class({
 			
 		}, this);
 		
-		this.fx = new Fx.Elements( this.els.item, {
-			onComplete: function() {
-				this.running = false;
-			}.bind(this)
-		});
+		this.fx = new Fx.Elements( this.els.item );
 		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
 		if( $chk(this.els.select) && this.els.select.length <= 0 ) { //automatically build the select if no costum select items are found
@@ -245,7 +241,9 @@ var FlexSlide = new Class({
 			this.itemWrap.grab( this.els.item[id] );
 			
 			this.running = true;
-			this.fx.start(this.fxConfig);
+			this.fx.start(this.fxConfig).chain( function() {
+				this.running = false;
+			}.bind(this) );
 			this.wrapFx.start(this.wrapFxConfig);
 			
 			// this.wrapFx.start(this.wrapFxConfig).chain( function() {
@@ -298,6 +296,12 @@ var FlexSlide = new Class({
 					this.request.setOptions({ url: href }).send();
 					break;
 				case 'inline':
+					this.loader.fade(0);
+					var div = new Element('div', { 'class': 'ui-RequestItem ui-Item' });
+					$$(href)[0].clone().setStyle('display', 'block').inject( div );
+					this.els.item[id] = this.fx.elements[id] = div;
+					this.itemWrap.grab(div);
+					this._show(id, fx);
 					break;
 			}
 			
