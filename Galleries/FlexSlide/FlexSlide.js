@@ -96,22 +96,6 @@ var FlexSlide = new Class({
 				currentEl.setStyle('display', 'none');
 				nextEl.setStyle('display', 'block');
 			},
-			zoom: function(current, next, currentEl, nextEl) {
-				this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
-				this.fxConfig[next] = {
-					'width': [currentEl.getSize().x, nextEl.getSize().x],
-					'height': [currentEl.getSize().y, nextEl.getSize().y]
-				};
-			},
-			dezoom: function(current, next, currentEl, nextEl) {
-				this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
-				this.fxConfig[current] = {
-					'width': [currentEl.getSize().x, nextEl.getSize().x],
-					'height': [currentEl.getSize().y, nextEl.getSize().y]
-				};
-				currentEl.setStyle('zIndex', 100);
-				nextEl.setStyle('zIndex', 50);
-			},
 			slideLeftBounce:  function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
 			slideRightBounce: function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); },
 			slideLeftQuart:   function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
