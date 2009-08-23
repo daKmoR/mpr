@@ -44,19 +44,6 @@ var FlexBox = new Class({
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
-		},
-		onOpenFinish: function() {
-			// this.bottomWrap.setStyles({
-				// 'display': 'block',
-				// 'bottom': '0'
-			// });
-			// this.bottomWrap.tween('bottom', -45);
-		},
-		onStartClose: function() {
-			// this.bottomWrap.tween('bottom', 0).get('tween').chain( function() {
-				// this.bottomWrap.setStyle('display', 'none');
-				// this.closeZoom();
-			// }.bind(this) );
 		}
 	},
 
@@ -75,117 +62,82 @@ var FlexBox = new Class({
 	},
 	
 	show: function() {
-		this.setMode();
-		if( !$chk(this.contentWrap) || this.contentWrap.get('html') == '' ) {
-			this.build();
-		} else {
-			this.open();
-		}
-	},
-	
-	open: function() {
-		var size = this.anchor.retrieve('zoomSize');
-		this.wrap.setStyle('display', 'block');
-		this.zoomRelativeTo( {x: size.x, y: size.y} );
-	},
-
-	close: function() {
-		this.fireEvent('onStartClose');
-	},
-	
-	closeZoom: function() {
-		if( $defined(this.nextWrap) ) this.nextWrap.setStyle('display', 'none');
-		if( $defined(this.previousWrap) ) this.previousWrap.setStyle('display', 'none');
-		if( this.mode == 'iframe' ) {
-			this.contentWrap.getElement('*').setStyle('display', 'none');
-		}
-		if( this.mode != 'image') {
-			this.contentWrap.fade(0);
-		}
-		var vars = {left: this.coords['left'], top: this.coords['top']};
-		if (this.options.opacityResize != 1) 
-			vars.opacity = [1, this.options.opacityResize];
-		
-		this.fx.start({
-			'0': vars,
-			'1': {width: this.coords['width'], height: this.coords['height'], margin: 0}
-		}).chain( function() {
-			this.wrap.setStyle('display', 'none');
-		}.bind(this) );
-	},
-	
-	buildContent: function() {
-		if( this.mode == 'image' ) {
-			// var image = new Asset.image(this.anchor.get('href'), {
-				// onload: function() {
-					// image.inject( this.contentWrap );
-					// var size = image.getSize();
-					// this.anchor.store('zoomSize', size);
-					// image.setStyles({ width: '100%', height: '100%' });
-					// image.addClass('item');
-					
-					// this.open();
-				// }.bind(this)
-			// });
-			var image = new Asset.images([this.anchor.get('href'), '../mpr/Galleries/FlexBox/../Core/Resources/images/small-ice.jpg', '../mpr/Galleries/FlexBox/../Core/Resources/images/medium-sun.jpg'], {
-				onComplete: function() {
-					//console.log( images );
-					image.inject( this.contentWrap );
-					var size = image[0].getSize();
-					this.anchor.store('zoomSize', size);
-					//image.setStyles({ width: '100%', height: '100%' });
-					image.addClass('item');
-					
-					this.open();
-				}.bind(this)
+		if( $defined(this.flexSlide) ) {
+			this.coords = this.anchor.getElement('img').getCoordinates();
+			this.wrap.setStyles({
+				'left': this.coords.left,
+				'top': this.coords.top
 			});
+			this.flexSlide.itemWrap.setStyles({
+				'width': this.coords.width,
+				'height': this.coords.height
+			});
+			this.wrap.setStyle('display', 'block');
 			
-		} else if( this.mode == 'iframe') {
-			this.anchor.store('zoomSize', this.options.defaultSize);
-			this.open();
-			
-		} else if( this.mode == 'inline' ) {
-			this.contentWrap.fade('hide');
-			$$(this.anchor.get('href'))[0].clone().setStyle('display', 'block').inject( this.contentWrap );
-			this.anchor.store('zoomSize', this.options.defaultSize);
-			this.open();
-			
-		} else if( this.mode == 'request') {
-			this.request = new Request.HTML({
-				url: this.anchor.get('href'),
-				method: 'get',
-				noCache: true,
-				autoCancel: true,
-				onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
-					this.contentWrap.set('html', responseHTML );
-					this.contentWrap.fade('hide');
-					this.anchor.store('zoomSize', this.options.defaultSize);
-					this.open();
-				}.bind(this)
-			}).send();
-			
-		}
+			this.flexSlide.setOptions({
+				autoHeight: true,
+				autoWidth: true,
+				autoCenter: false,
+				auto: false,
+				dynamicLoading: true,
+				centerContainer: true,
+				show: -1,
+				render: ['item'],
+				effect: { random: ['zoom'] }
+			});
 		
+			this.flexSlide.current = -1;
+			this.flexSlide.show(0);
+		} else {
+			this.build();
+		}
 	},
 	
 	build: function() {
 		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
-		this.builder( this.options.render, this.wrap );
+		this.wrap.grab( this.anchor.clone().addClass('item') );
 		
-		this.coords = this.anchor.getElement('img').getCoordinates();
-		this.coords.left += 1;
-		
-		this.wrap.setStyles({
-			left: this.coords['left'], 
-			top: this.coords['top'],
-			display: 'block',
-			opacity: this.options.opacityResize
+		this.flexSlide = new FlexSlide( this.wrap, {
+			show: -1,
+			render: ['item']
 		});
+		this.show();
+	},
+	
+	close: function() {
+		var width = this.coords.width;
+		var height = this.coords.height;
 		
-		this.contentWrap.setStyles( {width: this.coords['width'], height: this.coords['height']} );
+		var localCoords = this.coords;
 		
-		this.fx = new Fx.Elements( $$(this.wrap, this.contentWrap) );
-		this.buildContent();
+		this.flexSlide.setOptions({
+			autoWidth: false,
+			autoHeight: false,
+			centerContainer: false,
+			effect: { 
+				random: ['dezoom'],
+			},
+			effects: {
+				dezoom: function(current, next, currentEl, nextEl) {
+					this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+					this.wrapFxConfig[0] = {
+						'width': localCoords.width,
+						'height': localCoords.height
+					};
+					this.wrapFxConfig[1] = {
+						'left': localCoords.left,
+						'top': localCoords.top
+					};
+					this.fxConfig[current] = {
+						'width': [currentEl.getSize().x, localCoords.width],
+						'height': [currentEl.getSize().y, localCoords.height]
+					};
+					(function() { this.wrap.setStyle('display', 'none'); }).delay(600, this);
+				}
+			}
+		});
+		this.flexSlide.current = -1;
+		this.flexSlide.show(0);
 	},
 	
 	buildElement: function(item, wrapper) {
@@ -219,50 +171,6 @@ var FlexBox = new Class({
 				}, this);
 			}
 		}, this);
-	},
-	
-	setMode: function() {
-		var href = this.anchor.get('href')
-		var fileExt = href.substr(href.lastIndexOf('.') + 1).toLowerCase();
-		
-		switch( fileExt ) {
-			case 'jpg':
-			case 'gif':
-			case 'png':
-				this.mode = 'image';
-				break;
-			case 'swf':
-				this.mode = 'flash';
-				break;
-			case 'flv':
-				this.mode = 'flashVideo';
-				//this.contentObj.xH = 70;
-				break;
-			case 'mov':
-				this.mode = 'quicktime';
-				break;
-			case 'wmv':
-				this.mode = 'windowsMedia';
-				break;
-			case 'rv':
-			case 'rm':
-			case 'rmvb':
-				this.mode = 'real';
-				break;
-			case 'mp3':
-				this.mode = 'flashMp3';
-				// this.contentObj.width = 320;
-				// this.contentObj.height = 70;
-				break;
-			default:
-				if( href.charAt(0) === '#' ) {
-					this.mode = 'inline'
-				} else if( document.location.host === href.toURI().get('host') ) {
-					this.mode = 'request'
-				} else {
-					this.mode = 'iframe';
-				}
-		}
 	},
 	
 	zoomRelativeTo: function(to) {
@@ -310,54 +218,6 @@ var FlexBox = new Class({
 			
 		this.fireEvent('onOpen');
 	},
-	
-	finishOpen: function() {
-		if( $defined(this.nextWrap) ) this.nextWrap.setStyle('display', 'block');
-		if( $defined(this.previousWrap) ) this.previousWrap.setStyle('display', 'block');
-		
-		if( this.mode != 'image' )
-			this.contentWrap.fade(1);
-	
-		if( this.contentWrap.get('html') == '' ) {
-			switch( this.mode ) {
-				case 'iframe':
-					new Element('iframe', {
-						id: 'iFrame'+new Date().getTime(), 
-						width: 300,
-						height: 500,
-						src: this.anchor.get('href'),
-						frameborder: 0,
-						scrolling: 'auto'
-					}).inject( this.contentWrap );
-					break;
-				default:
-			}
-		} else {
-			if( this.mode == 'iframe' ) {
-				this.contentWrap.getElement('*').setStyle('display', 'block');
-			} else {
-				this.contentWrap.fade(1);
-			}
-			
-		}
-		
-		// console.log( $('mySecondTabs') );
-		// console.log(  );
-		
-		var myFlexSlideTabs = new FlexSlide( this.contentWrap, {
-			autoHeight: true,
-			autoCenter: false,
-			auto: false,
-			selectTemplate: 'Tab {id}',
-			render: ['previous', 'next', 'item'],
-			effect: {
-				up: 'fade',
-				down: 'slideRight'
-			}
-		});
-		
-		this.fireEvent('onOpenFinish');
-	},
 
 	keyboardListener: function(event){
 		if(!this.active) return;
@@ -368,7 +228,6 @@ var FlexBox = new Class({
 			case "n": case "right": this.changeImage(event, 1);
 		}
 	},
-
 
 	mouseWheelListener: function(event){
 		if(!this.active) return;

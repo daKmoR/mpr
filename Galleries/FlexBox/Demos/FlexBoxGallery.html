@@ -33,6 +33,10 @@ window.addEvent('domready', function() {
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexBox/FlexBox.js');
 	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
+	
+	$('start').addEvent('click', function() {
+		myFlexBox.close();
+	});
 /*	var myFlexBox2 = new FlexBox( $$('a.FlexBox')[1], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	var myFlexBox3 = new FlexBox( $$('a.FlexBox')[2], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	var myFlexBox4 = new FlexBox( $$('a.FlexBox')[3], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
@@ -47,6 +51,11 @@ window.addEvent('domready', function() {
 body { background: #ccc; }
 
 #myGallery a { line-height: 0; }
+
+.ui-NextWrap { height: 10px; width: 10px; background: red; }
+.ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
+
+#ui-Wrap { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -67,12 +76,14 @@ body { background: #ccc; }
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
+<a href="#" id="start">start</a>
 <h1>FlexSlide</h1>
 <h2>Introduction</h2>
 <p>
 	a simple Gallery which allows to easily adopt the output.
 </p>
 <h3>Default FlexSlide</h3>
+
 
 <div id="myGallery">
 	<a href="../../Core/Resources/images/medium-meadow.jpg" class="FlexBox">
