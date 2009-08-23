@@ -9,6 +9,13 @@ Script: IframeShim.js
 		Aaron Newton
 */
 
+$require('Core/Class/Class.Extras.js');
+$require('Core/Element/Element.Style.js');
+$require('Core/Element/Element.Event.js');
+
+$require('More/Element/Element.Position.js');
+$require('More/Class/Class.Occlude.js');
+
 var IframeShim = new Class({
 
 	Implements: [Options, Events, Class.Occlude],
