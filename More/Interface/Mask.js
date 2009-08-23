@@ -9,6 +9,14 @@ Script: Mask.js
 		Aaron Newton
 */
 
+$require('Core/Class/Class.Extras.js');
+$require('Core/Element/Element.Style.js');
+$require('Core/Element/Element.Event.js');
+
+$require('More/Element/Element.Position.js');
+$require('More/Class/Class.Binds.js');
+$require('More/Utilities/IframeShim.js');
+
 var Mask = new Class({
 
 	Implements: [Options, Events],
