@@ -103,11 +103,13 @@ var FlexSlide = new Class({
 			slideRightQuart:  function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); }
 		},
 		onShow: function(current, next) {
-			this.els.description[current].setStyle('display', 'block');
-			this.els.description[current].fade(0);
-			this.els.description[next].fade('hide');
-			this.els.description[next].setStyle('display', 'block');
-			this.els.description[next].fade(1);
+			if( $defined(this.els.description) ) {
+				this.els.description[current].setStyle('display', 'block');
+				this.els.description[current].fade(0);
+				this.els.description[next].fade('hide');
+				this.els.description[next].setStyle('display', 'block');
+				this.els.description[next].fade(1);
+			}
 		}
 	},
 	
