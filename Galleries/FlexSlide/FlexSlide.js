@@ -144,32 +144,10 @@ var FlexSlide = new Class({
 		this.loader = new Element('div', this.options.ui.loader).fade('hide');
 		this.loader.set('tween', { duration: 100 });
 		
-		this.options.render.each( function(item) {
-			this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( this.wrap );
-			
-			if( !$chk(this.options.selections[item]) ) {
-				this.options.selections[item] = '.' + item;
-			}
-			this.els[item] = this.wrap.getElements( this.options.selections[item] );
-			if( this.els[item].length > 0 ) {
-				this.els[item].each( function(el, i) {
-					if( item == 'select' ) {
-						el.addEvent('click', this.show.bind(this, i) );
-						if( el.get('tag') !== 'img' ) {
-							el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
-						}
-					}
-					el.addClass( this.options.ui[item + 'Item']['class'] );
-					this[item + 'Wrap'].grab(el);
-				}, this);
-			}
-			
-		}, this);
+		this.builder( this.options.render, this.wrap );
 		
-		this.fx = new Fx.Elements( this.els.item );
-		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
-		
-		if( $chk(this.els.select) && this.els.select.length <= 0 ) { //automatically build the select if no costum select items are found
+		//automatically build the select if no costum select items are found
+		if( $chk(this.els.select) && this.els.select.length <= 0 ) {
 			this.els.item.each( function(el, i) {
 				var select = new Element('div', this.options.ui.selectItem)
 					.addEvent('click', this.show.bind(this, i))
@@ -179,6 +157,9 @@ var FlexSlide = new Class({
 				this.els.select.push(select);
 			}, this);
 		}
+		
+		this.fx = new Fx.Elements( this.els.item );
+		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
 		this.updateCounter(0);
 		
@@ -190,6 +171,56 @@ var FlexSlide = new Class({
 		}
 		
 	},
+	
+	buildElement: function(item, wrapper) {
+		if( !$chk(this.options.ui[item]) )
+			this.options.ui[item] = { 'class' : item };
+		if( !$chk(this.options.selections[item]) )
+			this.options.selections[item] = '.' + item;
+		this.els[item] = this.wrap.getElements( this.options.selections[item] );
+		this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( wrapper );
+		
+		if( this.els[item].length > 0 ) {
+			this.els[item].each( function(el, i) {
+				if( item == 'select' ) {
+					el.addEvent('click', this.show.bind(this, i) );
+					if( el.get('tag') !== 'img' ) {
+						el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
+					}
+				}
+				el.addClass( this.options.ui[item + 'Item']['class'] );
+				this[item + 'Wrap'].grab(el);
+			}, this);
+		} else {
+			if( item === 'close' ) {
+				this[item + 'Wrap'].addEvent('click', function() {
+					this.close();
+				}.bind(this) );
+			} else if( item === 'description' ) {
+				// var txt = item.get('title') || item.getElement('img').get('alt');
+				// var parts = txt.split('::');
+				// if( parts.length === 2 )
+					// txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
+				// if( txt.charAt(0) === '#' ) 
+					// txt = $$(txt)[0].get('html');
+				// this[item + 'Wrap'].set('html', txt);
+			}
+		}
+		
+	},
+	
+	builder: function(els, wrapper) {
+		$each( els, function(item) {
+			if( $type(item) !== 'object' ) {
+				this.buildElement(item, wrapper);
+			} else {
+				$each( item, function(el, i) {
+					this.buildElement(i, wrapper);
+					this.builder(el, this[i + 'Wrap']);
+				}, this);
+			}
+		}, this);
+	},		
 	
 	show: function(id, fx) {
 		if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
@@ -264,12 +295,6 @@ var FlexSlide = new Class({
 			// this.wrapFx.start(this.wrapFxConfig).chain( function() {
 				// this.fx.start(this.fxConfig)
 			// }.bind(this) );
-
-			
-			// if( $chk(this.els.description) && this.els.description.length > 0 ) {
-				// this.descriptionWrap.grab( this.els.description[id] );
-				// this.options.effects['fade'].call( this, this.els.description[this.current], this.els.description[id] );
-			// }
 			
 			this.process(id);
 		}
