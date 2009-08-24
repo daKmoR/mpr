@@ -47,7 +47,8 @@ var FlexBox = new Class({
 	
 	show: function() {
 		if( $defined(this.flexSlide) ) {
-			this.coords = this.anchor.getElement('img').getCoordinates();
+			
+			this.coords = this.anchor.getElement('img') ? this.anchor.getElement('img').getCoordinates() : this.anchor.getCoordinates();
 			this.wrap.setStyles({
 				'left': this.coords.left,
 				'top': this.coords.top
@@ -111,7 +112,7 @@ var FlexBox = new Class({
 	},
 	
 	close: function() {
-		var localCoords = this.anchors[this.flexSlide.current].getElement('img').getCoordinates();
+		var localCoords = this.anchors[this.flexSlide.current].getElement('img') ? this.anchors[this.flexSlide.current].getElement('img').getCoordinates() : this.anchors[this.flexSlide.current].getCoordinates();
 		
 		this.flexSlide.setOptions({
 			autoWidth: false,
