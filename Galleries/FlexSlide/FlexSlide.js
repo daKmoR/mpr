@@ -50,7 +50,7 @@ var FlexSlide = new Class({
 		},
 		show: 0,
 		container: null,
-		getSizeFromContainer: false,
+		getSizeFromContainer: true,
 		initFx: 'display',
 		auto: true,
 		autoHeight: false,
@@ -101,6 +101,13 @@ var FlexSlide = new Class({
 			slideRightBounce: function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); },
 			slideLeftQuart:   function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
 			slideRightQuart:  function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); }
+		},
+		onShow: function(current, next) {
+			this.els.description[current].setStyle('display', 'block');
+			this.els.description[current].fade(0);
+			this.els.description[next].fade('hide');
+			this.els.description[next].setStyle('display', 'block');
+			this.els.description[next].fade(1);
 		}
 	},
 	
@@ -245,6 +252,7 @@ var FlexSlide = new Class({
 			this.itemWrap.grab( this.els.item[id] );
 			
 			this.running = true;
+			this.fireEvent('onShow', [this.current, id]);
 			this.fx.start(this.fxConfig).chain( function() {
 				this.running = false;
 				this.fireEvent('onShowEnd');
