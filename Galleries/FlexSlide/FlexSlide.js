@@ -247,6 +247,7 @@ var FlexSlide = new Class({
 			this.running = true;
 			this.fx.start(this.fxConfig).chain( function() {
 				this.running = false;
+				this.fireEvent('onShowEnd');
 			}.bind(this) );
 			this.wrapFx.start(this.wrapFxConfig);
 			
@@ -287,7 +288,7 @@ var FlexSlide = new Class({
 					});
 					break;
 				case 'request':
-					this.request = this.request || new Request.HTML({ method: 'get', noCache: true,	autoCancel: true,
+					var request = new Request.HTML({ method: 'get', noCache: true,	autoCancel: true, url: href,
 						onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
 							this.loader.fade(0);
 							var div = new Element('div', { 'class': 'ui-RequestItem ui-Item' });
@@ -296,8 +297,7 @@ var FlexSlide = new Class({
 							this.itemWrap.grab(div);
 							this._show(id, fx);
 						}.bind(this)
-					});
-					this.request.setOptions({ url: href }).send();
+					}).send();
 					break;
 				case 'inline':
 					this.loader.fade(0);
@@ -317,7 +317,7 @@ var FlexSlide = new Class({
 		
 		var diff = this.wrap.getSize().x - this.itemWrap.getSize().x;
 		
-		this.wrapFxConfig[1] = {};
+		this.wrapFxConfig[1] = this.wrapFxConfig[1] || {};
 		$extend(this.wrapFxConfig[1], {
 			'left': (this.options.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
 			'top': (this.options.container.getSize().y - this.els.item[id].getSize().y - diff) / 2
@@ -412,7 +412,7 @@ var FlexSlide = new Class({
 			default:
 				if( href.charAt(0) === '#' ) {
 					this.options.dynamicMode = 'inline'
-				} else if( document.location.host === href.toURI().get('host') + ':' + href.toURI().get('port') ) {
+				} else if( document.location.host === href.toURI().get('host') + (document.location.host.contains(':') ? ':' + href.toURI().get('port') : '') ) {
 					this.options.dynamicMode = 'request'
 				} else {
 					this.options.dynamicMode = 'iframe';
