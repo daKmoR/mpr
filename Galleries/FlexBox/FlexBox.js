@@ -61,7 +61,7 @@ var FlexBox = new Class({
 			this.flexSlide.setOptions({
 				autoHeight: true,
 				autoWidth: true,
-				autoCenter: false,
+				centerImage: false,
 				auto: false,
 				dynamicLoading: true,
 				centerContainer: true,
@@ -112,6 +112,7 @@ var FlexBox = new Class({
 			autoWidth: false,
 			autoHeight: false,
 			centerContainer: false,
+			centerImage: false,
 			effect: { 
 				random: ['dezoom'],
 			},

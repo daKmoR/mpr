@@ -53,10 +53,10 @@ var FlexSlide = new Class({
 		auto: true,
 		autoHeight: false,
 		autoWidth: false,
-		autoCenter: true,
+		centerImage: true,
 		centerContainer: false,
 		dynamicLoading: false,
-		dynamicMode: '',
+		dynamicMode: '',  //image, request, inline
 		preLoading: { previous: 2, next: 2 },
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
@@ -215,7 +215,7 @@ var FlexSlide = new Class({
 			this.wrapFxConfig = {};
 			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
 
-			if( this.options.autoCenter === true ) {
+			if( this.options.centerImage === true ) {
 				this.els.item[this.current].setStyle('margin-top', (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2 );
 				this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
 			}
