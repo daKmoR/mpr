@@ -65,7 +65,12 @@ var FlexBox = new Class({
 				auto: false,
 				dynamicLoading: true,
 				centerContainer: true,
-				effect: { random: ['zoom'] },
+				effect: { 
+					random: ['zoom'],
+					options: {
+						zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
+					}
+				},
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
 						this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
@@ -115,6 +120,9 @@ var FlexBox = new Class({
 			centerImage: false,
 			effect: { 
 				random: ['dezoom'],
+				options: {
+					dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut }
+				}
 			},
 			effects: {
 				dezoom: function(current, next, currentEl, nextEl) {

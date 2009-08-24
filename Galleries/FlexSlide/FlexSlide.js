@@ -70,8 +70,6 @@ var FlexSlide = new Class({
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
 				display: { duration: 0 },
-				zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
-				dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideRightBounce: { transition: Fx.Transitions.Bounce.easeOut },
 				slideLeftQuart: { transition: Fx.Transitions.Quart.easeInOut },
@@ -207,8 +205,9 @@ var FlexSlide = new Class({
 			this.els.item[id].set('style', 'display: block;');
 			this.els.item[this.current].set('style', 'display: block;');
 			if( !this.options.autoWidth ) {
-				this.els.item[id].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
-				this.els.item[this.current].setStyle('width', this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt() );
+				var width = this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt();
+				this.els.item[id].setStyle('width', width );
+				this.els.item[this.current].setStyle('width', width );
 			}
 			
 			this.fxConfig = {};
@@ -216,8 +215,9 @@ var FlexSlide = new Class({
 			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
 
 			if( this.options.centerImage === true ) {
-				this.els.item[this.current].setStyle('margin-top', (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2 );
-				this.els.item[id].setStyle('margin-top', (this.els.item[id].getParent().getSize().y - this.els.item[id].getSize().y) / 2 );
+				var margin = (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2;
+				this.els.item[this.current].setStyle('margin-top', margin);
+				this.els.item[id].setStyle('margin-top', margin );
 			}
 			
 			if( this.options.autoWidth || this.options.autoHeight )
