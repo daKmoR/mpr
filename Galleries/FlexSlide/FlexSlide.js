@@ -26,7 +26,7 @@ $require('More/Class/Class.Binds.js');
 $require('More/Utilities/Assets.js');
 $require('More/Native/URI.js');
 
-$require('Core/Request/Request.html.js');
+$require('Core/Request/Request.Html.js');
 
 
 var FlexSlide = new Class({
@@ -50,6 +50,8 @@ var FlexSlide = new Class({
 		},
 		show: 0,
 		container: null,
+		getSizeFromContainer: false,
+		initFx: 'display',
 		auto: true,
 		autoHeight: false,
 		autoWidth: false,
@@ -115,16 +117,18 @@ var FlexSlide = new Class({
 		this.wrap = $(wrap);
 
 		this.build();
-		this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
-		this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
-		
 		this.wrap.addClass( this.options.ui.wrap['class'] );
-		this.wrap.setStyles({
-			width: 'auto',
-			height: 'auto'
-		});
+		
+		if( this.options.getSizeFromContainer ) {
+			this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
+			this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
+			this.wrap.setStyles({
+				width: 'auto',
+				height: 'auto'
+			});
+		}
 		if( this.options.show >= 0 )
-			this.show( this.options.show );
+			this.show( this.options.show, this.options.initFx );
 	},
 	
 	build: function() {
