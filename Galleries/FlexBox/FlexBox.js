@@ -126,18 +126,16 @@ var FlexBox = new Class({
 	close: function() {
 		var localCoords = this.anchors[this.flexSlide.current].getElement('img') ? this.anchors[this.flexSlide.current].getElement('img').getCoordinates() : this.anchors[this.flexSlide.current].getCoordinates();
 		var animPadding = this.animPadding;
+		var fxOptions = this.options.flexSlide.effect.options.dezoom;
 		
-		this.flexSlide.setOptions({
+		this.flexSlide.setOptions( $merge(this.options.flexSlide, {
 			autoWidth: false,
 			autoHeight: false,
 			centerContainer: false,
-			centerImage: false,
-			effect: { 
-				random: ['dezoom'],
-			},
+			effect: { random: ['dezoom'] },
 			effects: {
 				dezoom: function(current, next, currentEl, nextEl) {
-					this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+					this.wrapFx.setOptions( fxOptions );
 					this.wrapFxConfig[0] = {
 						'width': localCoords.width,
 						'height': localCoords.height
@@ -151,13 +149,13 @@ var FlexBox = new Class({
 						'width': [currentEl.getSize().x, localCoords.width],
 						'height': [currentEl.getSize().y, localCoords.height]
 					};
-					(function() { 
+					(function() {
 						this.wrap.setStyle('display', 'none');
 						nextEl.set('style', '');
-					}).delay(600, this);
+					}).delay(fxOptions.duration, this);
 				}
 			}
-		});
+		}) );
 		var tmp = this.flexSlide.current;
 		this.flexSlide.current = -1;
 		this.flexSlide.show( tmp );
