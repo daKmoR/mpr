@@ -25,7 +25,27 @@ var FlexBox = new Class({
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
+		},
+		flexSlide: {
+			render: ['item', 'next'],
+			autoHeight: true,
+			autoWidth: true,
+			centerImage: false,
+			auto: false,
+			dynamicLoading: true,
+			centerContainer: true,
+			effect: {
+				random: ['fade'],
+				options: {
+					zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
+					dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut }
+				}
+			},
+			onShowEnd: function() {
+				this.nextWrap.setStyle('display', 'block');
+			}
 		}
+
 	},
 
 	initialize: function(anchor, anchors, options){
@@ -45,6 +65,7 @@ var FlexBox = new Class({
 	
 	show: function() {
 		var animPadding = this.animPadding;
+		var fxOptions = this.options.flexSlide.effect.options.zoom;
 		if( $defined(this.flexSlide) ) {
 			
 			this.coords = this.anchor.getElement('img') ? this.anchor.getElement('img').getCoordinates() : this.anchor.getCoordinates();
@@ -58,22 +79,11 @@ var FlexBox = new Class({
 			});
 			this.wrap.setStyle('display', 'block');
 			
-			this.flexSlide.setOptions({
-				autoHeight: true,
-				autoWidth: true,
-				centerImage: false,
-				auto: false,
-				dynamicLoading: true,
-				centerContainer: true,
-				effect: { 
-					random: ['zoom'],
-					options: {
-						zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
-					}
-				},
+			this.flexSlide.setOptions( $merge(this.options.flexSlide, {
+				effect: { random: ['zoom'] },
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
-						this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+						this.wrapFx.setOptions(fxOptions);
 						this.wrapFxConfig[1] = {
 							'padding': [0, animPadding]
 						};
@@ -82,20 +92,15 @@ var FlexBox = new Class({
 							'height': [currentEl.getSize().y, nextEl.getSize().y]
 						};
 					}
-				},
-				onShowEnd: function() {
-					this.nextWrap.setStyle('display', 'block');
 				}
-			});
-		
+			}) );
+			
 			this.flexSlide.current = -1;
 			this.flexSlide.show( this.current );
 			
 			(function() {
-				this.flexSlide.setOptions({
-					effect: { random: ['fade'] }
-				});
-			}).delay(600, this);
+				this.flexSlide.setOptions( this.options.flexSlide );
+			}).delay(fxOptions.duration, this);
 			
 		} else {
 			this.build();
@@ -113,7 +118,7 @@ var FlexBox = new Class({
 		
 		this.flexSlide = new FlexSlide( this.wrap, {
 			show: -1,
-			render: ['item', 'next']
+			render: this.options.flexSlide.render
 		});
 		this.show();
 	},
@@ -129,9 +134,6 @@ var FlexBox = new Class({
 			centerImage: false,
 			effect: { 
 				random: ['dezoom'],
-				options: {
-					dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut }
-				}
 			},
 			effects: {
 				dezoom: function(current, next, currentEl, nextEl) {
