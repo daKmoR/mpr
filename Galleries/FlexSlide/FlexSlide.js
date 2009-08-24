@@ -85,11 +85,11 @@ var FlexSlide = new Class({
 				this.fxConfig[next]    = { 'opacity': [0, 1] };
 			},
 			slideLeft: function(current, next, currentEl, nextEl) {
-				this.fxConfig[current] = { 'left': currentEl.getSize().x*-1   };
+				this.fxConfig[current] = { 'left': [0, currentEl.getSize().x*-1] };
 				this.fxConfig[next]    = { 'left': [currentEl.getSize().x, 0] };
 			},
 			slideRight: function(current, next, currentEl, nextEl) {
-				this.fxConfig[current] = { 'right': currentEl.getSize().x*-1   };
+				this.fxConfig[current] = { 'right': [0, currentEl.getSize().x*-1] };
 				this.fxConfig[next]    = { 'right': [currentEl.getSize().x, 0] };
 			},
 			display: function(current, next, currentEl, nextEl) {
@@ -412,7 +412,7 @@ var FlexSlide = new Class({
 			default:
 				if( href.charAt(0) === '#' ) {
 					this.options.dynamicMode = 'inline'
-				} else if( document.location.host === href.toURI().get('host') ) {
+				} else if( document.location.host === href.toURI().get('host') + ':' + href.toURI().get('port') ) {
 					this.options.dynamicMode = 'request'
 				} else {
 					this.options.dynamicMode = 'iframe';
