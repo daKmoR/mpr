@@ -17,8 +17,6 @@ var FlexBox = new Class({
 	Implements: [Options, Events],
 
 	options: {
-		defaultSize: { x: 500, y: 500 },
-		margin: 0,
 		resizeFactor: 0.95,
 		opacityResize: 0.5,
 		resizeLimit: false, // {x: 640, y: 640}
@@ -46,6 +44,7 @@ var FlexBox = new Class({
 	},
 	
 	show: function() {
+		var animPadding = this.animPadding;
 		if( $defined(this.flexSlide) ) {
 			
 			this.coords = this.anchor.getElement('img') ? this.anchor.getElement('img').getCoordinates() : this.anchor.getCoordinates();
@@ -75,6 +74,9 @@ var FlexBox = new Class({
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
 						this.wrapFx.setOptions({ transition: Fx.Transitions.Quart.easeOut, duration: 600 });
+						this.wrapFxConfig[1] = {
+							'padding': [0, animPadding]
+						};
 						this.fxConfig[next] = {
 							'width': [currentEl.getSize().x, nextEl.getSize().x],
 							'height': [currentEl.getSize().y, nextEl.getSize().y]
@@ -88,9 +90,9 @@ var FlexBox = new Class({
 			
 			(function() {
 				this.flexSlide.setOptions({
-					effect: { random: ['slideLeftBounce'] }
+					effect: { random: ['fade'] }
 				});
-			}).delay(1000, this);
+			}).delay(600, this);
 			
 		} else {
 			this.build();
@@ -99,6 +101,8 @@ var FlexBox = new Class({
 	
 	build: function() {
 		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
+		this.animPadding = this.wrap.getStyle('padding').toInt();
+		this.wrap.setStyle('padding', 0);
 		
 		this.anchors.each(function(el) {
 			this.wrap.grab( el.clone().addClass('item') );
@@ -113,6 +117,7 @@ var FlexBox = new Class({
 	
 	close: function() {
 		var localCoords = this.anchors[this.flexSlide.current].getElement('img') ? this.anchors[this.flexSlide.current].getElement('img').getCoordinates() : this.anchors[this.flexSlide.current].getCoordinates();
+		var animPadding = this.animPadding;
 		
 		this.flexSlide.setOptions({
 			autoWidth: false,
@@ -133,6 +138,7 @@ var FlexBox = new Class({
 						'height': localCoords.height
 					};
 					this.wrapFxConfig[1] = {
+						'padding': [animPadding, 0],
 						'left': localCoords.left,
 						'top': localCoords.top
 					};
@@ -140,7 +146,10 @@ var FlexBox = new Class({
 						'width': [currentEl.getSize().x, localCoords.width],
 						'height': [currentEl.getSize().y, localCoords.height]
 					};
-					(function() { this.wrap.setStyle('display', 'none'); }).delay(600, this);
+					(function() { 
+						this.wrap.setStyle('display', 'none');
+						nextEl.set('style', '');
+					}).delay(600, this);
 				}
 			}
 		});
