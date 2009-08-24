@@ -82,6 +82,9 @@ var FlexBox = new Class({
 							'height': [currentEl.getSize().y, nextEl.getSize().y]
 						};
 					}
+				},
+				onShowEnd: function() {
+					this.nextWrap.setStyle('display', 'block');
 				}
 			});
 		
@@ -158,39 +161,6 @@ var FlexBox = new Class({
 		this.flexSlide.show( tmp );
 	},
 	
-	buildElement: function(item, wrapper) {
-		if( !$chk(this.options.ui[item]) ) {
-			this.options.ui[item] = { 'class' : item };
-		}
-		this[item + 'Wrap'] = new Element('div', this.options.ui[item]).inject( wrapper );
-		if( item === 'close' ) {
-			this[item + 'Wrap'].addEvent('click', function() {
-				this.close();
-			}.bind(this) );
-		} else if( item === 'description' ) {
-			var txt = this.anchor.get('title') || this.anchor.getElement('img').get('alt');
-			var parts = txt.split('::');
-			if( parts.length === 2 )
-				txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
-			if( txt.charAt(0) === '#' ) 
-				txt = $$(txt)[0].get('html');
-			this[item + 'Wrap'].set('html', txt);
-		}
-	},
-	
-	builder: function(els, wrapper) {
-		$each( els, function(item) {
-			if( $type(item) !== 'object' ) {
-				this.buildElement(item, wrapper);
-			} else {
-				$each( item, function(el, i) {
-					this.buildElement(i, wrapper);
-					this.builder(el, this[i + 'Wrap']);
-				}, this);
-			}
-		}, this);
-	},
-	
 	zoomRelativeTo: function(to) {
 		var scale = this.options.resizeLimit;
 		if (!scale) {
@@ -251,16 +221,6 @@ var FlexBox = new Class({
 		if(!this.active) return;
 		if(event.wheel > 0) this.changeImage(event, -1);
 		if(event.wheel < 0) this.changeImage(event, 1);
-	},
-
-	changeImage: function(event, step){
-	
-		event.preventDefault();
-		var link = this.anchors[this.currentIndex+step];
-		if(!link) return false;
-		for(var f in this.fx) this.fx[f].cancel();
-		this.startLoad(link);
 	}
-	
 
 });
