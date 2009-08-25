@@ -32,7 +32,23 @@ window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexBox/FlexBox.js');
-	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], $$('a.FlexBox'), { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
+	$require('More/Fx/Fx.Slide.js');
+	
+	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], $$('a.FlexBox'), {
+		onOpenEnd: function() {
+			this.bottomWrap.fade('hide').fade(1);
+			if( $chk( this.closeWrap ) ) {
+				this.closeWrap.addEvent('click', function() {
+					myFlexBox.close();
+				});
+			}
+		},
+		flexSlide: {
+			render: [{ 'bottom': ['next', 'previous'] }, 'item', 'close'],
+			onShowEnd: function() {
+			}
+		}
+	});
 	
 	$('start').addEvent('click', function() {
 		myFlexBox.close();
@@ -50,16 +66,14 @@ window.addEvent('domready', function() {
 
 body { background: #ccc; }
 
-#myGallery a { line-height: 0; }
-
 .ui-NextWrap { height: 10px; width: 10px; background: red; }
 .ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
-
-#ui-Wrap { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; }
-
+.close { height: 10px; width: 10px; background: #000; position: absolute; right: 0; top: 0; }
 .ui-RequestItem { width: 500px; }
-
 .flexBoxWrap { background: #fff; padding: 10px; }
+.flexBoxWrap .ui-ItemWrap { background: #fff; }
+
+.flexBoxWrap .bottom { position: absolute; bottom: -20px; background: #fff; width: 100%; left: 0; opacity: 0; visibility: visible; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -90,11 +104,11 @@ body { background: #ccc; }
 
 
 <div id="myGallery">
-	<a href="../../Core/Resources/images/medium-ice.jpg" class="FlexBox">
-		<img src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
-	</a>
 	<a href="./data/text.html" class="FlexBox">
 		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	</a>
+	<a href="../../Core/Resources/images/medium-ice.jpg" class="FlexBox">
+		<img src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
 	</a>
 	<a href="./data/text2.html" class="FlexBox">
 		<img src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />

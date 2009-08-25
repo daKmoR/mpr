@@ -193,9 +193,6 @@ var FlexSlide = new Class({
 			}, this);
 		} else {
 			if( item === 'close' ) {
-				this[item + 'Wrap'].addEvent('click', function() {
-					this.close();
-				}.bind(this) );
 			} else if( item === 'description' ) {
 				// var txt = item.get('title') || item.getElement('img').get('alt');
 				// var parts = txt.split('::');
@@ -220,7 +217,7 @@ var FlexSlide = new Class({
 				}, this);
 			}
 		}, this);
-	},		
+	},
 	
 	show: function(id, fx) {
 		if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
