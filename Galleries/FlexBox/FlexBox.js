@@ -40,9 +40,16 @@ var FlexBox = new Class({
 					zoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut },
 					dezoom: { duration: 600, transition: Fx.Transitions.Quart.easeOut }
 				}
-			},
-			onShowEnd: function() {
-				this.nextWrap.setStyle('display', 'block');
+			}
+		},
+		openEnd: function() {
+			if( $chk(this.bottomWrap) ) {
+				this.bottomWrap.fade('hide').fade(1);
+			}
+			if( $chk( this.closeWrap ) ) {
+				this.closeWrap.addEvent('click', function() {
+					//FlexBox.close();
+				});
 			}
 		}
 
@@ -95,12 +102,15 @@ var FlexBox = new Class({
 				}
 			}) );
 			
+			this.flexSlide.addEvent('onShowEnd', this.options.openEnd);
+			
 			this.flexSlide.current = -1;
 			this.flexSlide.show( this.current );
 			
 			(function() {
 				this.flexSlide.setOptions( this.options.flexSlide );
-			}).delay(fxOptions.duration, this);
+				this.flexSlide.removeEvent('onShowEnd', this.options.openEnd);
+			}).delay(fxOptions.duration+100, this);
 			
 		} else {
 			this.build();
