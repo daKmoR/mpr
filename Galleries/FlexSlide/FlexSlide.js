@@ -104,11 +104,8 @@ var FlexSlide = new Class({
 		},
 		onShow: function(current, next) {
 			if( $defined(this.els.description) ) {
-				this.els.description[current].setStyle('display', 'block');
-				this.els.description[current].fade(0);
-				this.els.description[next].fade('hide');
-				this.els.description[next].setStyle('display', 'block');
-				this.els.description[next].fade(1);
+				this.els.description[current].setStyle('display', 'block').fade(0);
+				this.els.description[next].fade('hide').setStyle('display', 'block').fade(1);
 			}
 		}
 	},
