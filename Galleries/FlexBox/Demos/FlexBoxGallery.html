@@ -31,9 +31,10 @@
 window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
-	$require('Galleries/FlexBox/FlexBox.js');
+	$require('Galleries/FlexBox/FlexBoxes.js');
 	$require('More/Fx/Fx.Slide.js');
 	
+	/*
 	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], $$('a.FlexBox'), {
 		flexSlide: {
 			render: [{ 'bottom': ['next', 'previous'] }, 'item', 'close']
@@ -43,6 +44,8 @@ window.addEvent('domready', function() {
 	$('start').addEvent('click', function() {
 		myFlexBox.close();
 	});
+	*/
+	var myFlexBoxes = new FlexBoxes( $$('a.FlexBox') );
 /*	var myFlexBox2 = new FlexBox( $$('a.FlexBox')[1], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	var myFlexBox3 = new FlexBox( $$('a.FlexBox')[2], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
 	var myFlexBox4 = new FlexBox( $$('a.FlexBox')[3], { 'duration': 4000, auto: true, autoHeight: true, autoCenter: false } );
