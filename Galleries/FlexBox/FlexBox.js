@@ -47,10 +47,16 @@ var FlexBox = new Class({
 				this.flexSlide.bottomWrap.fade('hide').fade(1);
 			}
 			if( $chk( this.flexSlide.closeWrap ) ) {
-				this.flexSlide.closeWrap.addEvent('click', this.close.bind(this));
+				this.flexSlide.closeWrap.fade(1);
+				this.flexSlide.closeWrap.addEvent('click', this.options.closeStart.bind(this));
 			}
+		},
+		closeStart: function() {
+			this.flexSlide.closeWrap.fade(0);
+			this.flexSlide.bottomWrap.fade(0).get('tween').chain( function() {
+				this.close();
+			}.bind(this) );
 		}
-
 	},
 
 	initialize: function(anchor, anchors, options){
