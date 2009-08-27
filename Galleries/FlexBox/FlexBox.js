@@ -43,13 +43,11 @@ var FlexBox = new Class({
 			}
 		},
 		openEnd: function() {
-			if( $chk(this.bottomWrap) ) {
-				this.bottomWrap.fade('hide').fade(1);
+			if( $chk(this.flexSlide.bottomWrap) ) {
+				this.flexSlide.bottomWrap.fade('hide').fade(1);
 			}
-			if( $chk( this.closeWrap ) ) {
-				this.closeWrap.addEvent('click', function() {
-					//FlexBox.close();
-				});
+			if( $chk( this.flexSlide.closeWrap ) ) {
+				this.flexSlide.closeWrap.addEvent('click', this.close.bind(this));
 			}
 		}
 
@@ -102,14 +100,15 @@ var FlexBox = new Class({
 				}
 			}) );
 			
-			this.flexSlide.addEvent('onShowEnd', this.options.openEnd);
+			var openEnd = this.options.openEnd.pass(null, this);
+			this.flexSlide.addEvent('onShowEnd', openEnd );
 			
 			this.flexSlide.current = -1;
 			this.flexSlide.show( this.current );
 			
 			(function() {
 				this.flexSlide.setOptions( this.options.flexSlide );
-				this.flexSlide.removeEvent('onShowEnd', this.options.openEnd);
+				this.flexSlide.removeEvent('onShowEnd', openEnd );
 			}).delay(fxOptions.duration+100, this);
 			
 		} else {

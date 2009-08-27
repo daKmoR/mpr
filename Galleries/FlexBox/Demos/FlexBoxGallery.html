@@ -35,18 +35,8 @@ window.addEvent('domready', function() {
 	$require('More/Fx/Fx.Slide.js');
 	
 	var myFlexBox = new FlexBox( $$('a.FlexBox')[0], $$('a.FlexBox'), {
-		onOpenEnd: function() {
-			this.bottomWrap.fade('hide').fade(1);
-			if( $chk( this.closeWrap ) ) {
-				this.closeWrap.addEvent('click', function() {
-					myFlexBox.close();
-				});
-			}
-		},
 		flexSlide: {
-			render: [{ 'bottom': ['next', 'previous'] }, 'item', 'close'],
-			onShowEnd: function() {
-			}
+			render: [{ 'bottom': ['next', 'previous'] }, 'item', 'close']
 		}
 	});
 	
