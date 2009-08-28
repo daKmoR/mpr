@@ -65,6 +65,7 @@ var FlexSlide = new Class({
 		step: 1,
 		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
+		descriptionTemplate: '<h5>{title}</h5><p>{text}</p>',
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
@@ -155,6 +156,24 @@ var FlexSlide = new Class({
 			}, this);
 		}
 		
+		if( $chk(this.els.description) && this.els.description.length <= 0 ) {
+			this.els.item.each( function(el, i) {
+				var description = new Element('div', this.options.ui.descriptionItem)
+					.inject(this.descriptionWrap);
+				
+				var txt = el.get('title') || el.get('alt') || el.getElement('img').get('alt');
+				var parts = txt.split('::');
+				if( parts.length === 2 )
+					txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
+				if( txt.charAt(0) === '#' ) 
+					txt = $$(txt)[0].get('html');
+				description.set('html', txt);
+				
+				this.els.description.push(description);
+			}, this);
+			
+		}		
+		
 		this.fx = new Fx.Elements( this.els.item );
 		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
@@ -188,19 +207,7 @@ var FlexSlide = new Class({
 				el.addClass( this.options.ui[item + 'Item']['class'] );
 				this[item + 'Wrap'].grab(el);
 			}, this);
-		} else {
-			if( item === 'close' ) {
-			} else if( item === 'description' ) {
-				// var txt = item.get('title') || item.getElement('img').get('alt');
-				// var parts = txt.split('::');
-				// if( parts.length === 2 )
-					// txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
-				// if( txt.charAt(0) === '#' ) 
-					// txt = $$(txt)[0].get('html');
-				// this[item + 'Wrap'].set('html', txt);
-			}
-		}
-		
+		}		
 	},
 	
 	builder: function(els, wrapper) {
