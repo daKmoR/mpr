@@ -106,20 +106,20 @@ var FlexBox = new Class({
 				}
 			}) );
 			
-			var openEnd = this.options.openEnd.pass(null, this);
-			this.flexSlide.addEvent('onShowEnd', openEnd );
+			this.openEndEvent = this.openEnd.pass(null, this);
+			this.flexSlide.addEvent('onShowEnd', this.openEndEvent );
 			
 			this.flexSlide.current = -1;
 			this.flexSlide.show( this.current );
-			
-			(function() {
-				this.flexSlide.setOptions( this.options.flexSlide );
-				this.flexSlide.removeEvent('onShowEnd', openEnd );
-			}).delay(fxOptions.duration+100, this);
-			
 		} else {
 			this.build();
 		}
+	},
+	
+	openEnd: function() {
+		this.options.openEnd.run(null, this);
+		this.flexSlide.setOptions( this.options.flexSlide );
+		this.flexSlide.removeEvent('onShowEnd', this.openEndEvent );
 	},
 	
 	build: function() {
