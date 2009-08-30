@@ -33,8 +33,6 @@ var FlexBox = new Class({
 			centerImage: false,
 			auto: false,
 			dynamicLoading: true,
-			moveContainer: true,
-			centerContainer: true,
 			effect: {
 				random: ['fade'],
 				options: {
@@ -92,16 +90,30 @@ var FlexBox = new Class({
 			this.wrap.setStyle('display', 'block');
 			
 			this.flexSlide.setOptions( $merge(this.options.flexSlide, {
+				moveContainer: true,
+				centerContainer: false,
+				margin: 10,
 				effect: { random: ['zoom'] },
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
-						this.wrapFx.setOptions(fxOptions);
-						this.wrapFxConfig[1] = {
-							'padding': [0, animPadding]
-						};
 						this.fxConfig[next] = {
 							'width': [currentEl.getSize().x, nextEl.getSize().x],
 							'height': [currentEl.getSize().y, nextEl.getSize().y]
+						};
+						
+						var to = this.options.fixedSize || nextEl.getSize();
+						var box = this.options.container.getSize(), scroll = this.options.container.getScroll(), localCoords = this.wrap.getCoordinates();
+						var pos = {
+							x: (localCoords.left + (localCoords.width / 2) - to.x / 2).toInt()
+								.limit(scroll.x + this.options.margin, scroll.x + box.x - this.options.margin - to.x),
+							y: (localCoords.top + (localCoords.height / 2) - to.y / 2).toInt()
+								.limit(scroll.y + this.options.margin, scroll.y + box.y - this.options.margin - to.y)
+						}
+						this.wrapFx.setOptions(fxOptions);
+						this.wrapFxConfig[1] = {
+							'padding': [0, animPadding],
+							'left': pos.x,
+							'top': pos.y
 						};
 					}
 				}
@@ -147,6 +159,7 @@ var FlexBox = new Class({
 		this.flexSlide.setOptions( $merge(this.options.flexSlide, {
 			autoWidth: false,
 			autoHeight: false,
+			moveContainer: true,
 			centerContainer: false,
 			effect: { random: ['dezoom'] },
 			effects: {
