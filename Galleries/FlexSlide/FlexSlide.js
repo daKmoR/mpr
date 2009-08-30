@@ -56,6 +56,7 @@ var FlexSlide = new Class({
 		autoHeight: false,
 		autoWidth: false,
 		centerImage: true,
+		moveContainer: false,
 		centerContainer: false,
 		dynamicLoading: false,
 		dynamicMode: '',  //image, request, inline
@@ -122,6 +123,7 @@ var FlexSlide = new Class({
 		this.setOptions(options);
 
 		this.wrap = $(wrap);
+		if( !$defined(this.options.container) ) this.options.container = this.wrap.getParent();
 
 		this.build();
 		this.wrap.addClass( this.options.ui.wrap['class'] );
@@ -272,7 +274,7 @@ var FlexSlide = new Class({
 			if( this.options.autoHeight )
 				$extend(this.wrapFxConfig[0], {'height': this.els.item[id].getSize().y} );
 			
-			if( this.options.centerContainer )
+			if( this.options.moveContainer && this.options.centerContainer )
 				this.centerContainer(id);
 				
 			var tmp = {'display' : 'block'};
@@ -291,7 +293,8 @@ var FlexSlide = new Class({
 				this.running = false;
 				this.fireEvent('onShowEnd');
 			}.bind(this) );
-			this.wrapFx.start(this.wrapFxConfig);
+			if( this.options.moveContainer )
+				this.wrapFx.start(this.wrapFxConfig);
 			
 			// this.wrapFx.start(this.wrapFxConfig).chain( function() {
 				// this.fx.start(this.fxConfig)
@@ -349,10 +352,7 @@ var FlexSlide = new Class({
 	},
 	
 	centerContainer: function(id) {
-		if( !$defined(this.options.container) ) this.options.container = this.wrap.getParent();
-		
 		var diff = this.wrap.getSize().x - this.itemWrap.getSize().x;
-		
 		this.wrapFxConfig[1] = this.wrapFxConfig[1] || {};
 		$extend(this.wrapFxConfig[1], {
 			'left': (this.options.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
