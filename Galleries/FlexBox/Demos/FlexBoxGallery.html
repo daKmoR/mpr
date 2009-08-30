@@ -59,14 +59,15 @@ window.addEvent('domready', function() {
 
 body { background: #ccc; }
 
-.ui-NextWrap { height: 10px; width: 10px; background: red; }
-.ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
+.ui-NextWrap { height: 10px; width: 10px; background: red; float: right; }
+.ui-PreviousWrap { height: 10px; width: 10px; background: orange; float: left; }
 .close { height: 10px; width: 10px; background: #000; position: absolute; right: 0; top: 0; }
 .ui-RequestItem { width: 500px; }
 .flexBoxWrap { background: #fff; padding: 10px; }
 .flexBoxWrap .ui-ItemWrap { background: #fff; }
 
-.flexBoxWrap .bottom { position: absolute; bottom: -20px; background: #fff; width: 100%; left: 0; opacity: 0; visibility: visible; }
+.flexBoxWrap .bottom { position: absolute; bottom: -20px; background: #fff; width: 100%; left: 0; opacity: 0; visibility: visible; height: 20px; }
+.ui-DescriptionWrap { position: absolute; left: 20px; width: 300px; height: 20px; }
 
 /* ### Mpr.Css.End ### */
 </style>

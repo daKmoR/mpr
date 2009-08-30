@@ -33,6 +33,7 @@ var FlexBox = new Class({
 			centerImage: false,
 			auto: false,
 			dynamicLoading: true,
+			moveContainer: true,
 			centerContainer: true,
 			effect: {
 				random: ['fade'],
@@ -42,16 +43,16 @@ var FlexBox = new Class({
 				}
 			}
 		},
-		openEnd: function() {
+		onOpenEnd: function() {
 			if( $chk(this.flexSlide.bottomWrap) ) {
 				this.flexSlide.bottomWrap.fade('hide').fade(1);
 			}
 			if( $chk( this.flexSlide.closeWrap ) ) {
 				this.flexSlide.closeWrap.fade(1);
-				this.flexSlide.closeWrap.addEvent('click', this.options.closeStart.bind(this));
+				this.flexSlide.closeWrap.addEvent('click', this.fireEvent.bind(this, 'onCloseStart') );
 			}
 		},
-		closeStart: function() {
+		onCloseStart: function() {
 			this.flexSlide.closeWrap.fade(0);
 			this.flexSlide.bottomWrap.fade(0).get('tween').chain( function() {
 				this.close();
@@ -117,7 +118,7 @@ var FlexBox = new Class({
 	},
 	
 	openEnd: function() {
-		this.options.openEnd.run(null, this);
+		this.fireEvent('onOpenEnd');
 		this.flexSlide.setOptions( this.options.flexSlide );
 		this.flexSlide.removeEvent('onShowEnd', this.openEndEvent );
 	},
