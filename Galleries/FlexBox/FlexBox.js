@@ -31,6 +31,7 @@ var FlexBox = new Class({
 			autoHeight: true,
 			autoWidth: true,
 			centerImage: false,
+			centerContainer: true,
 			auto: false,
 			dynamicLoading: true,
 			effect: {
@@ -56,6 +57,7 @@ var FlexBox = new Class({
 				this.close();
 			}.bind(this) );
 		}
+		/* onCloseEnd */
 	},
 
 	initialize: function(anchor, anchors, options){
@@ -185,17 +187,24 @@ var FlexBox = new Class({
 						'width': [currentEl.getSize().x, localCoords.width],
 						'height': [currentEl.getSize().y, localCoords.height]
 					};
-					
-					(function() {
-						this.wrap.setStyle('display', 'none');
-						nextEl.set('style', '');
-					}).delay(fxOptions.duration, this);
 				}
 			}
 		}) );
+		
+		this.closeEndEvent = this.closeEnd.pass(null, this);
+		this.flexSlide.addEvent('onShowEnd', this.closeEndEvent );		
+		
 		var tmp = this.flexSlide.current;
 		this.flexSlide.current = -1;
 		this.flexSlide.show( tmp );
+	},
+	
+	closeEnd: function() {
+		this.fireEvent('onCloseEnd');
+		this.flexSlide.wrap.setStyle('display', 'none');
+		this.flexSlide.els.item[this.flexSlide.current].set('style', '');
+		
+		this.flexSlide.removeEvent('onShowEnd', this.closeEndEvent );
 	},
 	
 	zoomRelativeTo: function(to) {
