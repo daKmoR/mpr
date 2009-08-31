@@ -42,9 +42,13 @@ var FlexBox = new Class({
 				}
 			}
 		},
+		onOpen: function() {
+			this.flexSlide.bottomWrap.fade('hide');
+			this.flexSlide.closeWrap.fade('hide');
+		},
 		onOpenEnd: function() {
 			if( $chk(this.flexSlide.bottomWrap) ) {
-				this.flexSlide.bottomWrap.fade('hide').fade(1);
+				this.flexSlide.bottomWrap.fade(1);
 			}
 			if( $chk( this.flexSlide.closeWrap ) ) {
 				this.flexSlide.closeWrap.fade(1);
@@ -57,7 +61,7 @@ var FlexBox = new Class({
 				this.close();
 			}.bind(this) );
 		}
-		/* onCloseEnd */
+		/* onCloseEnd, onClose */
 	},
 
 	initialize: function(anchor, anchors, options){
@@ -131,6 +135,8 @@ var FlexBox = new Class({
 			
 			this.flexSlide.current = -1;
 			this.flexSlide.show( this.current );
+			
+			this.fireEvent('onOpen');
 		} else {
 			this.build();
 		}
@@ -197,6 +203,8 @@ var FlexBox = new Class({
 		var tmp = this.flexSlide.current;
 		this.flexSlide.current = -1;
 		this.flexSlide.show( tmp );
+		
+		this.fireEvent('onClose');
 	},
 	
 	closeEnd: function() {
