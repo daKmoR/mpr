@@ -18,10 +18,10 @@ var FlexBox = new Class({
 
 	options: {
 		resizeFactor: 0.95,
-		opacityResize: 0.5,
 		resizeLimit: false, // {x: 640, y: 640}
-		fixedSize: false, // {x: 640, y: 640}
-		centered: false,
+		
+		opacityZoom: 0.8,
+		centerZoom: false,
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
@@ -91,29 +91,34 @@ var FlexBox = new Class({
 			
 			this.flexSlide.setOptions( $merge(this.options.flexSlide, {
 				moveContainer: true,
-				centerContainer: false,
+				centerContainer: this.options.centerZoom,
+				opacityZoom: this.options.opacityZoom,
 				margin: 10,
 				effect: { random: ['zoom'] },
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
+						var to = this.options.fixedSize || nextEl.getSize();
 						this.fxConfig[next] = {
-							'width': [currentEl.getSize().x, nextEl.getSize().x],
-							'height': [currentEl.getSize().y, nextEl.getSize().y]
+							'width': [currentEl.getSize().x, to.x],
+							'height': [currentEl.getSize().y, to.y]
 						};
 						
-						var to = this.options.fixedSize || nextEl.getSize();
-						var box = this.options.container.getSize(), scroll = this.options.container.getScroll(), localCoords = this.wrap.getCoordinates();
-						var pos = {
-							x: (localCoords.left + (localCoords.width / 2) - to.x / 2).toInt()
-								.limit(scroll.x + this.options.margin, scroll.x + box.x - this.options.margin - to.x),
-							y: (localCoords.top + (localCoords.height / 2) - to.y / 2).toInt()
-								.limit(scroll.y + this.options.margin, scroll.y + box.y - this.options.margin - to.y)
+						var pos = { x: 0, y: 0 };
+						if( !this.options.centerZoom ) {
+							var box = this.options.container.getSize(), scroll = this.options.container.getScroll(), localCoords = this.wrap.getCoordinates();
+							pos = {
+								x: (localCoords.left + (localCoords.width / 2) - to.x / 2).toInt()
+									.limit(scroll.x + this.options.margin, scroll.x + box.x - this.options.margin - to.x),
+								y: (localCoords.top + (localCoords.height / 2) - to.y / 2).toInt()
+									.limit(scroll.y + this.options.margin, scroll.y + box.y - this.options.margin - to.y)
+							}
 						}
 						this.wrapFx.setOptions(fxOptions);
 						this.wrapFxConfig[1] = {
 							'padding': [0, animPadding],
 							'left': pos.x,
-							'top': pos.y
+							'top': pos.y,
+							'opacity': [this.options.opacityZoom, 1]
 						};
 					}
 				}
@@ -161,6 +166,7 @@ var FlexBox = new Class({
 			autoHeight: false,
 			moveContainer: true,
 			centerContainer: false,
+			opacityZoom: this.options.opacityZoom,
 			effect: { random: ['dezoom'] },
 			effects: {
 				dezoom: function(current, next, currentEl, nextEl) {
@@ -172,12 +178,14 @@ var FlexBox = new Class({
 					this.wrapFxConfig[1] = {
 						'padding': [animPadding, 0],
 						'left': localCoords.left,
-						'top': localCoords.top
+						'top': localCoords.top,
+						'opacity': [1, this.options.opacityZoom]
 					};
 					this.fxConfig[current] = {
 						'width': [currentEl.getSize().x, localCoords.width],
 						'height': [currentEl.getSize().y, localCoords.height]
 					};
+					
 					(function() {
 						this.wrap.setStyle('display', 'none');
 						nextEl.set('style', '');
