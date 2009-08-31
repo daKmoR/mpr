@@ -17,9 +17,6 @@ var FlexBox = new Class({
 	Implements: [Options, Events],
 
 	options: {
-		resizeFactor: 0.95,
-		resizeLimit: false, // {x: 640, y: 640}
-		
 		opacityZoom: 0.8,
 		centerZoom: false,
 		ui: {
@@ -110,7 +107,7 @@ var FlexBox = new Class({
 						};
 						
 						var pos = { x: 0, y: 0 };
-						if( !this.options.centerZoom ) {
+						if( !this.options.centerContainer ) {
 							var box = this.options.container.getSize(), scroll = this.options.container.getScroll(), localCoords = this.wrap.getCoordinates();
 							pos = {
 								x: (localCoords.left + (localCoords.width / 2) - to.x / 2).toInt()
@@ -213,68 +210,6 @@ var FlexBox = new Class({
 		this.flexSlide.els.item[this.flexSlide.current].set('style', '');
 		
 		this.flexSlide.removeEvent('onShowEnd', this.closeEndEvent );
-	},
-	
-	zoomRelativeTo: function(to) {
-		var scale = this.options.resizeLimit;
-		if (!scale) {
-			scale = this.container.getSize();
-			scale.x *= this.options.resizeFactor;
-			scale.y *= this.options.resizeFactor;
-		}
-		for (var i = 2; i--;) {
-			if (to.x > scale.x) {
-				to.y *= scale.x / to.x;
-				to.x = scale.x;
-			} else if (to.y > scale.y) {
-				to.x *= scale.y / to.y;
-				to.y = scale.y;
-			}
-		}
-		return this.zoomTo({x: to.x.toInt(), y: to.y.toInt()});
-	},
-
-	zoomTo: function(to) {
-		to = this.options.fixedSize || to;
-		var box = this.container.getSize(), scroll = this.container.getScroll();
-		var pos = (!this.options.centered) ? {
-			x: (this.coords.left + (this.coords.width / 2) - to.x / 2).toInt()
-				.limit(scroll.x + this.options.margin, scroll.x + box.x - this.options.margin - to.x),
-			y: (this.coords.top + (this.coords.height / 2) - to.y / 2).toInt()
-				.limit(scroll.y + this.options.margin, scroll.y + box.y - this.options.margin - to.y)
-		} :  {
-			x: scroll.x + ((box.x - to.x) / 2).toInt(),
-			y: scroll.y + ((box.y - to.y) / 2).toInt()
-		};
-		var vars = {left: pos.x, top: pos.y};
-		var vars2 = {width: to.x, height: to.y, margin: 10};
-		if (this.options.opacityResize != 1) 
-			vars.opacity = [this.options.opacityResize, 1];
-		else 
-			this.wrap.set('opacity', 1);
-		
-		this.fx.start({
-			'0': vars,
-			'1': vars2
-		}).chain( this.finishOpen.bind(this) );
-			
-		this.fireEvent('onOpen');
-	},
-
-	keyboardListener: function(event){
-		if(!this.active) return;
-		if(event.key != "f5") event.preventDefault();
-		switch (event.key){
-			case "esc": case "x": case "q": this.close(); break;
-			case "p": case "left": this.changeImage(event, -1); break;	
-			case "n": case "right": this.changeImage(event, 1);
-		}
-	},
-
-	mouseWheelListener: function(event){
-		if(!this.active) return;
-		if(event.wheel > 0) this.changeImage(event, -1);
-		if(event.wheel < 0) this.changeImage(event, 1);
 	}
 
 });
