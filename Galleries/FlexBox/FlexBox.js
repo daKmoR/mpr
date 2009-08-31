@@ -69,13 +69,13 @@ var FlexBox = new Class({
 		
 		this.anchor.addEvent('click', function(e) {
 			e.stop();
-			this.show();
+			this.open();
 			
 		}.bind(this) );
 
 	},
 	
-	show: function() {
+	open: function() {
 		var animPadding = this.animPadding;
 		var fxOptions = this.options.flexSlide.effect.options.zoom;
 		if( $defined(this.flexSlide) ) {
@@ -155,7 +155,7 @@ var FlexBox = new Class({
 			show: -1,
 			render: this.options.flexSlide.render
 		});
-		this.show();
+		this.open();
 	},
 	
 	close: function() {
