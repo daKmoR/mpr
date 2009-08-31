@@ -52,6 +52,9 @@ var FlexSlide = new Class({
 		container: null,
 		getSizeFromContainer: true,
 		initFx: 'display',
+		fixedSize: false, // {x: 640, y: 640}
+		resizeFactor: 0.95,
+		resizeLimit: false, // {x: 640, y: 640}
 		auto: true,
 		autoHeight: false,
 		autoWidth: false,
@@ -64,6 +67,9 @@ var FlexSlide = new Class({
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
+		active: true,
+		wheelListener: false,
+		keyboardListener: false,
 		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
 		descriptionTemplate: '<h5>{title}</h5><p>{text}</p>',
@@ -180,6 +186,11 @@ var FlexSlide = new Class({
 		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
 		this.updateCounter(0);
+		
+		if( this.options.wheelListener )
+			document.addEvent('mousewheel', this.mouseWheelListener.bindWithEvent(this));
+		if( this.options.keyboardListener )
+			document.addEvent('keydown', this.keyboardListener.bindWithEvent(this));		
 		
 		if( this.nextWrap ) {
 			this.nextWrap.addEvent('click', this.next.bind(this, this.options.step) );
@@ -408,6 +419,41 @@ var FlexSlide = new Class({
 	previous: function(step) {
 		this.next( step * -1 );
 	},
+	
+	keyboardListener: function(event){
+		if(!this.options.active) return;
+		if(event.key != 'f5') event.preventDefault();
+		switch (event.key){
+			case 'esc': case 'x': case 'q': this.close(); break;
+			case 'p': case 'left': this.previous(); break;	
+			case 'n': case 'right': this.next();
+		}
+	},
+
+	mouseWheelListener: function(event){
+		if(!this.options.active) return;
+		if(event.wheel > 0) this.previous();
+		if(event.wheel < 0) this.next();
+	},	
+	
+	// fixSizes: function() {
+		// var scale = this.options.resizeLimit;
+		// if (!scale) {
+			// scale = this.container.getSize();
+			// scale.x *= this.options.resizeFactor;
+			// scale.y *= this.options.resizeFactor;
+		// }
+		// for (var i = 2; i--;) {
+			// if (to.x > scale.x) {
+				// to.y *= scale.x / to.x;
+				// to.x = scale.x;
+			// } else if (to.y > scale.y) {
+				// to.x *= scale.y / to.y;
+				// to.y = scale.y;
+			// }
+		// }
+		// return this.zoomTo({x: to.x.toInt(), y: to.y.toInt()});
+	// }
 	
 	toElement: function() {
 		return this.wrap;
