@@ -31,6 +31,9 @@ var FlexBox = new Class({
 			centerContainer: true,
 			auto: false,
 			dynamicLoading: true,
+			wheelListener: false,
+			keyboardListener: false,
+			active: true,
 			effect: {
 				random: ['fade'],
 				options: {
@@ -154,10 +157,9 @@ var FlexBox = new Class({
 			this.wrap.grab( el.clone().addClass('item') );
 		}, this);
 		
-		this.flexSlide = new FlexSlide( this.wrap, {
-			show: -1,
-			render: this.options.flexSlide.render
-		});
+		this.flexSlide = new FlexSlide( this.wrap, $merge(this.options.flexSlide, {
+			show: -1
+		}) );
 		this.open();
 	},
 	

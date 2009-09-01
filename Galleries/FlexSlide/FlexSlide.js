@@ -188,7 +188,7 @@ var FlexSlide = new Class({
 		this.updateCounter(0);
 		
 		if( this.options.wheelListener )
-			document.addEvent('mousewheel', this.mouseWheelListener.bindWithEvent(this));
+			document.addEvent('mousewheel', this.wheelListener.bindWithEvent(this));
 		if( this.options.keyboardListener )
 			document.addEvent('keydown', this.keyboardListener.bindWithEvent(this));		
 		
@@ -430,7 +430,7 @@ var FlexSlide = new Class({
 		}
 	},
 
-	mouseWheelListener: function(event){
+	wheelListener: function(event){
 		if(!this.options.active) return;
 		if(event.wheel > 0) this.previous();
 		if(event.wheel < 0) this.next();
