@@ -34,6 +34,9 @@ var FlexBox = new Class({
 			wheelListener: false,
 			keyboardListener: false,
 			active: true,
+			ui: {
+				close: { 'class': 'ui-Close' }
+			},
 			effect: {
 				random: ['fade'],
 				options: {

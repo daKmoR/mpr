@@ -1,0 +1,14 @@
+.ui-NextWrap, .ui-PreviousWrap { height: 100%; width: 50%; position: absolute; top: 0; left: 0; z-index: 100; }
+	.ui-NextWrap { right: 0; left: auto; }
+		.ui-NextWrap:hover { background: url(img/next.gif) no-repeat right 20px; }
+	.ui-PreviousWrap:hover { background: url(img/previous.gif) no-repeat left 20px; }
+	
+	.ui-Close { height: 22px; width: 66px; background: url(img/close.gif) no-repeat; position: absolute; right: 10px; top: 10px; }
+	
+	.ui-DescriptionWrap { margin: 5px 0 0 10px; height: 40px; color: #666; font-size: 12.8px; font-weight: bold; }
+	.ui-CounterWrap { bottom: 5px; position: absolute; color: #aaa; font-family: "Trebuchet MS"; }
+	
+	.flexBoxWrap .bottom { position: absolute; background: #fff; width: 100%; left: 0; height: 45px; }
+
+	.flexBoxWrap { background: #fff; padding: 10px; font-family: Helvetica, Arial, sans-serif; }
+	

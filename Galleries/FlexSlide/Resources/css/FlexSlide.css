@@ -2,6 +2,7 @@
 	.ui-Item, .ui-Description { position: absolute; display: none; }
 	
 	.ui-SelectWrap .ui-Select { display: block; cursor: pointer; }
-	.ui-NextWrap { width: 10px; height: 20px; cursor: pointer; }
-	.ui-PreviousWrap { width: 10px; height: 20px; cursor: pointer; }
+	.ui-NextWrap { cursor: pointer; }
+	.ui-PreviousWrap { cursor: pointer; }
 	.ui-Loader { background: #fff url('img/loader.gif') no-repeat center center; height: 100%; width: 100%; display: block; }
+	.ui-RequestItem { width: 500px; }
