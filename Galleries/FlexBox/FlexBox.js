@@ -9,6 +9,7 @@
  */
 
 $require('Galleries/FlexSlide/FlexSlide.js');
+$require('Visual/Overlay/Overlay.js');
 
 $require('Galleries/FlexBox/Resources/css/FlexBox.css');
 
@@ -19,6 +20,7 @@ var FlexBox = new Class({
 	options: {
 		opacityZoom: 0.8,
 		centerZoom: false,
+		useOverlay: true,
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
@@ -86,6 +88,10 @@ var FlexBox = new Class({
 		var animPadding = this.animPadding;
 		var fxOptions = this.options.flexSlide.effect.options.zoom;
 		if( $defined(this.flexSlide) ) {
+		
+			if( this.options.useOverlay ) {
+				this.overlay.show();
+			}
 			
 			this.coords = this.anchor.getElement('img') ? this.anchor.getElement('img').getCoordinates() : this.anchor.getCoordinates();
 			this.wrap.setStyles({
@@ -142,6 +148,7 @@ var FlexBox = new Class({
 			this.fireEvent('onOpen');
 		} else {
 			this.build();
+			this.open();
 		}
 	},
 	
@@ -152,6 +159,11 @@ var FlexBox = new Class({
 	},
 	
 	build: function() {
+		if( this.options.useOverlay ) {
+			this.overlay = new Overlay({ onClick: this.fireEvent.bind(this, 'onCloseStart') });
+			this.overlay.build();
+		}
+	
 		this.wrap = new Element('div', this.options.ui.wrap).inject(document.body);
 		this.animPadding = this.wrap.getStyle('padding').toInt();
 		this.wrap.setStyle('padding', 0);
@@ -163,7 +175,7 @@ var FlexBox = new Class({
 		this.flexSlide = new FlexSlide( this.wrap, $merge(this.options.flexSlide, {
 			show: -1
 		}) );
-		this.open();
+		this.flexSlide.build();
 	},
 	
 	close: function() {
@@ -205,6 +217,10 @@ var FlexBox = new Class({
 		var tmp = this.flexSlide.current;
 		this.flexSlide.current = -1;
 		this.flexSlide.show( tmp );
+		
+		if( this.options.useOverlay ) {
+			this.overlay.hide();
+		}
 		
 		this.fireEvent('onClose');
 	},
