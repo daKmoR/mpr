@@ -59,7 +59,7 @@ var FlexSlide = new Class({
 		autoHeight: false,
 		autoWidth: false,
 		centerImage: true,
-		moveContainer: false,
+		moveContainer: true,
 		centerContainer: false,
 		dynamicLoading: false,
 		dynamicMode: '',  //image, request, inline
@@ -131,17 +131,6 @@ var FlexSlide = new Class({
 		this.wrap = $(wrap);
 		if( !$defined(this.options.container) ) this.options.container = this.wrap.getParent();
 
-		this.build();
-		this.wrap.addClass( this.options.ui.wrap['class'] );
-		
-		if( this.options.getSizeFromContainer ) {
-			this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
-			this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
-			this.wrap.setStyles({
-				width: 'auto',
-				height: 'auto'
-			});
-		}
 		if( this.options.show >= 0 )
 			this.show( this.options.show, this.options.initFx );
 	},
@@ -186,6 +175,17 @@ var FlexSlide = new Class({
 		this.wrapFx = new Fx.Elements( [this.itemWrap, this.wrap] );
 		
 		this.updateCounter(0);
+		
+		this.wrap.addClass( this.options.ui.wrap['class'] );
+		
+		if( this.options.getSizeFromContainer ) {
+			this.itemWrap.setStyle('height', this.wrap.getStyle('height') );
+			this.itemWrap.setStyle('width', this.wrap.getStyle('width') );
+			this.wrap.setStyles({
+				width: 'auto',
+				height: 'auto'
+			});
+		}
 		
 		if( this.options.wheelListener )
 			document.addEvent('mousewheel', this.wheelListener.bindWithEvent(this));
@@ -237,10 +237,15 @@ var FlexSlide = new Class({
 	},
 	
 	show: function(id, fx) {
-		if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
-			this.dynamicLoading(id, fx);
+		if( this.itemWrap ) {
+			if( this.options.dynamicLoading === true && this.els.item[id].get('tag') === 'a' ) {
+				this.dynamicLoading(id, fx);
+			} else {
+				this._show(id, fx);
+			}
 		} else {
-			this._show(id, fx);
+			this.build();
+			this.show(id, fx);
 		}
 	},
 	
