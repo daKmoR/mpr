@@ -28,16 +28,17 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
-window.addEvent('domready', function() {
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
 
-	$require('Core/Utilities/DomReady.js');
-	$require('Galleries/FlexSlide/FlexSlide.js');
+window.addEvent('domready', function() {
+	
 	var bla = new FlexSlide( $('myGallery'), { 
-		'duration': 4000, 
+		'duration': 4000,
 		auto: true,
 		'selectTemplate': ''
 	});
-		
+	
 });
 /* ### Mpr.Js.End ### */
 </script>
@@ -45,12 +46,12 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#myGallery { height: 548px; width: 560px; background: #E5E5E5 url(img/slideshow.gif) no-repeat; height: 400px; width: 500px; }
+#myGalleryWrap { height: 548px; width: 560px; background: #E5E5E5 url(img/slideshow.gif) no-repeat; }
+#myGallery { height: 400px; width: 500px; position: relative; }
 
-#myGallery .ui-ItemWrap { margin-left: 30px; margin-top: 19px; }
-#myGallery .ui-ItemWrap img { max-height: 400px; max-width: 500px; }
-#myGallery .ui-SelectWrap { margin: 5px 0; }
-	#myGallery .select { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; }
+#myGallery .ui-Item { left: 30px; top: 39px; position: relative; }
+#myGallery .ui-Select { margin: 5px 0; margin-top: 70px;  }
+	#myGallery .ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -78,43 +79,45 @@ window.addEvent('domready', function() {
 </p>
 <h3>Default FlexSlide</h3>
 
-<div id="myGallery">
-	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	<div class="description">my first Element</div>
-	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-	<div class="description">my second Element</div>
-	<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	<div class="description">my third Element</div>
-	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	<div class="description">my first Element</div>
-	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-	<div class="description">my second Element</div>
-	<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	<div class="description">my third Element</div>
-	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	<div class="description">my first Element</div>
-	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-	<div class="description">my second Element</div>
-	<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	<div class="description">my third Element</div>
-	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
-	
+<div id="myGalleryWrap">
+	<div id="myGallery">
+		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+		<div class="description">my first Element</div>
+		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+		<div class="description">my second Element</div>
+		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+		<div class="description">my third Element</div>
+		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+		<div class="description">my first Element</div>
+		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+		<div class="description">my second Element</div>
+		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+		<div class="description">my third Element</div>
+		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+		<div class="description">my first Element</div>
+		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+		<div class="description">my second Element</div>
+		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+		<div class="description">my third Element</div>
+		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+		
+	</div>
 </div>
 
 <!-- ### Mpr.Html.End ### -->
