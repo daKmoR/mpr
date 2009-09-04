@@ -21,6 +21,7 @@ var FlexBox = new Class({
 		opacityZoom: 0.8,
 		centerZoom: false,
 		useOverlay: true,
+		margin: 40,
 		ui: {
 			wrap: { 'class': 'flexBoxWrap' },
 			content: { 'class': 'content' }
@@ -65,8 +66,13 @@ var FlexBox = new Class({
 			this.flexSlide.bottomWrap.fade(0).get('tween').chain( function() {
 				this.close();
 			}.bind(this) );
+		},
+		onCloseEnd: function() {
+			if( $defined(this.flexSlide.els.description) ) {
+				this.flexSlide.els.description.set('style', '');
+			}
 		}
-		/* onCloseEnd, onClose */
+		/* onClose */
 	},
 
 	initialize: function(anchor, anchors, options){
@@ -108,7 +114,7 @@ var FlexBox = new Class({
 				moveContainer: true,
 				centerContainer: this.options.centerZoom,
 				opacityZoom: this.options.opacityZoom,
-				margin: 10,
+				margin: this.options.margin,
 				effect: { random: ['zoom'] },
 				effects: {
 					zoom: function(current, next, currentEl, nextEl) {
