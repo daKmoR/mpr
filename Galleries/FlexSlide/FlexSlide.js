@@ -36,16 +36,11 @@ var FlexSlide = new Class({
 		render: ['previous', 'item', 'description', 'next', 'select'],
 		ui: {
 			wrap: { 'class': 'ui-Wrap' },
-			select: { 'class': 'ui-SelectWrap' },
-			selectItem: { 'class': 'ui-Select' },
-			next: { 'class': 'ui-NextWrap' },
-			item: { 'class': 'ui-ItemWrap' },
-			itemItem: { 'class': 'ui-Item' },
-			previous: { 'class': 'ui-PreviousWrap' },
-			description: { 'class': 'ui-DescriptionWrap' },
-			descriptionItem: { 'class': 'ui-Description' },
-			counter: { 'class': 'ui-CounterWrap' },
-			loader: { 'class': 'ui-Loader ui-Item' },
+			selectItem: { 'class': 'ui-SelectItem' },
+			descriptionItem: { 'class': 'ui-DescriptionItem' },
+			requestItem: { 'class': 'ui-RequestItem' },
+			inlineItem: { 'class': 'ui-InlineItem' },
+			loader: { 'class': 'ui-Loader ui-ItemItem' },
 			activeClass: 'ui-active'
 		},
 		show: 0,
@@ -72,7 +67,7 @@ var FlexSlide = new Class({
 		keyboardListener: false,
 		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
-		descriptionTemplate: '<h5>{title}</h5><p>{text}</p>',
+		descriptionTemplate: '<strong>{title}</strong><span>{text}</span>',
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
@@ -203,7 +198,7 @@ var FlexSlide = new Class({
 	
 	buildElement: function(item, wrapper) {
 		if( !$chk(this.options.ui[item]) )
-			this.options.ui[item] = { 'class' : item };
+			this.options.ui[item] = { 'class': 'ui-' + item.capitalize() };
 		if( !$chk(this.options.selections[item]) )
 			this.options.selections[item] = '.' + item;
 		this.els[item] = this.wrap.getElements( this.options.selections[item] );
@@ -217,10 +212,12 @@ var FlexSlide = new Class({
 						el.set('html', this.options.selectTemplate.substitute({id: i+1, text: el.get('html')}) );
 					}
 				}
+				if( !$chk(this.options.ui[item + 'Item']) )
+					this.options.ui[item + 'Item'] = { 'class': 'ui-' + item.capitalize() + 'Item' };
 				el.addClass( this.options.ui[item + 'Item']['class'] );
 				this[item + 'Wrap'].grab(el);
 			}, this);
-		}		
+		}
 	},
 	
 	builder: function(els, wrapper) {
@@ -335,7 +332,7 @@ var FlexSlide = new Class({
 					var image = new Asset.image(href, {
 						onload: function() {
 							this.loader.fade(0);
-							image.addClass('ui-Item');
+							image.addClass( this.options.ui.itemItem['class'] );
 							this.els.item[id] = this.fx.elements[id] = image;
 							this.itemWrap.grab( image );
 							this._show(id, fx);
@@ -346,7 +343,7 @@ var FlexSlide = new Class({
 					var request = new Request.HTML({ method: 'get', noCache: true,	autoCancel: true, url: href,
 						onSuccess: function(responseTree, responseElements, responseHTML, responseJavaScript) {
 							this.loader.fade(0);
-							var div = new Element('div', { 'class': 'ui-RequestItem ui-Item' });
+							var div = new Element('div', {'class': this.options.ui.itemItem['class'] + ' ' + this.options.ui.requestItem['class']} );
 							div.set('html', responseHTML);
 							this.els.item[id] = this.fx.elements[id] = div;
 							this.itemWrap.grab(div);
@@ -356,7 +353,7 @@ var FlexSlide = new Class({
 					break;
 				case 'inline':
 					this.loader.fade(0);
-					var div = new Element('div', { 'class': 'ui-RequestItem ui-Item' });
+					var div = new Element('div', {'class': this.options.ui.itemItem['class'] + ' ' + this.options.ui.inlineItem['class']} );
 					$$(href)[0].clone().setStyle('display', 'block').inject( div );
 					this.els.item[id] = this.fx.elements[id] = div;
 					this.itemWrap.grab(div);

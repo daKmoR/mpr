@@ -1,8 +1,8 @@
-.ui-ItemWrap, .ui-DescriptionWrap { position: relative; overflow: hidden; }
-	.ui-Item, .ui-Description { position: absolute; display: none; }
+.ui-Item, .ui-Description { position: relative; overflow: hidden; }
+	.ui-ItemItem, .ui-DescriptionItem { position: absolute; display: none; }
 	
-	.ui-SelectWrap .ui-Select { display: block; cursor: pointer; }
-	.ui-NextWrap { cursor: pointer; }
-	.ui-PreviousWrap { cursor: pointer; }
+	.ui-Select .ui-SelectItem { display: block; cursor: pointer; }
+	.ui-Next { cursor: pointer; }
+	.ui-Previous { cursor: pointer; }
 	.ui-Loader { background: #fff url('img/loader.gif') no-repeat center center; height: 100%; width: 100%; display: block; }
-	.ui-RequestItem { width: 500px; }
+	.ui-RequestItem, .ui-InlineItem { width: 500px; }
