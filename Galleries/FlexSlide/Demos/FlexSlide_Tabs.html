@@ -30,6 +30,8 @@
 /* ### Mpr.Js.Start ### */
 $require('Core/Utilities/DomReady.js');
 $require('Galleries/FlexSlide/FlexSlide.js');
+// we want to use more then display and fade
+$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
 
 window.addEvent('domready', function() {
 
@@ -151,8 +153,8 @@ window.addEvent('domready', function() {
 		<span class="select">AJAX text</span>
 	</a>
 	<div class="item">
-		<span class="select">default text</span>
-		I'm just a normal inline content, now magic happen here. All the other elements get's loaded dynamically. Meaning Requests for the html files and an Asset to load the full size image.
+		<span class="select">simple text</span>
+		I'm just a normal inline content, no magic happens here. All the other elements get loaded dynamically. Meaning Requests for the html files and an Asset.image to load the full size image.
 	</div>
 	<a href="../../Core/Resources/images/medium-ice.jpg" class="item">
 		<span class="select">image ice</span>

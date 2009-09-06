@@ -52,14 +52,10 @@ var FlexSlide = new Class({
 		effect: {
 			up: 'random', /* any availabele effect */
 			down: 'random', /* any availabele effect */
-			random: ['fade', 'slideLeftQuart', 'slideRightQuart'],
+			random: ['fade'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
 			options: {
-				display: { duration: 0 },
-				slideLeftBounce: { transition: Fx.Transitions.Bounce.easeOut },
-				slideRightBounce: { transition: Fx.Transitions.Bounce.easeOut },
-				slideLeftQuart: { transition: Fx.Transitions.Quart.easeInOut },
-				slideRightQuart: { transition: Fx.Transitions.Quart.easeInOut }
+				display: { duration: 0 }
 			},
 			wrapFxOptions: { duration: 1000, transition: Fx.Transitions.Quart.easeInOut }
 		},
@@ -68,23 +64,11 @@ var FlexSlide = new Class({
 				this.fxConfig[current] = { 'opacity': [1, 0] };
 				this.fxConfig[next]    = { 'opacity': [0, 1] };
 			},
-			slideLeft: function(current, next, currentEl, nextEl) {
-				this.fxConfig[current] = { 'left': [0, currentEl.getSize().x*-1] };
-				this.fxConfig[next]    = { 'left': [currentEl.getSize().x, 0] };
-			},
-			slideRight: function(current, next, currentEl, nextEl) {
-				this.fxConfig[current] = { 'right': [0, currentEl.getSize().x*-1] };
-				this.fxConfig[next]    = { 'right': [currentEl.getSize().x, 0] };
-			},
 			display: function(current, next, currentEl, nextEl) {
 				this.wrapFx.setOptions({ duration: 0 });
 				currentEl.setStyle('display', 'none');
 				nextEl.setStyle('display', 'block');
-			},
-			slideLeftBounce:  function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
-			slideRightBounce: function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); },
-			slideLeftQuart:   function(current, next, currentEl, nextEl) { this.options.effects.slideLeft.call (this, current, next, currentEl, nextEl); },
-			slideRightQuart:  function(current, next, currentEl, nextEl) { this.options.effects.slideRight.call(this, current, next, currentEl, nextEl); }
+			}
 		},
 		onShow: function(current, next) {
 			if( $defined(this.els.description) ) {
