@@ -18,14 +18,6 @@ $require('Core/Fx/Fx.Transitions.js');
 
 $require('More/Fx/Fx.Elements.js');
 
-$require('More/Class/Class.Binds.js');
-
-// Lightbox needed
-$require('More/Utilities/Assets.js');
-$require('More/Native/URI.js');
-
-$require('Core/Request/Request.Html.js');
-
 var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
@@ -304,10 +296,6 @@ var FlexSlide = new Class({
 			'left': (this.options.container.getSize().x - this.els.item[id].getSize().x - diff) / 2,
 			'top': (this.options.container.getSize().y - this.els.item[id].getSize().y - diff) / 2
 		});
-	},
-	
-	display: function(id) {
-		this.show(id, 'display');
 	},
 	
 	updateCounter: function(id) {
