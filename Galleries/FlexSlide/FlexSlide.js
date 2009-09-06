@@ -28,7 +28,6 @@ $require('More/Native/URI.js');
 
 $require('Core/Request/Request.Html.js');
 
-
 var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
@@ -275,9 +274,9 @@ var FlexSlide = new Class({
 			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
 
 			if( this.options.centerImage === true ) {
-				var margin = (this.els.item[this.current].getParent().getSize().y - this.els.item[this.current].getSize().y) / 2;
-				this.els.item[this.current].setStyle('margin-top', margin);
-				this.els.item[id].setStyle('margin-top', margin );
+				var parentSize = this.els.item[this.current].getParent().getSize().y;
+				this.els.item[this.current].setStyle('margin-top', (parentSize - this.els.item[this.current].getSize().y) / 2 );
+				this.els.item[id].setStyle('margin-top', (parentSize - this.els.item[id].getSize().y) / 2 );
 			}
 			
 			if( this.options.autoWidth || this.options.autoHeight )
