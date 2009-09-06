@@ -8,7 +8,7 @@
  * @copyright Copyright belongs to the respective authors
  */
 
-$require('Galleries/FlexSlide/FlexSlide.js');
+$require('Galleries/FlexSlide/FlexSlide.Advanced.js');
 $require('Visual/Overlay/Overlay.js');
 
 $require('Galleries/FlexBox/Resources/css/FlexBox.css');
@@ -180,7 +180,7 @@ var FlexBox = new Class({
 			this.wrap.grab( el.clone().addClass('item') );
 		}, this);
 		
-		this.flexSlide = new FlexSlide( this.wrap, $merge(this.options.flexSlide, {
+		this.flexSlide = new FlexSlide.Advanced( this.wrap, $merge(this.options.flexSlide, {
 			show: -1
 		}) );
 		this.flexSlide.build();
