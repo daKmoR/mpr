@@ -34,8 +34,11 @@ FlexSlide.Advanced = new Class({
 	},
 	
 	build: function() {
-		this.loader = new Element('div', this.options.ui.loader).fade('hide');
-		this.loader.set('tween', { duration: 100 });
+	
+		if( this.options.dynamicLoading === true ) {
+			this.loader = new Element('div', this.options.ui.loader).fade('hide');
+			this.loader.set('tween', { duration: 100 });
+		}
 		
 		this.parent();
 		

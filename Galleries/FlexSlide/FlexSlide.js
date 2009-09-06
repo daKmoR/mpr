@@ -54,9 +54,7 @@ var FlexSlide = new Class({
 			down: 'random', /* any availabele effect */
 			random: ['fade'],
 			globalOptions: { duration: 1000, transition: Fx.Transitions.linear },
-			options: {
-				display: { duration: 0 }
-			},
+			options: { display: { duration: 0 }	},
 			wrapFxOptions: { duration: 1000, transition: Fx.Transitions.Quart.easeInOut }
 		},
 		effects: {
@@ -96,9 +94,6 @@ var FlexSlide = new Class({
 	},
 	
 	build: function() {
-		this.loader = new Element('div', this.options.ui.loader).fade('hide');
-		this.loader.set('tween', { duration: 100 });
-		
 		this.builder( this.options.render, this.wrap );
 		
 		//automatically build the select if no costum select items are found
@@ -118,7 +113,7 @@ var FlexSlide = new Class({
 				var description = new Element('div', this.options.ui.descriptionItem)
 					.inject(this.descriptionWrap);
 				
-				var txt = el.get('title') || el.get('alt') || el.getElement('img').get('alt');
+				var txt = el.get('title') || el.get('alt') || $chk(el.getElement('img')) ? el.getElement('img').get('alt') : '';
 				var parts = txt.split('::');
 				if( parts.length === 2 )
 					txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
