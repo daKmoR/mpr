@@ -62,10 +62,12 @@ var FlexBox = new Class({
 			}
 		},
 		onCloseStart: function() {
-			this.flexSlide.closeWrap.fade(0);
-			this.flexSlide.bottomWrap.fade(0).get('tween').chain( function() {
-				this.close();
-			}.bind(this) );
+			if( !this.flexSlide.running ) {
+				this.flexSlide.closeWrap.fade(0);
+				this.flexSlide.bottomWrap.fade(0).get('tween').chain( function() {
+					this.close();
+				}.bind(this) );
+			}
 		},
 		onCloseEnd: function() {
 			if( $defined(this.flexSlide.els.description) ) {
