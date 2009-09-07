@@ -40,6 +40,7 @@ window.addEvent('domready', function() {
 		auto: true,
 		selectTemplate: '',
 		onBuild: function() {
+			// no build in functionality for first and last image, so we need to add it manually
 			this.firstWrap.addEvent('click', function() {
 				this.show(0);
 			}.bind(this) );
@@ -47,6 +48,7 @@ window.addEvent('domready', function() {
 				this.show( this.els.item.length-1 )
 			}.bind(this) );
 			
+			// pause & resume functionality
 			this.pauseWrap.addEvent('click', function() {
 				if( this.options.auto ) {
 					this.options.auto = false;
@@ -59,6 +61,7 @@ window.addEvent('domready', function() {
 				}
 			}.bind(this) );
 			
+			// shows and hides the control
 			this.controlsWrap.fade('hide');
 			this.itemWrap.addEvent('mouseenter', function(e) {
 				this.controlsWrap.fade(1);
@@ -70,6 +73,7 @@ window.addEvent('domready', function() {
 			this.els.select.fade(0.3);
 		},
 		onSelectChange: function(currentEl, nextEl) {
+			// only the active element is shown with full opacity
 			currentEl.fade(0.3);
 			nextEl.fade(1);
 		}
@@ -86,7 +90,7 @@ window.addEvent('domready', function() {
 #myGallery { height: 400px; width: 500px; position: relative; }
 
 .ui-Item { left: 30px; top: 39px; position: relative; }
-.ui-SelectScroller { margin-top: 70px; }
+.ui-SelectScroller { margin-top: 50px; }
 .ui-Select { margin: 0 10px;  }
 	.ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; background: #fff; }
 	
