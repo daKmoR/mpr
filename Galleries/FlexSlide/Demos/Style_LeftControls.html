@@ -33,13 +33,16 @@ $require('Galleries/FlexSlide/FlexSlide.js');
 
 window.addEvent('domready', function() {
 
-	var myFlexSlideTabs = new FlexSlide( $('myGallery'), { 
-		autoHeight: true,
-		autoWidth: true,
-		centerImage: false,
+	var leftControls = new FlexSlide( $('myGallery'), {
+		duration: 10000,
 		auto: false,
-		centerContainer: true,
-		render: ['item', 'next', 'previous']
+		render: ['previous', 'next', 'counter', 'description', 'item'],
+		effect: { random: ['fade'] }
+	});
+	
+	// click on a picture should show the next picture
+	$$('#myGallery .item').addEvent('click', function() {
+		leftControls.next();
 	});
 		
 });
@@ -49,11 +52,18 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-.ui-Next { height: 10px; width: 10px; background: red; }
-.ui-Previous { height: 10px; width: 10px; background: orange; }
+#myGallery { height: 300px; width: 300px; position: relative; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px; line-height: 21px; } 
 
-#globalContainer { position: relative; width: 650px; height: 650px; background: #ccc; }
-#myGallery { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; }
+#myGallery .ui-Next, #myGallery .ui-Previous, #myGallery .ui-Counter { border: 1px solid #E0E0E0; color: #AFB2B9; position: absolute; width: 25px; height: 15px; top: 20px; }
+
+#myGallery .ui-Next { background: url(Style_LeftControls/css/img/bigNext.gif) no-repeat 8px 1px; left: 30px;  }
+#myGallery .ui-Previous { background: url(Style_LeftControls/css/img/bigPrevious.gif) no-repeat 8px 1px; }
+#myGallery .ui-Counter { font-size: 10px; line-height: 10px; left: 60px; padding: 2px 3px; width: 22px; height: 11px; }
+
+#myGallery .ui-Item { float: left; border: 1px solid #AFB2B9; }
+#myGallery .ui-ItemItem { cursor: pointer; }
+#myGallery .ui-Description { width: 200px; height: 100px; float: left; clear: left; margin-top: 100px; }
+
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -81,15 +91,31 @@ window.addEvent('domready', function() {
 </p>
 <h3>Default FlexSlide</h3>
 
-<div id="globalContainer">
-
-	<div id="myGallery">
-		<img class="item" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about meadow" />
-		<img class="item" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+<div id="myGallery">
+	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+	<div class="description">
+		<p style="font-style: italic;">Requiem NN / Requiem NN</p>
+		<p>2007-2009</p>
+		<p>20x20in (50x50cm)</p>
+		<p>Digital C-Print</p>
+		<p>released by Refial Inc.</p>
 	</div>
-
+	
+	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+	<div class="description">
+		<p style="font-style: italic;">Renuable NN / Suberglue MM</p>
+		<p>2005-2006</p>
+		<p>40x20in (100x50cm)</p>
+	</div>
+	
+	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+	<div class="description">
+		<p style="font-style: italic;">Daniem NN / Obsession LL</p>
+		<p>2009-2010</p>
+		<p>20x40in (50x100cm)</p>
+		<p>Digital D-Print</p>
+	</div>
+	
 </div>
 
 

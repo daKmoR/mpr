@@ -34,17 +34,11 @@ $require('Galleries/FlexSlide/FlexSlide.js');
 window.addEvent('domready', function() {
 
 	var leftControls = new FlexSlide( $('myGallery'), {
-		duration: 10000,
-		auto: false,
-		render: ['previous', 'next', 'counter', 'description', 'item'],
+		getSizeFromContainer: false,
+		render: ['item', 'overlay', 'previous', 'next', 'select'],
 		effect: { random: ['fade'] }
 	});
 	
-	// click on a picture should show the next picture
-	$$('#myGallery .item').addEvent('click', function() {
-		leftControls.next();
-	});
-		
 });
 /* ### Mpr.Js.End ### */
 </script>
@@ -52,18 +46,20 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#myGallery { height: 300px; width: 300px; position: relative; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px; line-height: 21px; } 
+#myGallery { height: 702px; background: url(Style_Television/css/img/television.bg.jpg) no-repeat; position: relative; }
+.ui-Item { height: 350px; width: 450px; left: 100px; top: 85px; }
 
-#myGallery .ui-Next, #myGallery .ui-Previous, #myGallery .ui-Counter { border: 1px solid #E0E0E0; color: #AFB2B9; position: absolute; width: 25px; height: 15px; top: 20px; }
+.ui-Overlay { width: 477px; height: 393px; background: url(Style_Television/css/img/overlay.png) no-repeat; left:85px; position: absolute; top: 64px; }
+.ui-Previous, .ui-Next { width: 32px; height: 32px; position: absolute; left: 576px; top: 249px; }
+	.ui-Previous:hover { background: url(Style_Television/css/img/previous.png) no-repeat; }
+.ui-Next { left: 603px; }
+	.ui-Next:hover { background: url(Style_Television/css/img/next.png) no-repeat; }
 
-#myGallery .ui-Next { background: url(img/bigNext.gif) no-repeat 8px 1px; left: 30px;  }
-#myGallery .ui-Previous { background: url(img/bigPrevious.gif) no-repeat 8px 1px; }
-#myGallery .ui-Counter { font-size: 10px; line-height: 10px; left: 60px; padding: 2px 3px; width: 22px; height: 11px; }
-
-#myGallery .ui-Item { float: left; border: 1px solid #AFB2B9; }
-#myGallery .ui-ItemItem { cursor: pointer; }
-#myGallery .ui-Description { width: 200px; height: 100px; float: left; clear: left; margin-top: 100px; }
-
+.ui-Select { width: 50px; height: 160px; position: absolute; left: 578px; top: 290px; }
+	.ui-SelectItem { width: 52px; height: 14px; }
+	.ui-SelectItem:hover { background: url(Style_Television/css/img/selectItem.png) no-repeat center center; }
+	.ui-active { background: url(Style_Television/css/img/selectItem.active.png) no-repeat center center; }
+	
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -93,31 +89,17 @@ window.addEvent('domready', function() {
 
 <div id="myGallery">
 	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	<div class="description">
-		<p style="font-style: italic;">Requiem NN / Requiem NN</p>
-		<p>2007-2009</p>
-		<p>20x20in (50x50cm)</p>
-		<p>Digital C-Print</p>
-		<p>released by Refial Inc.</p>
-	</div>
-	
 	<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-	<div class="description">
-		<p style="font-style: italic;">Renuable NN / Suberglue MM</p>
-		<p>2005-2006</p>
-		<p>40x20in (100x50cm)</p>
-	</div>
-	
 	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	<div class="description">
-		<p style="font-style: italic;">Daniem NN / Obsession LL</p>
-		<p>2009-2010</p>
-		<p>20x40in (50x100cm)</p>
-		<p>Digital D-Print</p>
-	</div>
-	
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="item" src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	<img class="item" src="../../Core/Resources/images/medium-sevenSisters.jpg" alt="Some Description about sevenSisters" />
+	<img class="item" src="../../Core/Resources/images/medium-river.jpg" alt="Some Description about river" />
+	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
+	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
 </div>
 
+<p>Image by <a href="http://www.flickr.com/photos/phrenzee/1447530226/">phrenzee</a></p>
 
 <!-- ### Mpr.Html.End ### -->
 					</div>

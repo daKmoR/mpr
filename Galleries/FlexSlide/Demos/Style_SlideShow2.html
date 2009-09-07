@@ -34,8 +34,7 @@ $require('Galleries/FlexSlide/FlexSlide.js');
 window.addEvent('domready', function() {
 	
 	var bla = new FlexSlide( $('myGallery'), {
-		render: ['item', { 'controls': ['first', 'previous', 'pause', 'next', 'last'] }, 'description', {'selectScroller': ['select'] }, 'overlayLeft', 'overlayRight' ],
-		useScroller: true,
+		render: ['item', { 'controls': ['first', 'previous', 'pause', 'next', 'last'] }, 'description', 'advSelect', 'overlayLeft', 'overlayRight' ],
 		duration: 4000,
 		auto: true,
 		selectTemplate: '',
@@ -128,12 +127,12 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>FlexSlide</h1>
+<h1>FlexSlide Style SlideShow 2</h1>
 <h2>Introduction</h2>
 <p>
-	a simple Gallery which allows to easily adopt the output.
+	this mimics the SlideShow 2 Layout.
 </p>
-<h3>Default FlexSlide</h3>
+<h3>SlideShow 2 Style</h3>
 
 <div id="myGalleryWrap">
 	<div id="myGallery">
@@ -184,7 +183,6 @@ window.addEvent('domready', function() {
 		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
 		<div class="description">my LAST Element</div>
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
-		
 	</div>
 </div>
 

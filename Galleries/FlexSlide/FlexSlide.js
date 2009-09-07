@@ -23,7 +23,7 @@ var FlexSlide = new Class({
 	Implements: [Options, Events],
 	options: {
 		selections: {}, /* item: '.myOtherItemClass' you can define your own css classes here */
-		render: ['previous', 'item', 'description', 'next', 'select'],
+		render: ['item'],
 		ui: {
 			wrap: { 'class': 'ui-Wrap' },
 			selectItem: { 'class': 'ui-SelectItem' },
