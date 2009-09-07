@@ -6,3 +6,4 @@
 	.ui-Previous { cursor: pointer; }
 	.ui-Loader { background: #fff url('img/loader.gif') no-repeat center center; height: 100%; width: 100%; display: block; }
 	.ui-RequestItem, .ui-InlineItem { width: 500px; }
+	.ui-SelectScroller { overflow: hidden; }

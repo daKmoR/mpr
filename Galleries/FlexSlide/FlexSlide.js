@@ -13,10 +13,11 @@ $require('Galleries/FlexSlide/Resources/css/FlexSlide.css');
 $require('Core/Element/Element.Dimensions.js');
 $require('Core/Element/Element.Style.js');
 $require('Core/Utilities/Selectors.js');
-
 $require('Core/Fx/Fx.Transitions.js');
 
 $require('More/Fx/Fx.Elements.js');
+$require('Snippets/Array/Array.getCombinedSize.js');
+$require('More/Interface/Scroller.js');
 
 var FlexSlide = new Class({
 	Implements: [Options, Events],
@@ -42,6 +43,8 @@ var FlexSlide = new Class({
 		centerImage: true,
 		moveContainer: true,
 		centerContainer: false,
+		useScroller: false,
+		scrollerOptions: {area: 100, velocity: 0.1},
 		duration: 4000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
@@ -106,6 +109,11 @@ var FlexSlide = new Class({
 				select.set('html', this.options.selectTemplate.substitute({id: i+1}) );
 				this.els.select.push(select);
 			}, this);
+		}
+		
+		if( this.options.useScroller == true ) {
+			this.scroller = new Scroller( this.selectWrap.getParent(), this.options.scrollerOptions).start();
+			this.selectWrap.setStyle('width', this.selectWrap.getChildren().getCombinedSize().x);
 		}
 		
 		if( $chk(this.els.description) && this.els.description.length <= 0 ) {
@@ -176,7 +184,11 @@ var FlexSlide = new Class({
 	},
 	
 	builder: function(els, wrapper) {
-		$each( els, function(item) {
+		$each( els, function(item, i) {
+			if (item === 'advSelect') {
+				els[i] = item = {'selectScroller' : ['select']};
+				this.options.useScroller = true;
+			}
 			if( $type(item) !== 'object' ) {
 				this.buildElement(item, wrapper);
 			} else {

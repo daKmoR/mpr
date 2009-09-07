@@ -70,6 +70,17 @@ window.addEvent('domready', function() {
 			down: 'slideRightQuart'
 		}
 	});
+	
+	var TabsAdvancedScroller = new FlexSlide.Advanced( $('TabsAdvancedScroller'), { 
+		autoHeight: true,
+		centerImage: false,
+		auto: false,
+		render: ['advSelect', 'item'],
+		effect: {
+			up: 'slideLeftQuart',
+			down: 'slideRightQuart'
+		}
+	});
 		
 });
 /* ### Mpr.Js.End ### */
@@ -77,11 +88,12 @@ window.addEvent('domready', function() {
 
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
+.px240x720 .col2 { min-height: 1650px; } /* is only needed so that the bottom doesn't shrink and create visually flicks in FF 3.5.2 */
 
 #myTabs { height: 100px; }
 
 .ui-Item { clear: both; background: #eee; }
-.ui-SelectItem { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 70px; padding: 0 10px; margin: 0; font-size: 12px; line-height: 25px; text-align: center; }
+.ui-SelectItem { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; min-width: 70px; padding: 0 10px; margin: 0; font-size: 12px; line-height: 25px; text-align: center; }
 .ui-SelectItem.ui-active { border-bottom: none; padding-bottom: 1px; background: #eee; }
 .ui-ItemItem { padding: 20px; }
 
@@ -149,6 +161,42 @@ window.addEvent('domready', function() {
 
 <h3>FlexSlide.Advanced as Tabs with dynamic loading (AJAX)</h3>
 <div id="TabsAdvanced">
+	<a href="./data/text.html" class="item">
+		<span class="select">AJAX text</span>
+	</a>
+	<div class="item">
+		<span class="select">simple text</span>
+		I'm just a normal inline content, no magic happens here. All the other elements get loaded dynamically. Meaning Requests for the html files and an Asset.image to load the full size image.
+	</div>
+	<a href="../../Core/Resources/images/medium-ice.jpg" class="item">
+		<span class="select">image ice</span>
+	</a>
+	<a href="./data/text2.html" class="item" title="here comes the text">
+		<span class="select">AJAX text2</span>
+	</a>
+	<a href="../../Core/Resources/images/medium-sun.jpg" class="item">
+		<span class="select">image sun</span>
+	</a>
+</div>
+
+<h3>FlexSlide.Advanced as Tabs with dynamic loading (AJAX) and Scroller</h3>
+<div id="TabsAdvancedScroller">
+	<a href="./data/text.html" class="item">
+		<span class="select">AJAX text</span>
+	</a>
+	<div class="item">
+		<span class="select">simple text</span>
+		I'm just a normal inline content, no magic happens here. All the other elements get loaded dynamically. Meaning Requests for the html files and an Asset.image to load the full size image.
+	</div>
+	<a href="../../Core/Resources/images/medium-ice.jpg" class="item">
+		<span class="select">image ice</span>
+	</a>
+	<a href="./data/text2.html" class="item" title="here comes the text">
+		<span class="select">AJAX text2</span>
+	</a>
+	<a href="../../Core/Resources/images/medium-sun.jpg" class="item">
+		<span class="select">image sun</span>
+	</a>	
 	<a href="./data/text.html" class="item">
 		<span class="select">AJAX text</span>
 	</a>
