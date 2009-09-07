@@ -33,7 +33,8 @@ $require('Galleries/FlexSlide/FlexSlide.js');
 
 window.addEvent('domready', function() {
 	
-	var bla = new FlexSlide( $('myGallery'), { 
+	var bla = new FlexSlide( $('myGallery'), {
+		render: ['item', 'description', 'advSelect'],
 		'duration': 4000,
 		auto: true,
 		'selectTemplate': ''
@@ -51,7 +52,7 @@ window.addEvent('domready', function() {
 
 #myGallery .ui-Item { left: 30px; top: 39px; position: relative; }
 #myGallery .ui-Select { margin: 5px 0; margin-top: 70px;  }
-	#myGallery .ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; }
+	#myGallery .ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; background: #fff; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -104,6 +105,18 @@ window.addEvent('domready', function() {
 		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
 		<div class="description">my third Element</div>
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+		<div class="description">my first Element</div>
+		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
+		<div class="description">my second Element</div>
+		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
+		
+		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+		<div class="description">my third Element</div>
+		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />		
 		
 		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
 		<div class="description">my first Element</div>
