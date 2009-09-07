@@ -34,10 +34,45 @@ $require('Galleries/FlexSlide/FlexSlide.js');
 window.addEvent('domready', function() {
 	
 	var bla = new FlexSlide( $('myGallery'), {
-		render: ['item', 'description', 'advSelect'],
-		'duration': 4000,
+		render: ['item', { 'controls': ['first', 'previous', 'pause', 'next', 'last'] }, 'description', {'selectScroller': ['select'] }, 'overlayLeft', 'overlayRight' ],
+		useScroller: true,
+		duration: 4000,
 		auto: true,
-		'selectTemplate': ''
+		selectTemplate: '',
+		onBuild: function() {
+			this.firstWrap.addEvent('click', function() {
+				this.show(0);
+			}.bind(this) );
+			this.lastWrap.addEvent('click', function() {
+				this.show( this.els.item.length-1 )
+			}.bind(this) );
+			
+			this.pauseWrap.addEvent('click', function() {
+				if( this.options.auto ) {
+					this.options.auto = false;
+					$clear(this.autotimer);
+					this.pauseWrap.setStyle('background-position', '20px 0');
+				} else {
+					this.options.auto = true;
+					this.pauseWrap.setStyle('background-position', '0 0');
+					this.auto();
+				}
+			}.bind(this) );
+			
+			this.controlsWrap.fade('hide');
+			this.itemWrap.addEvent('mouseenter', function(e) {
+				this.controlsWrap.fade(1);
+			}.bind(this) );
+			this.wrap.addEvent('mouseleave', function() {
+				this.controlsWrap.fade(0);
+			}.bind(this) );
+			
+			this.els.select.fade(0.3);
+		},
+		onSelectChange: function(currentEl, nextEl) {
+			currentEl.fade(0.3);
+			nextEl.fade(1);
+		}
 	});
 	
 });
@@ -47,12 +82,28 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-#myGalleryWrap { height: 548px; width: 560px; background: #E5E5E5 url(img/slideshow.gif) no-repeat; }
+#myGalleryWrap { height: 548px; width: 560px; background: #E5E5E5 url(Style_SlideShow2/css/img/slideshow.gif) no-repeat; }
 #myGallery { height: 400px; width: 500px; position: relative; }
 
-#myGallery .ui-Item { left: 30px; top: 39px; position: relative; }
-#myGallery .ui-Select { margin: 5px 0; margin-top: 70px;  }
-	#myGallery .ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; background: #fff; }
+.ui-Item { left: 30px; top: 39px; position: relative; }
+.ui-SelectScroller { margin-top: 70px; }
+.ui-Select { margin: 0 10px;  }
+	.ui-SelectItem { float: left; width: 50px; height: 40px; padding: 5px; margin: 0 5px; border: 1px solid #ccc; background: #fff; }
+	
+.ui-Description { font-size: 12px; height: 20px; left: 30px; top: 20px; }
+.ui-DescriptionItem { width: 500px; text-align: center; background: #fff; border-top: 1px solid #eee; }
+	
+.ui-Controls { background: url(Style_SlideShow2/css/img/controller.png); height: 42px; left: 50%; margin: -44px 0 0 -119px; overflow: hidden; position: absolute;	top: 50%; width: 238px; z-index: 10000; }
+	.ui-Controls div { cursor: pointer; height: 18px; position: absolute; top: 12px; overflow: hidden; }
+		.ui-Controls div:hover { background-position: 0 18px; }
+	.ui-First { background: url(Style_SlideShow2/css/img/controller-first.gif); left: 33px;	width: 19px; }
+	.ui-Previous { background: url(Style_SlideShow2/css/img/controller-prev.gif); left: 65px; width: 28px; }
+	.ui-Pause { background: url(Style_SlideShow2/css/img/controller-pause.gif); left: 109px; width: 20px; }
+	.ui-Next { background: url(Style_SlideShow2/css/img/controller-next.gif); left: 145px; width: 28px; }
+	.ui-Last { background: url(Style_SlideShow2/css/img/controller-last.gif); left: 186px; width: 19px; }
+	
+.ui-OverlayLeft, .ui-OverlayRight { background: url(Style_SlideShow2/css/img/thumbnails-a.png); left: 0; top: 465px; height: 60px; position: absolute; width: 30px; z-index: 10000; }
+.ui-OverlayRight { background: url(Style_SlideShow2/css/img/thumbnails-b.png); left: auto; right: 0; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -83,7 +134,7 @@ window.addEvent('domready', function() {
 <div id="myGalleryWrap">
 	<div id="myGallery">
 		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-		<div class="description">my first Element</div>
+		<div class="description">my FIRST Element</div>
 		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
@@ -95,39 +146,39 @@ window.addEvent('domready', function() {
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-		<div class="description">my first Element</div>
+		<div class="description">my fourth Element</div>
 		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-		<div class="description">my second Element</div>
+		<div class="description">my fifth Element</div>
 		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-		<div class="description">my third Element</div>
+		<div class="description">my sixth Element</div>
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-		<div class="description">my first Element</div>
+		<div class="description">my seventh Element</div>
 		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-		<div class="description">my second Element</div>
+		<div class="description">my eight Element</div>
 		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-		<div class="description">my third Element</div>
+		<div class="description">my ninth Element</div>
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />		
 		
 		<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-		<div class="description">my first Element</div>
+		<div class="description">my tenth Element</div>
 		<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-ice.jpg" alt="Some Description about ice" />
-		<div class="description">my second Element</div>
+		<div class="description">my eleventh Element</div>
 		<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
 		
 		<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-		<div class="description">my third Element</div>
+		<div class="description">my LAST Element</div>
 		<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about water" />
 		
 	</div>
