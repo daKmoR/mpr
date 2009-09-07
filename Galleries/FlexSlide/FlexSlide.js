@@ -45,7 +45,7 @@ var FlexSlide = new Class({
 		centerContainer: false,
 		useScroller: false,
 		scrollerOptions: {area: 100, velocity: 0.1},
-		duration: 4000,
+		duration: 5000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
 		active: true,
@@ -229,22 +229,23 @@ var FlexSlide = new Class({
 			
 			this.els.item[id].set('style', 'display: block;');
 			this.els.item[this.current].set('style', 'display: block;');
+			
 			if( !this.options.autoWidth ) {
 				var width = this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt();
 				this.els.item[id].setStyle('width', width );
 				this.els.item[this.current].setStyle('width', width );
 			}
 			
-			this.fxConfig = {};
-			this.wrapFxConfig = {};
-			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
-
 			if( this.options.centerImage === true ) {
 				var parentSize = this.els.item[this.current].getParent().getSize().y;
 				this.els.item[this.current].setStyle('margin-top', (parentSize - this.els.item[this.current].getSize().y) / 2 );
 				this.els.item[id].setStyle('margin-top', (parentSize - this.els.item[id].getSize().y) / 2 );
 			}
 			
+			this.fxConfig = {};
+			this.wrapFxConfig = {};
+			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
+
 			if( this.options.autoWidth || this.options.autoHeight )
 				this.wrapFxConfig[0] = {};
 			if( this.options.autoWidth )
