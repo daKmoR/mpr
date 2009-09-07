@@ -77,6 +77,7 @@ var FlexSlide = new Class({
 				this.els.description[next].fade('hide').setStyle('display', 'block').fade(1);
 			}
 		}
+		/*onBuild, onSelectChange(currentEl, nextEl) */
 	},
 	
 	current: -1,
@@ -121,7 +122,7 @@ var FlexSlide = new Class({
 				var description = new Element('div', this.options.ui.descriptionItem)
 					.inject(this.descriptionWrap);
 				
-				var txt = el.get('title') || el.get('alt') || $chk(el.getElement('img')) ? el.getElement('img').get('alt') : '';
+				var txt = el.get('title') || el.get('alt') || $chk(el.getElement('img')) ? el.getElement('img').get('alt') || '' : '';
 				var parts = txt.split('::');
 				if( parts.length === 2 )
 					txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
@@ -157,6 +158,7 @@ var FlexSlide = new Class({
 			this.previousWrap.addEvent('click', this.previous.bind(this, this.options.step) );
 		}
 		
+		this.fireEvent('onBuild');
 	},
 	
 	buildElement: function(item, wrapper) {
@@ -301,6 +303,7 @@ var FlexSlide = new Class({
 				this.els.select[this.current].removeClass( this.options.ui.activeClass );
 			}
 			this.els.select[id].addClass( this.options.ui.activeClass );
+			this.fireEvent('onSelectChange', [this.els.select[this.current], this.els.select[id]]);
 		}
 		
 		this.updateCounter(id);
