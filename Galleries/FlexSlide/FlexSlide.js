@@ -230,17 +230,8 @@ var FlexSlide = new Class({
 			this.els.item[id].set('style', 'display: block;');
 			this.els.item[this.current].set('style', 'display: block;');
 			
-			if( !this.options.autoWidth ) {
-				var width = this.els.item[id].getParent().getSize().x - this.els.item[id].getStyle('padding-left').toInt() - this.els.item[id].getStyle('padding-right').toInt();
-				this.els.item[id].setStyle('width', width );
-				this.els.item[this.current].setStyle('width', width );
-			}
-			
-			if( this.options.centerImage === true ) {
-				var parentSize = this.els.item[this.current].getParent().getSize().y;
-				this.els.item[this.current].setStyle('margin-top', (parentSize - this.els.item[this.current].getSize().y) / 2 );
-				this.els.item[id].setStyle('margin-top', (parentSize - this.els.item[id].getSize().y) / 2 );
-			}
+			this.adjustElement(this.els.item[this.current]);
+			this.adjustElement(this.els.item[id]);
 			
 			this.fxConfig = {};
 			this.wrapFxConfig = {};
@@ -282,6 +273,25 @@ var FlexSlide = new Class({
 			this.process(id);
 		}
 	},
+	
+	adjustElement: function(el) {
+		var parentSize = el.getParent().getSize(), elSize = el.getSize();
+		if( elSize.x > elSize.y ) {
+			if( !this.options.autoWidth ) {
+				el.setStyle('width', parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
+				elSize = el.getSize();
+			}
+			if( this.options.centerImage === true )
+				el.setStyle('margin', (parentSize.y - elSize.y) / 2 + 'px 0' );
+		} else {
+			if( !this.options.autoHeight ) {
+				el.setStyle('height', parentSize.y - el.getStyle('padding-top').toInt() - el.getStyle('padding-bottom').toInt() );
+				elSize = el.getSize();
+			}
+			if( this.options.centerImage === true )
+				el.setStyle('margin', '0 ' + (parentSize.x - elSize.x) / 2 + 'px' );
+		}
+	},	
 	
 	centerContainer: function(id) {
 		var diff = this.wrap.getSize().x - this.itemWrap.getSize().x;
