@@ -33,14 +33,9 @@ window.addEvent('domready', function() {
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexBox/FlexBoxes.js');
 	
-	$require('Galleries/FlexBox/Resources/css/Style_Lightbox.css');
+	$require('Galleries/FlexBox/Styles/LightBox/LightBox.js');
 	
-	var myFlexBoxes = new FlexBoxes( $$('a.FlexBox'), {
-		flexSlide: {
-			render: [{'item': ['previous', 'next']}, { 'bottom': [{'description': ['counter']}, 'close'] } ],
-			counterTemplate: 'Image {id} of {count}',
-		}
-	});
+	var myFlexBoxes = new FlexBoxes( $$('a.FlexBox') );
 	
 });
 /* ### Mpr.Js.End ### */
