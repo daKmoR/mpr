@@ -276,21 +276,29 @@ var FlexSlide = new Class({
 	
 	adjustElement: function(el) {
 		var parentSize = el.getParent().getSize(), elSize = el.getSize();
-		if( elSize.x > elSize.y ) {
+		var diffHeight = parentSize.y - elSize.y, diffWidth = parentSize.x - elSize.x;
+		
+		if ( diffHeight > diffWidth ) {
 			if( !this.options.autoWidth ) {
 				el.setStyle('width', parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
 				elSize = el.getSize();
 			}
-			if( this.options.centerImage === true )
-				el.setStyle('margin', (parentSize.y - elSize.y) / 2 + 'px 0' );
 		} else {
 			if( !this.options.autoHeight ) {
 				el.setStyle('height', parentSize.y - el.getStyle('padding-top').toInt() - el.getStyle('padding-bottom').toInt() );
 				elSize = el.getSize();
 			}
-			if( this.options.centerImage === true )
-				el.setStyle('margin', '0 ' + (parentSize.x - elSize.x) / 2 + 'px' );
 		}
+		
+		if( this.options.centerImage === true ) {
+			if( diffHeight > diffWidth ) {
+				el.setStyle('margin', (parentSize.y - elSize.y) / 2 + 'px 0' );
+			} else {
+				el.setStyle('margin', '0 ' + (parentSize.x - elSize.x) / 2 + 'px' );
+			}
+		}
+		
+		
 	},	
 	
 	centerContainer: function(id) {

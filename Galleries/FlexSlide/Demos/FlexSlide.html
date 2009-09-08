@@ -32,7 +32,7 @@ window.addEvent('domready', function() {
 
 	$require('Core/Utilities/DomReady.js');
 	$require('Galleries/FlexSlide/FlexSlide.js');
-	var myFlexSlide = new FlexSlide( $('myGallery'), { centerImage: false } );
+	var myFlexSlide = new FlexSlide( $('myGallery') );
 	
 });
 /* ### Mpr.Js.End ### */
@@ -70,15 +70,22 @@ window.addEvent('domready', function() {
 <h3>Default FlexSlide</h3>
 
 <div id="myGallery">
-	<div class="item">
-		<p>You can define whatever you want...</p>
+	<div class="item" style="height: 200px; width: 500px;">
+		<p>It comes with no really style at all. <br /> However you can easily adopt to whatever ever you want it to look like</p>
+		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 	</div>
 	<div class="item">
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</p>
+		<p>As it's possible to slide complete html code you can easily create Sliders, </p>
+		<img src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about ice" />
 	</div>
-	<div class="item">
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-	</div>
+	<img class="item" src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="item" src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	<img class="item" src="../../Core/Resources/images/medium-sevenSisters.jpg" alt="Some Description about sevenSisters" />
+	<img class="item" src="../../Core/Resources/images/medium-river.jpg" alt="Some Description about river" />
+	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
+	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
+	
 </div>
 
 <!-- ### Mpr.Html.End ### -->
