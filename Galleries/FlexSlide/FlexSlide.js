@@ -38,10 +38,9 @@ var FlexSlide = new Class({
 		resizeFactor: 0.95,
 		resizeLimit: false, // {x: 640, y: 640}
 		auto: true,
-		autoHeight: false,
-		autoWidth: false,
+		autoItemSize: { x: true, y: false },
+		autoContainerSize: { x: false, y: false },
 		centerImage: true,
-		moveContainer: true,
 		centerContainer: false,
 		useScroller: false,
 		scrollerOptions: {area: 100, velocity: 0.1},
@@ -227,9 +226,6 @@ var FlexSlide = new Class({
 			this.fx.setOptions( newOptions );
 			this.wrapFx.setOptions( this.options.effect.wrapFxOptions );
 			
-			this.els.item[id].set('style', 'display: block;');
-			this.els.item[this.current].set('style', 'display: block;');
-			
 			this.adjustElement(this.els.item[this.current]);
 			this.adjustElement(this.els.item[id]);
 			
@@ -237,14 +233,14 @@ var FlexSlide = new Class({
 			this.wrapFxConfig = {};
 			this.options.effects[fx].call( this, this.current, id, currentEl, this.els.item[id] );
 
-			if( this.options.autoWidth || this.options.autoHeight )
+			if( this.options.autoContainerSize.x || this.options.autoContainerSize.y )
 				this.wrapFxConfig[0] = {};
-			if( this.options.autoWidth )
+			if( this.options.autoContainerSize.x )
 				$extend(this.wrapFxConfig[0], {'width': this.els.item[id].getSize().x} );
-			if( this.options.autoHeight )
+			if( this.options.autoContainerSize.y )
 				$extend(this.wrapFxConfig[0], {'height': this.els.item[id].getSize().y} );
 			
-			if( this.options.moveContainer && this.options.centerContainer )
+			if( this.options.centerContainer )
 				this.centerContainer(id);
 				
 			var tmp = {'display' : 'block'};
@@ -263,8 +259,7 @@ var FlexSlide = new Class({
 				this.running = false;
 				this.fireEvent('onShowEnd');
 			}.bind(this) );
-			if( this.options.moveContainer )
-				this.wrapFx.start(this.wrapFxConfig);
+			this.wrapFx.start(this.wrapFxConfig);
 			
 			// this.wrapFx.start(this.wrapFxConfig).chain( function() {
 				// this.fx.start(this.fxConfig)
@@ -275,30 +270,49 @@ var FlexSlide = new Class({
 	},
 	
 	adjustElement: function(el) {
-		var parentSize = el.getParent().getSize(), elSize = el.getSize();
+		el.set('style', 'display: block;');
+	
+		var parent = el.getParent(), parentSize = parent.getSize(), elSize = el.getSize();
+		var width = parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() - parent.getStyle('padding-left').toInt() - parent.getStyle('padding-right').toInt();
+		var height = parentSize.y - el.getStyle('padding-top').toInt() - el.getStyle('padding-bottom').toInt() - parent.getStyle('padding-top').toInt() - parent.getStyle('padding-bottom').toInt();
 		var diffHeight = parentSize.y - elSize.y, diffWidth = parentSize.x - elSize.x;
 		
-		if ( diffHeight > diffWidth ) {
-			if( !this.options.autoWidth ) {
-				el.setStyle('width', parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() );
-				elSize = el.getSize();
-			}
-		} else {
-			if( !this.options.autoHeight ) {
-				el.setStyle('height', parentSize.y - el.getStyle('padding-top').toInt() - el.getStyle('padding-bottom').toInt() );
-				elSize = el.getSize();
-			}
+		var autoItemSize = this.options.autoItemSize;
+		
+		if( el.get('tag') === 'img' || el.get('tag') === 'a' ) {
+			autoItemSize = { x: false, y: false };
+			if ( diffHeight > diffWidth ) //quer
+				autoItemSize.x = true;
+			else
+				autoItemSize.y = true;
+		}
+		
+		if( this.options.autoContainerSize.y ) {
+			autoItemSize = { x: true, y: false };
+		}
+		
+		if( autoItemSize.x )
+			el.setStyle('width', width);
+		if( autoItemSize.y )
+			el.setStyle('height', height);
+		
+		elSize = el.getSize();
+		
+		// we need to set width and height for links as they may contain image with width and height 100%
+		if( el.get('tag') === 'a' ) {
+			if( autoItemSize.x )
+				el.setStyle('height', elSize.y);
+			if( autoItemSize.y )
+				el.setStyle('width', elSize.x);
 		}
 		
 		if( this.options.centerImage === true ) {
-			if( diffHeight > diffWidth ) {
-				el.setStyle('margin', (parentSize.y - elSize.y) / 2 + 'px 0' );
+			if( diffHeight > diffWidth ) { //quer
+				el.setStyle('margin', (height - elSize.y) / 2 + 'px 0' );
 			} else {
-				el.setStyle('margin', '0 ' + (parentSize.x - elSize.x) / 2 + 'px' );
+				el.setStyle('margin', '0 ' + (width - elSize.x) / 2 + 'px' );
 			}
 		}
-		
-		
 	},	
 	
 	centerContainer: function(id) {
