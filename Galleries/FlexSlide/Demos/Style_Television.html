@@ -31,12 +31,22 @@
 $require('Core/Utilities/DomReady.js');
 $require('Galleries/FlexSlide/FlexSlide.js');
 
+$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
+
 window.addEvent('domready', function() {
 
-	var leftControls = new FlexSlide( $('myGallery'), {
+	var Style_Television = new FlexSlide( $('myGallery'), {
 		getSizeFromContainer: false,
 		render: ['item', 'overlay', 'previous', 'next', 'select'],
+		auto: false,
 		effect: { random: ['fade'] }
+	});
+	
+	$('allTransitions').addEvent('click', function(e) {
+		e.stop();
+		Style_Television.setOptions({
+			effect: { random: ['fade', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce' ] }
+		});
 	});
 	
 });
@@ -80,12 +90,12 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>FlexSlide</h1>
+<h1>FlexSlide Style Television</h1>
 <h2>Introduction</h2>
 <p>
-	a simple Gallery which allows to easily adopt the output.
+	With FlexSlide you can easily adopt you Gallery to any Layout.
 </p>
-<h3>Default FlexSlide</h3>
+<h3>Television Style</h3>
 
 <div id="myGallery">
 	<img class="item" src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
@@ -100,6 +110,9 @@ window.addEvent('domready', function() {
 </div>
 
 <p>Image by <a href="http://www.flickr.com/photos/phrenzee/1447530226/">phrenzee</a></p>
+
+<h3>Options</h3>
+<a href="#" id="allTransitions">activate all Transitions for this SlideShow</a>
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
