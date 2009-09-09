@@ -39,6 +39,8 @@ var FlexSlide = new Class({
 		resizeLimit: false, // {x: 640, y: 640}
 		auto: true,
 		autoItemSize: { x: true, y: false },
+		autoItemSizeSpecial: ['img', 'a'],
+		centerItemTags: ['img', 'a'],
 		autoContainerSize: { x: false, y: false },
 		centerItem: true,
 		centerContainer: false,
@@ -278,7 +280,7 @@ var FlexSlide = new Class({
 		var diffHeight = parentSize.y - elSize.y, diffWidth = parentSize.x - elSize.x;
 		var autoItemSize = this.options.autoItemSize;
 		
-		if( el.get('tag') === 'img' || el.get('tag') === 'a' ) {
+		if( this.options.autoItemSizeSpecial.contains(el.get('tag')) ) {
 			autoItemSize = { x: false, y: false };
 			if ( diffHeight > diffWidth ) //quer
 				autoItemSize.x = true;
@@ -301,14 +303,14 @@ var FlexSlide = new Class({
 		elSize = el.getSize();
 		
 		// we need to set width and height for links as they may contain image with width and height 100%
-		if( el.get('tag') === 'a' ) {
+		if( this.options.autoItemSizeSpecial.contains(el.get('tag')) ) {
 			if( autoItemSize.x )
 				el.setStyle('height', elSize.y);
 			if( autoItemSize.y )
 				el.setStyle('width', elSize.x);
 		}
 		
-		if( this.options.centerItem === true ) {
+		if( this.options.centerItem === true && this.options.centerItemTags.contains(el.get('tag')) ) {
 			if( diffHeight > diffWidth ) { //quer
 				el.setStyle('margin', (height - elSize.y) / 2 + 'px 0' );
 			} else {
