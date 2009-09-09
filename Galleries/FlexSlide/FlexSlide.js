@@ -272,7 +272,11 @@ var FlexSlide = new Class({
 	},
 	
 	adjustElement: function(el) {
-		el.set('style', 'display: block;');
+		if( !el.retrieve('FlexSlide:ElementStyle') ) {
+			el.setStyle('display', 'block');
+			el.store('FlexSlide:ElementStyle', el.get('style'));
+		}
+		el.set('style', el.retrieve('FlexSlide:ElementStyle') );
 	
 		var parent = el.getParent(), parentSize = parent.getSize(), elSize = el.getSize();
 		var width = parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() - parent.getStyle('padding-left').toInt() - parent.getStyle('padding-right').toInt();
