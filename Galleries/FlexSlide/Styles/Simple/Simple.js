@@ -16,7 +16,5 @@ FlexSlide.implement('options', {
 	ui: { wrap: { 'class': 'ui-Wrap simpleSlide' } },
 	autoItemSize: { x: true, y: true },
 	getSizeFromContainer: false,
-	render: ['description', 'previous', 'item', 'next', 'advSelect'],
-	auto: false,
-	effect: { random: ['fade'] }
+	render: ['description', 'previous', 'item', 'next', 'advSelect']
 });

@@ -1,5 +1,6 @@
 .ui-Item, .ui-Description { position: relative; overflow: hidden; }
 	.ui-ItemItem, .ui-DescriptionItem { position: absolute; display: none; }
+	img.ui-ItemItem { width: auto; height: auto; }
 	
 	.ui-Select .ui-SelectItem { display: block; cursor: pointer; }
 	.ui-Next { cursor: pointer; }
