@@ -28,8 +28,7 @@ var FlexBox = new Class({
 		},
 		flexSlide: {
 			render: [{ 'bottom': ['next', 'description', 'previous'] }, 'item', 'close'],
-			autoHeight: true,
-			autoWidth: true,
+			autoContainerSize: { x: true, y: true },
 			centerImage: false,
 			centerContainer: true,
 			auto: false,
@@ -113,7 +112,6 @@ var FlexBox = new Class({
 			this.wrap.setStyle('display', 'block');
 			
 			this.flexSlide.setOptions( $merge(this.options.flexSlide, {
-				moveContainer: true,
 				centerContainer: this.options.centerZoom,
 				opacityZoom: this.options.opacityZoom,
 				margin: this.options.margin,
@@ -192,9 +190,7 @@ var FlexBox = new Class({
 		var fxOptions = this.options.flexSlide.effect.options.dezoom;
 		
 		this.flexSlide.setOptions( $merge(this.options.flexSlide, {
-			autoWidth: false,
-			autoHeight: false,
-			moveContainer: true,
+			autoContainerSize: { x: false, y: false },
 			centerContainer: false,
 			opacityZoom: this.options.opacityZoom,
 			effect: { random: ['dezoom'] },
