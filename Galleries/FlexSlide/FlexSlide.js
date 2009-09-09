@@ -123,7 +123,9 @@ var FlexSlide = new Class({
 				var description = new Element('div', this.options.ui.descriptionItem)
 					.inject(this.descriptionWrap);
 				
-				var txt = el.get('title') || el.get('alt') || $chk(el.getElement('img')) ? el.getElement('img').get('alt') || '' : '';
+				var txt = el.get('title') || el.get('alt') || '';
+				if( el.getElement('img') && txt === '' )
+					txt = el.getElement('img').get('alt');
 				var parts = txt.split('::');
 				if( parts.length === 2 )
 					txt = this.options.descriptionTemplate.substitute( {'title': parts[0], 'text': parts[1]} );
