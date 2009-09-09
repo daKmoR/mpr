@@ -29,23 +29,26 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 $require('Core/Utilities/DomReady.js');
-$require('Galleries/FlexSlide/FlexSlide.js');
+$require('Galleries/FlexSlide/FlexSlide.Advanced.js');
+
+$require('Galleries/FlexSlide/Styles/Simple/Simple.js');
 
 window.addEvent('domready', function() {
 
-	var myFlexSlideTabs = new FlexSlide( $('myGallery'), { 
-		autoHeight: true,
-		autoWidth: true,
-		autoCenter: false,
+	var dynamicLoading = new FlexSlide.Advanced($('myGallery'), {
 		auto: false,
-		dynamicLoading: true,
-		centerContainer: true,
-		render: ['item', 'next', 'previous'],
-		effect: {
-			random: ['fade']
-		}
+		selectTemplate: '{id}',
+		render: ['description', 'previous', 'item', 'next', 'advSelect']
 	});
-		
+	
+	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
+	$('allTransitions').addEvent('click', function(e) {
+		e.stop();
+		dynamicLoading.setOptions({
+			effect: { random: ['fade', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce' ] }
+		});
+	});	
+	
 });
 /* ### Mpr.Js.End ### */
 </script>
@@ -53,19 +56,9 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
-/*
-.ui-ItemWrap { height: 200px; clear: both; background: #eee; }
-.ui-Select { -moz-border-radius: 10px 10px 0 0; border: 1px solid #333; float: left; width: 70px; padding: 0 10px; margin: 0; font-size: 12px; line-height: 25px; text-align: center; }
-.ui-Select.ui-active { border-bottom: none; padding-bottom: 1px; background: #eee; }
-.ui-Item { padding: 20px; }
-*/
-
-.ui-NextWrap { height: 10px; width: 10px; background: red; }
-.ui-PreviousWrap { height: 10px; width: 10px; background: orange; }
-
-#globalContainer { position: relative; width: 650px; height: 650px; background: #ccc; }
-#myGallery { position: absolute; background: #fff; left: 10px; top: 10px; padding: 10px; width: 300px; height: 300px; }
-.item { width: 300px; }
+.description a { color: #777; font-weight: normal; text-decoration: none; }
+	.description a:hover { text-decoration: underline; }
+a.header { color: #ff0000; font-size: 18px; font-weight: bold; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -86,35 +79,116 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>FlexSlide</h1>
+<h1>FlexSlide.Advanced dynamic Loading</h1>
 <h2>Introduction</h2>
 <p>
-	a simple Gallery which allows to easily adopt the output.
+	With FlexSlide.Advanced you can dynamically load images, urls, inline content
 </p>
-<h3>Default FlexSlide</h3>
+<h3>Example for dynamic Loading of some images from flickr</h3>
 
-<div id="globalContainer">
-
-	<div id="myGallery">
-		<div class="item">
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-		</div>
-		<a href="../../Core/Resources/images/medium-meadow.jpg" class="item">
-			<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-		</a>
-		<a href="../../Core/Resources/images/tiny-ice.jpg" class="item">
-			<img class="select" src="../../Core/Resources/images/small-ice.jpg" alt="Some Description about meadow" />
-		</a>
-		<div class="item">
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-		</div>
-		<a href="./data/text.html" class="item">
-			<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
-		</a>
+<div id="myGallery">
+	
+	<div class="item" style="padding: 60px;">
+		Most of the items in this gallery are plain image. Some are links holding a single image and we have this and another div Item. <br />
+		Isn't that great to be able to combine all different types of stuff? 
+		<p style="font-size: 55px;">I'm loving it :)</p>
 	</div>
+	<div class="description">some explainations</div>
+	
+	<a href="http://farm4.static.flickr.com/3426/3902586025_68996266dd.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/makuneros/3902586025/">Al paso</a> by <a href="http://www.flickr.com/photos/makuneros/">makuneros</a></div>
+	
+	<a href="http://farm4.static.flickr.com/3081/3133924813_df166bd818.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/jaewalk/3133924813/">underneath a star</a> by <a href="http://www.flickr.com/photos/jaewalk/">jaeWALK</a></div>
 
+	<a href="http://farm4.static.flickr.com/3025/3073485075_f6efae25c1.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/paulobrandao/3073485075/">frozen light in a snow weekend, MANZANEDA</a> by <a href="http://www.flickr.com/photos/paulobrandao/">Paulo Brandão</a></div>
+
+	<a href="http://farm4.static.flickr.com/3178/2985066755_a23e402f28.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/mikebaird/2985066755/">Two equestrian riders, girls on horseback, in low tide reflections.</a> by <a href="http://www.flickr.com/photos/mikebaird/">mikebaird</a></div>
+
+	<a href="http://farm3.static.flickr.com/2283/1552383685_56e2ae46c7.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/hamed/1552383685/">Eid Mubarak</a> by <a href="http://www.flickr.com/photos/hamed/">Hamed Saber</a></div>
+
+	<a href="http://farm4.static.flickr.com/3218/2762313433_bc027466e3.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/paulobrandao/2762313433/">hdr tree</a> by <a href="http://www.flickr.com/photos/paulobrandao/">Paulo Brandão</a></div>
+
+	<a href="http://farm4.static.flickr.com/3141/2713795057_4136bb1211.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/paulobrandao/2713795057/">WATER TOWER</a> by <a href="http://www.flickr.com/photos/paulobrandao/">Paulo Brandão</a></div>
+
+	<a href="http://farm4.static.flickr.com/3074/2663118435_0bd52b9234.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/paulobrandao/2663118435/">Ocean Colors</a> by <a href="http://www.flickr.com/photos/paulobrandao/">Paulo Brandão</a></div>
+
+	<a href="http://farm3.static.flickr.com/2016/1804080776_eff78a2313.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/pagedooley/1804080776/">Each war is different, each war is the same</a> by <a href="http://www.flickr.com/photos/pagedooley/">kevindooley</a></div>
+
+	<a href="http://farm2.static.flickr.com/1121/566128230_af7d5328f1.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/pearbiter/566128230/">The Sun Sets on Château de Chillon</a> by <a href="http://www.flickr.com/photos/pearbiter/">Pear Biter</a></div>
+
+	<a href="http://farm4.static.flickr.com/3380/3291631671_5659b99c85.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/shivani_rana/3291631671/">mY first HDR</a> by <a href="http://www.flickr.com/photos/shivani_rana/">Februum</a></div>
+
+	<a href="http://farm4.static.flickr.com/3604/3567615703_b8fa51b9bb.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/vramak/3567615703/">The Karma Machine</a> by <a href="http://www.flickr.com/photos/vramak/">vramak</a></div>
+
+	<a href="http://farm4.static.flickr.com/3633/3461322169_4a9b025c5a.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/ectopsyche/3461322169/">Two columns</a> by <a href="http://www.flickr.com/photos/ectopsyche/">Sergio Tudela</a></div>
+
+	<a href="http://farm3.static.flickr.com/2066/1752872124_8f8977d65f.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/peasap/1752872124/">Fire and Water</a> by <a href="http://www.flickr.com/photos/peasap/">peasap</a></div>
+
+	<a href="http://farm4.static.flickr.com/3370/3237246096_9a8cde6f5a.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/alphaducentaure/3237246096/">Lumineux voile</a> by <a href="http://www.flickr.com/photos/alphaducentaure/">alpha du centaure</a></div>
+
+	<a href="http://farm4.static.flickr.com/3351/3228637838_d313126033.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/stage88/3228637838/">Australia Day Fireworks</a> by <a href="http://www.flickr.com/photos/stage88/">stage88</a></div>
+
+	<a href="http://farm4.static.flickr.com/3267/3202420084_bc4a6a0085.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/akkku/3202420084/">Tilt-Shift Manhattan</a> by <a href="http://www.flickr.com/photos/akkku/">Aku :)</a></div>
+
+	<a href="http://farm4.static.flickr.com/3144/2981779469_e341e23725.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/chile-suecia/2981779469/">stockholm night....</a> by <a href="http://www.flickr.com/photos/chile-suecia/">Hector Melo A.</a></div>
+
+	<a href="http://farm4.static.flickr.com/3237/2526007720_9620dfde38.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/liberato/2526007720/">Zippo</a> by <a href="http://www.flickr.com/photos/liberato/">liber</a></div>
+
+	<a href="http://farm4.static.flickr.com/3067/2487291985_fe237bde20.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/66164549@N00/2487291985/">I thought I saw a puddy cat....</a> by <a href="http://www.flickr.com/photos/66164549@N00/">law_keven</a></div>
+
+	<a href="http://farm3.static.flickr.com/2246/1841944810_cb7237eae0_b.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/pagedooley/1841944810/">Big wheel</a> by <a href="http://www.flickr.com/photos/pagedooley/">kevindooley</a></div>
+
+	<a href="http://farm2.static.flickr.com/1194/1061897539_baedf4619e_o.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/muha/1061897539/">weekend inspiration</a> by <a href="http://www.flickr.com/photos/muha/">muha...</a></div>
+
+	<a href="http://farm2.static.flickr.com/1372/1426623052_93825cffc6.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/nicholas_t/1426623052/">Billowy</a> by <a href="http://www.flickr.com/photos/nicholas_t/">Nicholas_T</a></div>
+
+	<a href="http://farm1.static.flickr.com/213/452412873_7f53d0c124.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/nrbelex/452412873/">Highway Insomnia</a> by <a href="http://www.flickr.com/photos/nrbelex/">Nrbelex</a></div>
+
+	<a href="http://farm1.static.flickr.com/108/259816210_b8fea89e17.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/grrphoto/259816210/">Cocodrilo</a> by <a href="http://www.flickr.com/photos/grrphoto/">R'eyes</a></div>
+
+	<a href="http://farm1.static.flickr.com/47/148665503_cf21216ecd.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/hamed/148665503/">Tehran Sunset</a> by <a href="http://www.flickr.com/photos/hamed/">Hamed Saber</a></div>
+
+	<a href="http://farm3.static.flickr.com/2436/3680331543_7653552f42.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/werkunz/3680331543/">The Sky above us</a> by <a href="http://www.flickr.com/photos/werkunz/">werkunz1</a></div>
+
+	<a href="http://farm4.static.flickr.com/3642/3339417842_9749516bb4.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/opoterser/3339417842/">Face of a Southern Yellowjacket Queen</a> by <a href="http://www.flickr.com/photos/opoterser/">Opo Terser</a></div>
+
+	<a href="http://farm4.static.flickr.com/3232/2911840052_e64b59f0dc.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/chantrybee/2911840052/">Here comes the sun...</a> by <a href="http://www.flickr.com/photos/chantrybee/">chantrybee</a></div>
+
+	<a href="http://farm4.static.flickr.com/3220/2712880605_5c5b8cc18a.jpg" class="item"> </a>
+	<div class="description"><a class="header" href="http://www.flickr.com/photos/paulobrandao/2712880605/">Inside Garden 360</a> by <a href="http://www.flickr.com/photos/paulobrandao/">Paulo Brandão</a></div>
+	
 </div>
 
+<h3>Options</h3>
+<a href="#" id="allTransitions">activate all Transitions for this SlideShow</a>
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
