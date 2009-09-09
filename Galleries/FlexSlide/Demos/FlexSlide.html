@@ -28,11 +28,16 @@
 		
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
+
+$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
+
 window.addEvent('domready', function() {
 
-	$require('Core/Utilities/DomReady.js');
-	$require('Galleries/FlexSlide/FlexSlide.js');
-	var myFlexSlide = new FlexSlide( $('myGallery') );
+	var myFlexSlide = new FlexSlide( $('myGallery'), {
+		effect: { random: ['slideLeftQuart'] }
+	});
 	
 });
 /* ### Mpr.Js.End ### */
@@ -70,7 +75,7 @@ window.addEvent('domready', function() {
 <h3>Default FlexSlide</h3>
 
 <div id="myGallery">
-	<div class="item" style="height: 200px; width: 500px;">
+	<div class="item">
 		<p>It comes with no really style at all. <br /> However you can easily adopt to whatever ever you want it to look like</p>
 		<img src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
 	</div>

@@ -36,8 +36,8 @@ $require('Galleries/FlexSlide/FlexSlide.Transitions.js');
 window.addEvent('domready', function() {
 
 	var TabsSimple = new FlexSlide( $('TabsSimple'), { 
-		autoHeight: true,
-		centerImage: false,
+		autoContainerSize: { x: false, y: true },
+		centerItem: false,
 		auto: false,
 		render: ['select', 'item'],
 		effect: { 
@@ -47,8 +47,8 @@ window.addEvent('domready', function() {
 	});
 	
 	var TabsAnimation = new FlexSlide( $('TabsAnimation'), { 
-		autoHeight: true,
-		centerImage: false,
+		autoContainerSize: { x: false, y: true },
+		centerItem: false,
 		auto: false,
 		selectTemplate: 'Tab {id}',
 		render: ['select', 'item'],
@@ -61,8 +61,8 @@ window.addEvent('domready', function() {
 	//this requires the advanced version of FlexSlide
 	$require('Galleries/FlexSlide/FlexSlide.Advanced.js');
 	var TabsAdvanced = new FlexSlide.Advanced( $('TabsAdvanced'), { 
-		autoHeight: true,
-		centerImage: false,
+		autoContainerSize: { x: false, y: true },
+		centerItem: false,
 		auto: false,
 		render: ['select', 'item'],
 		effect: {
@@ -72,8 +72,8 @@ window.addEvent('domready', function() {
 	});
 	
 	var TabsAdvancedScroller = new FlexSlide.Advanced( $('TabsAdvancedScroller'), { 
-		autoHeight: true,
-		centerImage: false,
+		autoContainerSize: { x: false, y: true },
+		centerItem: false,
 		auto: false,
 		render: ['advSelect', 'item'],
 		effect: {
