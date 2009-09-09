@@ -1,0 +1,154 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
+
+$require('Galleries/FlexSlide/Styles/Simple/Simple.js');
+
+window.addEvent('domready', function() {
+
+	var Style_Simple = new FlexSlide($('myGallery') );
+	
+	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
+	$('allTransitions').addEvent('click', function(e) {
+		e.stop();
+		Style_Simple.setOptions({
+			effect: { random: ['fade', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce' ] }
+		});
+	});	
+	
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+
+	
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>FlexSlide Style Simple</h1>
+<h2>Introduction</h2>
+<p>
+	With FlexSlide you can easily adopt you Gallery to any Layout.
+</p>
+<h3>Simple Style</h3>
+
+<div id="myGallery">
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	
+	<div class="item" style="padding: 60px;" title="this is the first div Element">
+		Most of the items in this gallery are plain image. Some are links holding a single image and we have this and another div Item. <br />
+		Isn't that great to be able to combine all different types of stuff? 
+		<p style="font-size: 55px;">I'm loving it :)</p>
+	</div>
+	<div class="select">DIV</div>
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about meadow" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-sevenSisters.jpg" alt="Some Description about sevenSisters" />
+	<img class="select" src="../../Core/Resources/images/small-sevenSisters.jpg" alt="Some Description about meadow" />
+	
+	<div class="item" style="padding: 40px;" title="my second div Element">
+		This is a simple text div containing some inline style. <br />
+		It demonstrates the autoItemSize feature for width and height. It won't be centered - yeah it has the full size so it won't work. <br />
+		However it could be done by setting <br />
+		autoItemSize: { x: true, y: false } (which is default) and <br />
+		centerItemTags: ['img', 'a', 'div']. <br />
+		Using this the div would have the full width and would be centered vertically.
+	</div>
+	<div class="select">DIV</div>
+
+	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
+	<img class="select" src="../../Core/Resources/images/small-mountains.jpg" alt="Some Description about mountains" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
+	<img class="select" src="../../Core/Resources/images/small-brownMountains.jpg" alt="Some Description about meadow" />	
+	
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />	
+
+</div>
+
+<h3>Options</h3>
+<a href="#" id="allTransitions">activate all Transitions for this SlideShow</a>
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
