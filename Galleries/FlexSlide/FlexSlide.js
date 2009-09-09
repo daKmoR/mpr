@@ -276,7 +276,6 @@ var FlexSlide = new Class({
 		var width = parentSize.x - el.getStyle('padding-left').toInt() - el.getStyle('padding-right').toInt() - parent.getStyle('padding-left').toInt() - parent.getStyle('padding-right').toInt();
 		var height = parentSize.y - el.getStyle('padding-top').toInt() - el.getStyle('padding-bottom').toInt() - parent.getStyle('padding-top').toInt() - parent.getStyle('padding-bottom').toInt();
 		var diffHeight = parentSize.y - elSize.y, diffWidth = parentSize.x - elSize.x;
-		
 		var autoItemSize = this.options.autoItemSize;
 		
 		if( el.get('tag') === 'img' || el.get('tag') === 'a' ) {
@@ -286,11 +285,14 @@ var FlexSlide = new Class({
 			else
 				autoItemSize.y = true;
 		}
-		
-		if( this.options.autoContainerSize.y ) {
+
+		if( this.options.autoContainerSize.y && this.options.autoContainerSize.x )
+			autoItemSize = { x: false, y: false };
+		else if ( this.options.autoContainerSize.y )
 			autoItemSize = { x: true, y: false };
-		}
-		
+		else if ( this.options.autoContainerSize.x )
+			autoItemSize = { x: false, y: true };
+			
 		if( autoItemSize.x )
 			el.setStyle('width', width);
 		if( autoItemSize.y )
@@ -313,7 +315,7 @@ var FlexSlide = new Class({
 				el.setStyle('margin', '0 ' + (width - elSize.x) / 2 + 'px' );
 			}
 		}
-	},	
+	},
 	
 	centerContainer: function(id) {
 		var diff = this.wrap.getSize().x - this.itemWrap.getSize().x;
