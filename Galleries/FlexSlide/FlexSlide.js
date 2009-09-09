@@ -40,7 +40,7 @@ var FlexSlide = new Class({
 		auto: true,
 		autoItemSize: { x: true, y: false },
 		autoContainerSize: { x: false, y: false },
-		centerImage: true,
+		centerItem: true,
 		centerContainer: false,
 		useScroller: false,
 		scrollerOptions: {area: 100, velocity: 0.1},
@@ -308,7 +308,7 @@ var FlexSlide = new Class({
 				el.setStyle('width', elSize.x);
 		}
 		
-		if( this.options.centerImage === true ) {
+		if( this.options.centerItem === true ) {
 			if( diffHeight > diffWidth ) { //quer
 				el.setStyle('margin', (height - elSize.y) / 2 + 'px 0' );
 			} else {

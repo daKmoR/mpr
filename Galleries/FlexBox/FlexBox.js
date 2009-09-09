@@ -29,7 +29,7 @@ var FlexBox = new Class({
 		flexSlide: {
 			render: [{ 'bottom': ['next', 'description', 'previous'] }, 'item', 'close'],
 			autoContainerSize: { x: true, y: true },
-			centerImage: false,
+			centerItem: false,
 			centerContainer: true,
 			auto: false,
 			dynamicLoading: true,
