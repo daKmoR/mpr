@@ -7,7 +7,7 @@ License:
 */
 
 $require('Core/Request/Request.js');
-$require('Core/Utilities/Utilities.Json.js');
+$require('Core/Utilities/Json.js');
 
 Request.JSON = new Class({
 
