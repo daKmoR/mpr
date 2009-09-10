@@ -45,6 +45,7 @@ var FlexSlide = new Class({
 		centerItem: true,
 		centerContainer: false,
 		useScroller: false,
+		scrollerMode: 'horizontal',
 		scrollerOptions: {area: 100, velocity: 0.1},
 		duration: 5000,
 		mode: 'continuous', /* [continuous, reverse, random] */
@@ -114,8 +115,11 @@ var FlexSlide = new Class({
 		}
 		
 		if( this.options.useScroller == true ) {
+			if( this.options.scrollerMode === 'horizontal' )
+				this.selectWrap.setStyle('width', this.selectWrap.getChildren().getCombinedSize().x);
+			if( this.options.scrollerMode === 'vertical' )
+				this.selectWrap.setStyle('height', this.selectWrap.getChildren().getCombinedSize().y);
 			this.scroller = new Scroller( this.selectWrap.getParent(), this.options.scrollerOptions).start();
-			this.selectWrap.setStyle('width', this.selectWrap.getChildren().getCombinedSize().x);
 		}
 		
 		if( $chk(this.els.description) && this.els.description.length <= 0 ) {
