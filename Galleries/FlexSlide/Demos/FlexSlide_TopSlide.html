@@ -1,0 +1,167 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Galleries/FlexSlide/FlexSlide.js');
+
+$require('Galleries/FlexSlide/Styles/Simple/Simple.js');
+
+window.addEvent('domready', function() {
+
+	var TopSlide = new FlexSlide($('myGallery'), {
+		scrollerMode: 'vertical',
+		render: ['item', 'advSelect'],
+		effect: {
+			up: 'slideTopQuart',
+			down: 'slideBottomQuart'
+		}
+	});
+	
+	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
+	$('allTransitions').addEvent('click', function(e) {
+		e.stop();
+		TopSlide.setOptions({
+			effect: { 
+				up: 'random',
+				down: 'random',
+				random: ['fade', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce' ] 
+			}
+		});
+	});
+	
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+div.ui-SelectScroller { width: 79px; float: left; height: 350px; clear: none; top: 0; }
+.ui-Item { float: left; }
+
+div.ui-Select { margin: 10px 0; }
+.ui-SelectItem { margin: 4px 8px; }
+
+#myGallery { clear: both; height: 350px; width: 685px; }
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>FlexSlide Top Slide</h1>
+<h2>Introduction</h2>
+<p>
+	With FlexSlide you can easily adopt you Gallery to any Layout.
+</p>
+<h3>Top Slide</h3>
+
+<div id="myGallery">
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
+	
+	<div class="item" style="padding: 60px;" title="this is the first div Element">
+		Most of the items in this gallery are plain image. Some are links holding a single image and we have this and another div Item. <br />
+		Isn't that great to be able to combine all different types of stuff? 
+		<p style="font-size: 55px;">I'm loving it :)</p>
+	</div>
+	<div class="select">DIV</div>
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about meadow" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-sevenSisters.jpg" alt="Some Description about sevenSisters" />
+	<img class="select" src="../../Core/Resources/images/small-sevenSisters.jpg" alt="Some Description about meadow" />
+	
+	<div class="item" style="padding: 40px;" title="my second div Element">
+		You can easily use any html and it will be properly slided, faded or whatever... user your imagination. It's a Slider for anything not just images.
+		It's about beeing flexible and using it in various situations. You don't need 10 different Script for Tabs, Newsticker, Galleries, Slideshows anymore...
+	  just set some FlexSlide options and you should be done with everything.
+	</div>
+	<div class="select">DIV</div>
+
+	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
+	<img class="select" src="../../Core/Resources/images/small-mountains.jpg" alt="Some Description about mountains" />
+	
+	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
+	<img class="select" src="../../Core/Resources/images/small-brownMountains.jpg" alt="Some Description about meadow" />	
+	
+	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
+	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
+	
+	<a href="#" class="item">
+		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
+	</a>
+	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />	
+
+</div>
+
+<h3>Options</h3>
+<a href="#" id="allTransitions">activate all Transitions for this SlideShow</a>
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
