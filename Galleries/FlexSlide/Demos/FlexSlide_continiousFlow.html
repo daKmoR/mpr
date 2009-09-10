@@ -31,13 +31,32 @@
 $require('Core/Utilities/DomReady.js');
 $require('Galleries/FlexSlide/FlexSlide.js');
 
-$require('Galleries/FlexSlide/Styles/Simple/Simple.js');
+$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
 
 window.addEvent('domready', function() {
 
-	var myFlexSlide = new FlexSlide($('myGallery') );
+	var myFlexSlide = new FlexSlide( $('myGallery'), {
+		auto: false,
+		getSizeFromContainer: false,
+		onShowEnd: function() {
+			this.next();
+		},
+		effect: { 
+			globalOptions: { duration: 4000 },
+			random: ['slideLeft']
+		},
+		onBuild: function() {
+			this.wrap.addEvents({
+				'mouseenter': function() {
+					this.fx.pause();
+				}.bind(this),
+				'mouseleave': function() {
+					this.fx.resume();
+				}.bind(this)
+			});
+		}
+	});
 	
-	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
 	var allTransitions = ['fade', 'slideLeft', 'slideRight', 'slideTop', 'slideBottom', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce'];
 	$('setTransition').selectedIndex = allTransitions.indexOf( myFlexSlide.options.effect.random[0] ) + 1;
 	$('setTransition').addEvent('change', function() {
@@ -54,8 +73,10 @@ window.addEvent('domready', function() {
 <style type="text/css">
 /* ### Mpr.Css.Start ### */
 
+#myGallery { height: 85px; border: 1px solid #ccc; width: 626px; }
+div.ui-Item { height: 85px; width: 626px; }
 
-	
+#myGallery img { width: 101px; height: 85px; }
 
 /* ### Mpr.Css.End ### */
 </style>
@@ -76,66 +97,40 @@ window.addEvent('domready', function() {
 				<div class="col2">
 					<div class="content" id="contentMain">
 <!-- ### Mpr.Html.Start ### -->
-<h1>FlexSlide Style Simple</h1>
+<h1>FlexSlide continiousFlow</h1>
 <h2>Introduction</h2>
 <p>
-	With FlexSlide you can easily adopt you Gallery to any Layout.
+	you can also keep the transition running and running and running. It is a little limited as the item will to fill out the full width or there will be a gap. Furthermore direction changes can only be done if a full item (6 icons are) transitioned... it's not perfect but still a possibilty with FlexSlide.
 </p>
-<h3>Simple Style</h3>
+<h3>FlexSlide continiousFlow</h3>
 
 <div id="myGallery">
-	<a href="#" class="item">
-		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
-	</a>
-	<img class="select" src="../../Core/Resources/images/small-meadow.jpg" alt="Some Description about meadow" />
-	
-	<div class="item" style="padding: 60px;" title="this is the first div Element">
-		Most of the items in this gallery are plain image. Some are links holding a single image and we have this and another div Item. <br />
-		Isn't that great to be able to combine all different types of stuff? 
-		<p style="font-size: 55px;">I'm loving it :)</p>
-	</div>
-	<div class="select">DIV</div>
-	
-	<a href="#" class="item">
-		<img src="../../Core/Resources/images/medium-water.jpg" alt="Some Description about water" />
-	</a>
-	<img class="select" src="../../Core/Resources/images/small-water.jpg" alt="Some Description about meadow" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
-	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
-	
-	<a href="#" class="item">
-		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
-	</a>
-	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />
-	
-	<img class="item" src="../../Core/Resources/images/medium-sevenSisters.jpg" alt="Some Description about sevenSisters" />
-	<img class="select" src="../../Core/Resources/images/small-sevenSisters.jpg" alt="Some Description about meadow" />
-	
-	<div class="item" style="padding: 40px;" title="my second div Element">
-		This is a simple text div containing some inline style. <br />
-		It demonstrates the autoItemSize feature for width and height. It won't be centered - yeah it has the full size so it won't work. <br />
-		However it could be done by setting <br />
-		autoItemSize: { x: true, y: false } (which is default) and <br />
-		centerItemTags: ['img', 'a', 'div']. <br />
-		Using this the div would have the full width and would be centered vertically.
-	</div>
-	<div class="select">DIV</div>
 
-	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
-	<img class="select" src="../../Core/Resources/images/small-mountains.jpg" alt="Some Description about mountains" />
+	<div class="item">
+		<a href="http://www.webtogs.co.uk/Brasher/"> <img src="http://www.webtogs.co.uk/brands75/63.jpg" title="Brasher" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Scarpa/"> <img src="http://www.webtogs.co.uk/brands75/29.jpg" title="Scarpa" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Thermarest/"> <img src="http://www.webtogs.co.uk/brands75/94.jpg" title="Thermarest" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Berghaus/"> <img src="http://www.webtogs.co.uk/brands75/4.jpg" title="Berghaus" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Big_Agnes/"> <img src="http://www.webtogs.co.uk/brands75/88.jpg" title="Big Agnes" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Bridgedale/"> <img src="http://www.webtogs.co.uk/brands75/35.jpg" title="Bridgedale" alt="" /> </a>
+	</div>
+	<div class="item">
+		<a href="http://www.webtogs.co.uk/Buff/"> <img src="http://www.webtogs.co.uk/brands75/65.jpg" title="Buff" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Camelbak/"> <img src="http://www.webtogs.co.uk/brands75/3.jpg" title="Camelbak" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Craghoppers/"> <img src="http://www.webtogs.co.uk/brands75/6.jpg" title="Craghoppers" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Crumpler/"> <img src="http://www.webtogs.co.uk/brands75/93.jpg" title="Crumpler" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Deuter/"> <img src="http://www.webtogs.co.uk/brands75/39.jpg" title="Deuter" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Haglofs/"> <img src="http://www.webtogs.co.uk/brands75/86.jpg" title="Haglofs" alt="" /> </a>
+	</div>
+	<div class="item">
+		<a href="http://www.webtogs.co.uk/Helly_Hansen/"> <img src="http://www.webtogs.co.uk/brands75/71.jpg" title="Helly Hansen" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Icebreaker/"> <img src="http://www.webtogs.co.uk/brands75/95.jpg" title="Icebreaker" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Inov8/"> <img src="http://www.webtogs.co.uk/brands75/92.jpg" title="Inov8" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Jetboil/"> <img src="http://www.webtogs.co.uk/brands75/61.jpg" title="Jetboil" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Keen/"> <img src="http://www.webtogs.co.uk/brands75/31.jpg" title="Keen" alt="" /> </a>
+		<a href="http://www.webtogs.co.uk/Kuhl/"> <img src="http://www.webtogs.co.uk/brands75/97.jpg" title="Kuhl" alt="" /> </a>
+	</div>
 	
-	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
-	<img class="select" src="../../Core/Resources/images/small-brownMountains.jpg" alt="Some Description about meadow" />	
-	
-	<img class="item" src="../../Core/Resources/images/medium-sun.jpg" alt="Some Description about sun" />
-	<img class="select" src="../../Core/Resources/images/small-sun.jpg" alt="Some Description about meadow" />
-	
-	<a href="#" class="item">
-		<img src="../../Core/Resources/images/medium-stone.jpg" alt="Some Description about stone" />
-	</a>
-	<img class="select" src="../../Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />	
-
 </div>
 
 <h3>Options</h3>
@@ -156,6 +151,7 @@ window.addEvent('domready', function() {
 	<option value="slideBottomBounce">slideBottomBounce</option>
 </select>
 (select on of the transitions on the left to set it to the current FlexSlide)
+
 
 <!-- ### Mpr.Html.End ### -->
 					</div>

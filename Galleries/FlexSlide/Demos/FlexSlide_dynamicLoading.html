@@ -35,19 +35,21 @@ $require('Galleries/FlexSlide/Styles/Simple/Simple.js');
 
 window.addEvent('domready', function() {
 
-	var dynamicLoading = new FlexSlide.Advanced($('myGallery'), {
+	var myFlexSlide = new FlexSlide.Advanced($('myGallery'), {
 		auto: false,
 		selectTemplate: '{id}',
 		render: ['description', 'previous', 'item', 'next', 'advSelect']
 	});
 	
 	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
-	$('allTransitions').addEvent('click', function(e) {
-		e.stop();
-		dynamicLoading.setOptions({
-			effect: { random: ['fade', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce' ] }
+	var allTransitions = ['fade', 'slideLeft', 'slideRight', 'slideTop', 'slideBottom', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce'];
+	$('setTransition').selectedIndex = allTransitions.indexOf( myFlexSlide.options.effect.random[0] ) + 1;
+	$('setTransition').addEvent('change', function() {
+		var value = this.get('value') != 'all' ? [this.get('value')] : allTransitions;
+		myFlexSlide.setOptions({
+			effect: { random: value	}
 		});
-	});	
+	});
 	
 });
 /* ### Mpr.Js.End ### */
@@ -189,7 +191,23 @@ a.header { color: #ff0000; font-size: 18px; font-weight: bold; }
 </div>
 
 <h3>Options</h3>
-<a href="#" id="allTransitions">activate all Transitions for this SlideShow</a>
+<select id="setTransition">
+	<option value="all">all</option>
+	<option value="fade">fade</option>
+	<option selected="selected" value="slideLeft">slideLeft</option>
+	<option value="slideRight">slideRight</option>
+	<option value="slideTop">slideTop</option>
+	<option value="slideBottom">slideBottom</option>
+	<option value="slideLeftQuart">slideLeftQuart</option>
+	<option value="slideRightQuart">slideRightQuart</option>
+	<option value="slideTopQuart">slideTopQuart</option>
+	<option value="slideBottomQuart">slideBottomQuart</option>
+	<option value="slideLeftBounce">slideLeftBounce</option>
+	<option value="slideRightBounce">slideRightBounce</option>
+	<option value="slideTopBounce">slideTopBounce</option>
+	<option value="slideBottomBounce">slideBottomBounce</option>
+</select>
+(select on of the transitions on the left to set it to the current FlexSlide)
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
