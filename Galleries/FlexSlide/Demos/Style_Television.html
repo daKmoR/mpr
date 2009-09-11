@@ -40,7 +40,10 @@ window.addEvent('domready', function() {
 		getSizeFromContainer: false,
 		render: ['item', 'overlay', 'previous', 'next', 'select'],
 		auto: false,
-		effect: { random: ['slideLeft'] }
+		effect: {
+			up: 'slideLeftQuart',
+			down: 'slideRightQuart'
+		}
 	});
 	
 	var allTransitions = ['fade', 'slideLeft', 'slideRight', 'slideTop', 'slideBottom', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce'];
@@ -48,7 +51,11 @@ window.addEvent('domready', function() {
 	$('setTransition').addEvent('change', function() {
 		var value = this.get('value') != 'all' ? [this.get('value')] : allTransitions;
 		myFlexSlide.setOptions({
-			effect: { random: value	}
+			effect: { 
+				up: 'random',
+				down: 'random',
+				random: value
+			}
 		});
 	});
 
