@@ -158,17 +158,17 @@ var MooFlow = new Class({
 			'display':'none',
 			'height': this.MooFlow.getSize().y
 		}).inject(this.MooFlow);
-		obj['con'] = new Element('div').inject(obj['div']);
-		img.setStyles({'vertical-align':'bottom', 'width':'100%', 'height':'50%'});
-		img.addEvents({'click': this.clickTo.bind(this, i), 'dblclick': this.viewCallBack.bind(this, i)});
-		img.inject(obj['con']);
 		
-		new Element('div').reflect({ 'img': img,
-			'ref': this.options.reflection,
-			'height': obj.height,
-			'width': obj.width,
-			'color': this.options.bgColor
-		}).setStyles({'width':'100%','height':'50%','background-color': this.options.bgColor}).inject(obj['con']);
+		img.addEvents({'click': this.clickTo.bind(this, i), 'dblclick': this.viewCallBack.bind(this, i)});
+		img.inject(obj['div']);
+		
+		img.reflect({
+			'size': { x: obj['width'], y: obj['height'] },
+			'opacity': this.options.reflection
+		});
+		
+		obj['con'] = img.getParent();
+		obj['con'].setStyle('width', 'auto');
 		
 		this.loader.set('text', (counter+1) + ' / ' + this.loadedImages.length);
 	},
@@ -367,7 +367,7 @@ var MooFlow = new Class({
 					div.left = round(((x / z * sz) + sz) - (f * 0.5) / z * sz) + 'px';
 					div.top = round(oW * 0.4 - H) + offY + 'px';
 				}	
-				el.con.style.height = H*2 + 'px';		
+				el.con.style.height = H*(1+this.options.reflection) + 'px';		
 				div.width = W + 'px';
 				div.zIndex = x < 0 ? zI++ : zI--;
 				div.display = 'block';
@@ -375,6 +375,6 @@ var MooFlow = new Class({
 				div.display = 'none';
 			}
 			x += foc;
-		});
+		}, this);
 	}
 });
