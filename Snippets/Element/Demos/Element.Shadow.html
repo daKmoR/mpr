@@ -29,11 +29,15 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 
+$require('Core/Utilities/DomReady.js');
 $require('Snippets/Element/Element.Shadow.js');
 
 window.addEvent('domready', function() {
-
-	$$('.shadow').shadow();
+	
+	$('generate').addEvent('click', function(e) {
+		e.stop();
+		$$('.shadow').shadow();
+	});
 
 });
 /* ### Mpr.Js.End ### */
@@ -67,6 +71,8 @@ window.addEvent('domready', function() {
 	let you easily create shadows for elements
 </p>
 <h3>Default Shadow</h3>
+
+<a href="#" id="generate">generate Shadows</a> <br />
 
 <img class="shadow" src="../../../Galleries/Core/Resources/images/small-water.jpg" alt="Some Description about water" />
 <img class="shadow" src="../../../Galleries/Core/Resources/images/small-sun.jpg" alt="Some Description about sun" />

@@ -29,11 +29,15 @@
 <script type="text/javascript">
 /* ### Mpr.Js.Start ### */
 
+$require('Core/Utilities/DomReady.js');
 $require('Snippets/Element/Element.Reflect.js');
 
 window.addEvent('domready', function() {
-
-	$('contentMain').getElements('img').reflect();
+	
+	$('generate').addEvent('click', function(e) {
+		e.stop();
+		$$('.reflect').reflect();
+	});
 
 });
 /* ### Mpr.Js.End ### */
@@ -68,9 +72,11 @@ window.addEvent('domready', function() {
 </p>
 <h3>Default Reflection</h3>
 
-<img src="../../../Galleries/Core/Resources/images/small-water.jpg" alt="Some Description about water" />
-<img src="../../../Galleries/Core/Resources/images/small-sun.jpg" alt="Some Description about sun" />
-<img src="../../../Galleries/Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />
+<a href="#" id="generate">generate Reflections</a> <br />
+
+<img class="reflect" src="../../../Galleries/Core/Resources/images/small-water.jpg" alt="Some Description about water" />
+<img class="reflect" src="../../../Galleries/Core/Resources/images/small-sun.jpg" alt="Some Description about sun" />
+<img class="reflect" src="../../../Galleries/Core/Resources/images/small-stone.jpg" alt="Some Description about meadow" />
 
 <!-- ### Mpr.Html.End ### -->
 					</div>
