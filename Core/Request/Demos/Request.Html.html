@@ -1,0 +1,120 @@
+<!DOCTYPE html 
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="../../../Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+
+		<!--[if IE 7]> 
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie7.css" type="text/css" media="screen" />
+		<![endif]-->
+
+		<!--[if lte IE 6]>
+			<link rel="stylesheet" href="../../../Mpr/Resources/css/screen_ie6.css" type="text/css" media="screen" />
+		<![endif]-->
+		
+		<title>Fx.Slide Demo</title>
+		
+		<script type="text/javascript">
+			var MPR = {};
+			MPR.path = '../../../';
+		</script>
+		
+		<script src="../../../Mpr.php" type="text/javascript"></script>
+		
+<!-- ### Mpr.Header.Start ### -->
+<!-- ### Mpr.Header.End ### -->
+		
+<script type="text/javascript">
+/* ### Mpr.Js.Start ### */
+$require('Core/Utilities/DomReady.js');
+$require('Core/Request/Request.Html.js');
+
+window.addEvent('domready', function() {
+
+var tmp = new Element('div', { html: '<div><h3>header</h3><p>some text</p><h3 id="special">special header</h3></div>' });
+console.log( tmp.getElements('h3') ); // [h3, h3#special]
+console.log( tmp.getElements('h3#special') ); // []
+console.log( tmp.getElementById('special') ); // null
+
+
+$(document.body).grab( tmp );
+console.log( tmp.getElements('h3') ); // [h3, h3#special]
+console.log( tmp.getElements('h3#special') ); // [h3#special]
+console.log( tmp.getElementById('special') ); // <h3 id="special">
+ 
+	var myRequest = new Request.HTML({
+		url: MPR.path + 'Core/Request/Demos/data/text.html',
+		onSuccess: function( tree, els, html, js ) {
+			//$('updateMe').set('html', html);
+			
+			$('updateMe').grab( tree );
+			console.log( tree.getElements('h3#special') );
+			console.log( tree.getElementById('special') );
+		
+			//console.log( tree.getElementById('special') );
+			
+			//console.log( els.getElementById('special') );
+		},
+		method: 'get'
+	});
+	
+	$('go').addEvent('click', function(e) {
+		e.stop();
+		myRequest.send();
+	});
+	
+});
+/* ### Mpr.Js.End ### */
+</script>
+
+<style type="text/css">
+/* ### Mpr.Css.Start ### */
+
+
+/* ### Mpr.Css.End ### */
+</style>
+		
+	</head>
+	<body>
+	
+		<div id="wrap">
+		
+			<div id="header">
+				<h2 style="border: none; margin-bottom: 10px;"><a href="/">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
+			</div>
+			
+			<div class="colmask equal px240x720">
+				<div class="col1">
+					<img src="../../../Mpr/Resources/img/menu.gif" alt="menu" />
+				</div>
+				<div class="col2">
+					<div class="content" id="contentMain">
+<!-- ### Mpr.Html.Start ### -->
+<h1>FlexBox</h1>
+<h2>Introduction</h2>
+<p>
+	The default FlexBox comes with no real style at all. However you can easily adopt this with some css or by loading some predefined Styles.
+</p>
+<h3>Default FlexBox</h3>
+
+<a href="#" id="go">fire the Request</a>
+
+<div id="updateMe">
+	<p>this content will be replaced</p>
+</div>
+
+<!-- ### Mpr.Html.End ### -->
+					</div>
+				</div>
+			</div>
+			
+			<div id="footer">
+				This documentation is released under a <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Attribution-NonCommercial-ShareAlike 3.0</a> License. 
+			</div>
+			
+		</div> <!-- /wrap -->
+		
+	</body>
+</html>
