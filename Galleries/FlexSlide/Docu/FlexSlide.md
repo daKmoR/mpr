@@ -17,38 +17,41 @@ FlexSlide Method: constructor {#FlexSlide:constructor}
 
 ### Options:
 * selections      - (*object*: defaults to `{}`) Here you can override the default selection of objects
-* render          - (*array*: defaults to `['previous', 'item', 'description', 'next', 'select']`)  What Elements should be rendered and in what order
+		example: item: '.myOtherItemClass'
+* render          - (*array*: defaults to `['item']`) elements in this array will be rendered (in it's order)
 * ui              - (*object*: ) Here you can override the default names of the html-classes
-		
 		example: item: { 'class': ui-Item' }
-* display         - (*number*: defaults to 0) which image should be shown on start
-* auto		  	    - (*boolean*: defaults to 'true') do you want to use a times 
-* autoHeight	    - (*boolean*: defaults to 'false') Show the 'Item' with automatical height
-* autoCenter	    - (*boolean*: defaults to 'true') Show the 'Item' in the center of the Box (uses margin-top)
-* duration	    	- (*number*: defaults to 1000) time in ms to the next image
-* mode		      	- (*array*: default to 'continuous', 'reverse', 'random') mode to show the next image
-* step		      	- (*number*: defaults to 0) how many steps to the next image
-* selectTemplate	- (*array*: defaults to '{text}', '{id}') show a selector 
-* counterTemplate	- (*array*: defaults to '{id}', '{count}') counter vor the selector
-* effect		    	- (*object*: defaults to {}) here you can choose youre effects
+* show            - (*number*: defaults to 0) which image should be shown on start
+* container       - (*object*: defaults to null) if defined this container will be used (if not defined it will be set to the wrap div)
+* getSizeFromContainer - (*boolean*: defaults to 'true') use the width/height from the element and copy it to the ItemWrap; then reset width/height to auto
+* initFx          - (*string*: defaults to 'display') effect to be used for the first show
+* auto		  	    - (*boolean*: defaults to 'true') go automatically to the next image
+* duration	    	- (*number*: defaults to 5000) time in ms when to switch to the next image
+* autoItemSize    - (*object*: defaults to { x: true, y: false }) if true the width/height get's set to the same size as the itemContainer
+* autoItemSizeSpecial - (*array*: default to ['img', 'a']) these tags will "ignore" autoItemSize and instead will set one side to auto (to fit into the gallery maintaining the aspect ratio)
+* centerImage	    - (*boolean*: defaults to true) the item will be centered with margin
+* centerContainer - (*boolean*: defaults to false) will center the whole gallery (will only show an effect if the gallery is absolute positioned)
+* useScroller     - (*boolean*: default to false) use a scroller for the selection (Thumbnails) [needs a div with class="selectScroller"]
+* scrollerMode:   - (*string*: default to 'horizontal') use the scroller horizontal or vertical
+* scrollerOptions - (*object*: default to {area: 100, velocity: 0.1}) options for the scroller
+* mode		      	- (*array*: default to 'continuous') how to select the next image [continuous, reverse, random]
+* step		      	- (*number*: defaults to 1) steps to the next image
+* selectTemplate	- (*string*: defaults to '{text}') text for the selects
+* counterTemplate	- (*string*: defaults to '{id}/{count}') content for the counter
+* descriptionTemplate - (*string*: default to '<strong>{title}</strong><span>{text}</span>') you can use alt="myTitle :: mySubText" to generate nice descriptions
+* effect		    	- (*object*: defaults to {}) here you can choose your effects
 	* up            - (*string*: default to 'random') effect to be used for the next or higher image (example switching vom image 2 to 4)
 	* down          - (*string*: default to 'random') effect to be used for the previous or lower image (example switching vom image 6 to 1)
-	* random        - (*array*: default to ['fade', 'slideLeftBounce', 'slideRightBounce']) array of effect that can be selected if using random 
+	* random        - (*array*: default to ['fade']) array of effects we can choose from if using random
 	* globalOptions - (*object*: default to { duration: 1000, transition: Fx.Transitions.linear }) default options for all fx
-	* options       - (*object*) you can define individual options for each effect
-
+	* options       - (*object*: defaults to { display: { duration: 0 }	} ) you can define individual options for each effect
+	* wrapFxOptions - (*object*: defaults to { duration: 1000, transition: Fx.Transitions.Quart.easeInOut }) options for the container animation
 
 ### Available effects:
 
  * fade: fade to the next Image
- * random: fade to the next random Image
+ * random: fade to the next Image using a random effec
  * display: show the next image without effect
- * slideLeft: slide to the image on the left
- * slideRight: slide to the image on the right
- * slideLeftBounce: slide tho the Image on the left with bounce effect
- * slideRightBounce: slide tho the Image on the right with bounce effect
- * slideLeftQuart: slide tho the Image on the left with quart effect
- * slideRightQuart: slide tho the Image on the right with bounce effect
 
 ### Example:
 
@@ -88,7 +91,6 @@ FlexSlide Method: constructor {#FlexSlide:constructor}
 		window.addEvent('domready', function() {
 			var example = new FlexSlide( $('example'), { 
 				duration: 16000,
-				autoCenter: false,
 				render: ['previous', 'item', 'description', 'next'],
 				effect: {
 					globalOptions: { duration: 600 },
@@ -99,30 +101,10 @@ FlexSlide Method: constructor {#FlexSlide:constructor}
 		});
 	</script>
 
-
-
-
-FlexSlide Method: display {#FlexSlide:display}
----------------------------------
-
-* (*function*) Shows a image or a element without effect 
-
-### Signature:
-
-	display: function(id)
-
-### Arguments:
-
-1. id - (*integer*) Number of image (id) you want to show
-
-### Example:
-
-	$('nextClick').addEvent('click', function(e) { 		e.stop(); 		myGallery.display(0);	});
-
 FlexSlide Method: show {#FlexSlide:show}
 ---------------------------------
 
-* (*function*) Shows a image or a element with fade effect
+* (*function*) Shows the item with an effect (either the up effect if the item to be shown has a higher index - otherwise the down effect)
 
 ### Signature:
 
@@ -130,19 +112,23 @@ FlexSlide Method: show {#FlexSlide:show}
 
 ### Arguments:
 
-1. id - (*integer*) Number of image (id) you want to show
-2. fx - (*string*, optional) Effect howto display your image
+1. id - (*integer*) id of the item (id) you want to show
+2. fx - (*string*, optional) effect howto display the item
 
 ### Example:
 
 	$('nextClick').addEvent('click', function(e) { 		e.stop(); 		myGallery.show(0);	});
 
-
-
+	$('nextClick').addEvent('click', function(e) {
+ 		e.stop();
+		// an instant show without an effect
+ 		myGallery.show(0, 'display');
+	});
+	
 FlexSlide Method: next {#FlexSlide:next}
 ----------------------------------
 
-* (*function*) Shows the next image or element with an effect
+* (*function*) Shows the next item with an effect
 
 ### Signature:
 
@@ -150,7 +136,7 @@ FlexSlide Method: next {#FlexSlide:next}
 
 ### Arguments:
 
-1. step - (*string* defaults to 1) show the next (n times) image (optional)
+1. step - (*string* defaults to 1) show the next (n times) item (optional)
 
 
 ### Example:
@@ -161,7 +147,7 @@ FlexSlide Method: next {#FlexSlide:next}
 FlexSlide Method: previous {#FlexSlide:previous}
 ----------------------------------
 
-* (*function*) Shows the previous image or element an effect
+* (*function*) Shows the previous item with an effect
 
 ### Syntax:
 
@@ -169,9 +155,9 @@ FlexSlide Method: previous {#FlexSlide:previous}
 
 ### Arguments:
 
-1. step - (*string*) show the previous (n times) image (optional)
+1. step - (*string*) show the previous (n times) item (optional)
 
 
 ### Example:
 
-	$('nextClick').addEvent('click', function(e) { 		e.stop(); 		myGallery.previous();	});
+	$('nextClick').addEvent('click', function(e) { 		e.stop(); 		myGallery.previous(2);	});

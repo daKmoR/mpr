@@ -38,6 +38,7 @@ var FlexSlide = new Class({
 		resizeFactor: 0.95,
 		resizeLimit: false, // {x: 640, y: 640}
 		auto: true,
+		duration: 5000,
 		autoItemSize: { x: true, y: false },
 		autoItemSizeSpecial: ['img', 'a'],
 		centerItemTags: ['img', 'a'],
@@ -47,10 +48,8 @@ var FlexSlide = new Class({
 		useScroller: false,
 		scrollerMode: 'horizontal',
 		scrollerOptions: {area: 100, velocity: 0.1},
-		duration: 5000,
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
-		active: true,
 		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
 		descriptionTemplate: '<strong>{title}</strong><span>{text}</span>',

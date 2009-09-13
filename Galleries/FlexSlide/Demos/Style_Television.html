@@ -31,9 +31,7 @@
 $require('Core/Utilities/DomReady.js');
 $require('Galleries/FlexSlide/FlexSlide.js');
 
-$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
-
-window.addEvent('domready', function() {
+window.addEvent('load', function() {
 
 	var myFlexSlide = new FlexSlide( $('myGallery'), {
 		autoItemSize: { x: true, y: true },
@@ -46,6 +44,7 @@ window.addEvent('domready', function() {
 		}
 	});
 	
+	$require('Galleries/FlexSlide/FlexSlide.Transitions.js');
 	var allTransitions = ['fade', 'slideLeft', 'slideRight', 'slideTop', 'slideBottom', 'slideLeftQuart', 'slideRightQuart', 'slideTopQuart', 'slideBottomQuart', 'slideLeftBounce', 'slideRightBounce', 'slideTopBounce', 'slideBottomBounce'];
 	$('setTransition').selectedIndex = allTransitions.indexOf( myFlexSlide.options.effect.random[0] ) + 1;
 	$('setTransition').addEvent('change', function() {
@@ -110,6 +109,10 @@ window.addEvent('domready', function() {
 <h3>Television Style</h3>
 
 <div id="myGallery">
+	<div class="item" style="color: #fff; padding: 60px; font-size: 20px;">
+		If the first Item is an image you may want to use window.addEvent('load', ... instead of domready so the image gets centered correctly (needs the first item loaded) <br />
+		You can of course use a proper image preloading method like Assets.image
+	</div>
 	<a href="#" class="item">
 		<img src="../../Core/Resources/images/medium-meadow.jpg" alt="Some Description about meadow" />
 	</a>
@@ -139,7 +142,6 @@ window.addEvent('domready', function() {
 		Using this the div would have the full width and would be centered vertically.
 	</div>
 	<img class="item" src="../../Core/Resources/images/medium-mountains.jpg" alt="Some Description about mountains" />
-	<img class="item" src="../../Core/Resources/images/medium-brownMountains.jpg" alt="Some Description about brownMountains" />
 </div>
 
 <p>Image by <a href="http://www.flickr.com/photos/phrenzee/1447530226/">phrenzee</a></p>
