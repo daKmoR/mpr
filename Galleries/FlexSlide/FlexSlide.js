@@ -304,20 +304,19 @@ var FlexSlide = new Class({
 		else if ( this.options.autoContainerSize.x )
 			autoItemSize = { x: false, y: true };
 			
-		if( autoItemSize.x )
+		var childs = el.getElements('*');
+		if( autoItemSize.x ) {
 			el.setStyle('width', width);
-		if( autoItemSize.y )
+			if( childs.length === 1 && childs[0].get('tag') === 'img' )
+				childs[0].setStyle('width', '100%');
+		}
+		if( autoItemSize.y ) {
 			el.setStyle('height', height);
+			if( childs.length === 1 && childs[0].get('tag') === 'img' )
+				childs[0].setStyle('height', '100%');
+		}
 		
 		elSize = el.getSize();
-		
-		// we need to set width and height for links as they may contain image with width and height 100%
-		if( this.options.autoItemSizeSpecial.contains(el.get('tag')) ) {
-			if( autoItemSize.x )
-				el.setStyle('height', elSize.y);
-			if( autoItemSize.y )
-				el.setStyle('width', elSize.x);
-		}
 		
 		if( this.options.centerItem === true && this.options.centerItemTags.contains(el.get('tag')) ) {
 			if( diffHeight > diffWidth ) { //quer

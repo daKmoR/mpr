@@ -7,7 +7,6 @@ div.simpleSlide { width: 650px; border: 1px solid #000; }
 			div.simpleSlide div.ui-Previous:hover { background-position: -75px; }
 	
 	div.simpleSlide div.ui-Item { float: left; width: 600px; height: 350px; }
-		div.simpleSlide div.ui-Item a img { width: 100%; height: 100%; }
 		
 	div.ui-SelectScroller { clear: both; position: relative; top: 20px; margin-bottom: 40px; background: #eee; }
 	div.ui-Select { margin: 0 10px;  }
