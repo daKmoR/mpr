@@ -1,9 +1,18 @@
 /*
-Script: String.js
-	Contains String Prototypes like camelCase, capitalize, test, and toInt.
+---
 
-License:
-	MIT-style license.
+script: String.js
+
+description: Contains String Prototypes like camelCase, capitalize, test, and toInt.
+
+license: MIT-style license.
+
+requires:
+- /Native
+
+provides: [String]
+
+...
 */
 
 $require('Core/Core/Core.js');

@@ -1,12 +1,23 @@
 /*
-Script: URI.js
-	Provides methods useful in managing the window location and uris.
+---
 
-	License:
-		MIT-style license.
+script: URI.js
 
-	Authors:
-		Sebastian Markbåge, Aaron Newton
+description: Provides methods useful in managing the window location and uris.
+
+license: MIT-style license
+
+authors:
+- Sebastian Markbåge
+- Aaron Newton
+
+requires:
+- core:1.2.4/Selectors
+- /String.QueryString
+
+provides: URI
+
+...
 */
 
 $require('Core/Native/Function.js');
@@ -96,7 +107,7 @@ var URI = new Class({
 			case 'value': return this.combine(this.parsed, base ? base.parsed : false);
 			case 'data' : return this.getData();
 		}
-		return this.parsed[part] || null;
+		return this.parsed[part] || '';
 	},
 
 	go: function(){
@@ -115,9 +126,9 @@ var URI = new Class({
 	},
 
 	setData: function(values, merge, part){
-		if ($type(arguments[0]) == 'string'){ 
-			values = this.getData(); 
-			values[arguments[0]] = arguments[1]; 
+		if (typeof values == 'string'){
+			values = this.getData();
+			values[arguments[0]] = arguments[1];
 		} else if (merge) {
 			values = $merge(this.getData(), values);
 		}
@@ -130,12 +141,9 @@ var URI = new Class({
 
 });
 
-['toString', 'valueOf'].each(function(method){
-	URI.prototype[method] = function(){
-		return this.get('value');
-	};
-});
-
+URI.prototype.toString = URI.prototype.valueOf = function(){
+	return this.get('value');
+};
 
 URI.regs = {
 	endSlash: /\/$/,

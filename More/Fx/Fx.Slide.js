@@ -1,12 +1,22 @@
 /*
-Script: Fx.Slide.js
-	Effect to slide an element in and out of view.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Slide.js
 
-	Authors:
-		Valerio Proietti
+description: Effect to slide an element in and out of view.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+
+requires:
+- core:1.2.4/Fx Element.Style
+- /MooTools.More
+
+provides: [Fx.Slide]
+
+...
 */
 
 $require('Core/Fx/Fx.js');
@@ -17,7 +27,8 @@ Fx.Slide = new Class({
 	Extends: Fx,
 
 	options: {
-		mode: 'vertical'
+		mode: 'vertical',
+		hideOverflow: true
 	},
 
 	initialize: function(element, options){
@@ -28,8 +39,10 @@ Fx.Slide = new Class({
 		this.element = this.subject = document.id(element);
 		this.parent(options);
 		var wrapper = this.element.retrieve('wrapper');
+		var styles = this.element.getStyles('margin', 'position', 'overflow');
+		if (this.options.hideOverflow) styles = $extend(styles, {overflow: 'hidden'});
 		this.wrapper = wrapper || new Element('div', {
-			styles: $extend(this.element.getStyles('margin', 'position'), {overflow: 'hidden'})
+			styles: styles
 		}).wraps(this.element);
 		this.element.store('wrapper', this.wrapper).setStyle('margin', 0);
 		this.now = [];

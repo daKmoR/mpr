@@ -1,9 +1,18 @@
 /*
-Script: Class.Extras.js
-	Contains Utility Classes that can be implemented into your own Classes to ease the execution of many common tasks.
+---
 
-License:
-	MIT-style license.
+script: Class.Extras.js
+
+description: Contains Utility Classes that can be implemented into your own Classes to ease the execution of many common tasks.
+
+license: MIT-style license.
+
+requires:
+- /Class
+
+provides: [Chain, Events, Options]
+
+...
 */
 
 $require('Core/Class/Class.js');
@@ -81,7 +90,7 @@ var Events = new Class({
 });
 
 Events.removeOn = function(string){
-	return string.replace(/^on([A-Z])/, function(full, first) {
+	return string.replace(/^on([A-Z])/, function(full, first){
 		return first.toLowerCase();
 	});
 };

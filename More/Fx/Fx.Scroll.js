@@ -1,12 +1,24 @@
 /*
-Script: Fx.Scroll.js
-	Effect to smoothly scroll any element, including the window.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Scroll.js
 
-	Authors:
-		Valerio Proietti
+description: Effect to smoothly scroll any element, including the window.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+
+requires:
+- core:1.2.4/Fx
+- core:1.2.4/Element.Event
+- core:1.2.4/Element.Dimensions
+- /MooTools.More
+
+provides: [Fx.Scroll]
+
+...
 */
 
 $require('Core/Fx/Fx.js');
@@ -55,11 +67,12 @@ Fx.Scroll = new Class({
 
 	start: function(x, y){
 		if (!this.check(x, y)) return this;
-		var offsetSize = this.element.getSize(), scrollSize = this.element.getScrollSize();
-		var scroll = this.element.getScroll(), values = {x: x, y: y};
+		var scrollSize = this.element.getScrollSize(),
+			scroll = this.element.getScroll(), 
+			values = {x: x, y: y};
 		for (var z in values){
-			var max = scrollSize[z] - offsetSize[z];
-			if ($chk(values[z])) values[z] = ($type(values[z]) == 'number') ? values[z].limit(0, max) : max;
+			var max = scrollSize[z];
+			if ($chk(values[z])) values[z] = ($type(values[z]) == 'number') ? values[z] : max;
 			else values[z] = scroll[z];
 			values[z] += this.options.offset[z];
 		}
@@ -106,6 +119,30 @@ Fx.Scroll = new Class({
 			}
 			if (to[axis] == null) to[axis] = scroll[axis];
 			if (offset && offset[axis]) to[axis] = to[axis] + offset[axis];
+		}, this);
+		if (to.x != scroll.x || to.y != scroll.y) this.start(to.x, to.y);
+		return this;
+	},
+
+	scrollToCenter: function(el, axes, offset){
+		axes = axes ? $splat(axes) : ['x', 'y'];
+		el = $(el);
+		var to = {},
+			pos = el.getPosition(this.element),
+			size = el.getSize(),
+			scroll = this.element.getScroll(),
+			containerSize = this.element.getSize(),
+			edge = {
+				x: pos.x + size.x,
+				y: pos.y + size.y
+			};
+
+		['x','y'].each(function(axis){
+			if(axes.contains(axis)){
+				to[axis] = pos[axis] - (containerSize[axis] - size[axis])/2;
+			}
+			if(to[axis] == null) to[axis] = scroll[axis];
+			if(offset && offset[axis]) to[axis] = to[axis] + offset[axis];
 		}, this);
 		if (to.x != scroll.x || to.y != scroll.y) this.start(to.x, to.y);
 		return this;

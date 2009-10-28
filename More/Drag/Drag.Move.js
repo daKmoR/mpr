@@ -1,14 +1,27 @@
 /*
-Script: Drag.Move.js
-	A Drag extension that provides support for the constraining of draggables to containers and droppables.
+---
 
-	License:
-		MIT-style license.
+script: Drag.Move.js
 
-	Authors:
-		Valerio Proietti
-		Tom Occhinno
-		Jan Kassens*/
+description: A Drag extension that provides support for the constraining of draggables to containers and droppables.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+- Tom Occhinno
+- Jan Kassens
+- Aaron Newton
+- Scott Kyle
+
+requires:
+- core:1.2.4/Element.Dimensions
+- /Drag
+
+provides: [Drag.Move]
+
+...
+*/
 
 $require('More/Drag/Drag.js');
 
@@ -29,14 +42,20 @@ Drag.Move = new Class({
 
 	initialize: function(element, options){
 		this.parent(element, options);
+		element = this.element;
+		
 		this.droppables = $$(this.options.droppables);
 		this.container = document.id(this.options.container);
-		if (this.container && $type(this.container) != 'element') this.container = document.id(this.container.getDocument().body);
-
-		var position = this.element.getStyle('position');
-		if (position=='static') position = 'absolute';
-		if ([this.element.getStyle('left'), this.element.getStyle('top')].contains('auto')) this.element.position(this.element.getPosition(this.element.offsetParent));
-		this.element.setStyle('position', position);
+		
+		if (this.container && $type(this.container) != 'element')
+			this.container = document.id(this.container.getDocument().body);
+		
+		var styles = element.getStyles('left', 'right', 'position');
+		if (styles.left == 'auto' || styles.top == 'auto')
+			element.setPosition(element.getPosition(element.getOffsetParent()));
+		
+		if (styles.position == 'static')
+			element.setStyle('position', 'absolute');
 
 		this.addEvent('start', this.checkDroppables, true);
 
@@ -44,41 +63,80 @@ Drag.Move = new Class({
 	},
 
 	start: function(event){
-		if (this.container){
-			var ccoo = this.container.getCoordinates(this.element.getOffsetParent()), cbs = {}, ems = {};
-
-			['top', 'right', 'bottom', 'left'].each(function(pad){
-				cbs[pad] = this.container.getStyle('border-' + pad).toInt();
-				ems[pad] = this.element.getStyle('margin-' + pad).toInt();
-			}, this);
-
-			var width = this.element.offsetWidth + ems.left + ems.right;
-			var height = this.element.offsetHeight + ems.top + ems.bottom;
-
-			if (this.options.includeMargins) {
-				$each(ems, function(value, key) {
-					ems[key] = 0;
-				});
-			}
-			if (this.container == this.element.getOffsetParent()) {
-				this.options.limit = {
-					x: [0 - ems.left, ccoo.right - cbs.left - cbs.right - width + ems.right],
-					y: [0 - ems.top, ccoo.bottom - cbs.top - cbs.bottom - height + ems.bottom]
-				};
-			} else {
-				this.options.limit = {
-					x: [ccoo.left + cbs.left - ems.left, ccoo.right - cbs.right - width + ems.right],
-					y: [ccoo.top + cbs.top - ems.top, ccoo.bottom - cbs.bottom - height + ems.bottom]
-				};
-			}
-
-		}
+		if (this.container) this.options.limit = this.calculateLimit();
+		
 		if (this.options.precalculate){
-			this.positions = this.droppables.map(function(el) {
+			this.positions = this.droppables.map(function(el){
 				return el.getCoordinates();
 			});
 		}
+		
 		this.parent(event);
+	},
+	
+	calculateLimit: function(){
+		var offsetParent = this.element.getOffsetParent(),
+			containerCoordinates = this.container.getCoordinates(offsetParent),
+			containerBorder = {},
+			elementMargin = {},
+			elementBorder = {},
+			containerMargin = {},
+			offsetParentPadding = {};
+
+		['top', 'right', 'bottom', 'left'].each(function(pad){
+			containerBorder[pad] = this.container.getStyle('border-' + pad).toInt();
+			elementBorder[pad] = this.element.getStyle('border-' + pad).toInt();
+			elementMargin[pad] = this.element.getStyle('margin-' + pad).toInt();
+			containerMargin[pad] = this.container.getStyle('margin-' + pad).toInt();
+			offsetParentPadding[pad] = offsetParent.getStyle('padding-' + pad).toInt();
+		}, this);
+
+		var width = this.element.offsetWidth + elementMargin.left + elementMargin.right,
+			height = this.element.offsetHeight + elementMargin.top + elementMargin.bottom,
+			left = 0,
+			top = 0,
+			right = containerCoordinates.right - containerBorder.right - width,
+			bottom = containerCoordinates.bottom - containerBorder.bottom - height;
+
+		if (this.options.includeMargins){
+			left += elementMargin.left;
+			top += elementMargin.top;
+		} else {
+			right += elementMargin.right;
+			bottom += elementMargin.bottom;
+		}
+		
+		if (this.element.getStyle('position') == 'relative'){
+			var coords = this.element.getCoordinates(offsetParent);
+			coords.left -= this.element.getStyle('left').toInt();
+			coords.top -= this.element.getStyle('top').toInt();
+			
+			left += containerBorder.left - coords.left;
+			top += containerBorder.top - coords.top;
+			right += elementMargin.left - coords.left;
+			bottom += elementMargin.top - coords.top;
+			
+			if (this.container != offsetParent){
+				left += containerMargin.left + offsetParentPadding.left;
+				top += (Browser.Engine.trident4 ? 0 : containerMargin.top) + offsetParentPadding.top;
+			}
+		} else {
+			left -= elementMargin.left;
+			top -= elementMargin.top;
+			
+			if (this.container == offsetParent){
+				right -= containerBorder.left;
+				bottom -= containerBorder.top;
+			} else {
+				left += containerCoordinates.left + containerBorder.left;
+				top += containerCoordinates.top + containerBorder.top;
+			}
+		}
+		
+		return {
+			x: [left, right],
+			y: [top, bottom]
+		};
 	},
 
 	checkAgainst: function(el, i){

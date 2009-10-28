@@ -9,7 +9,7 @@ Adds a semi-transparent overlay over a DOM element.
 
 ### See Also
 
-* [Waiter][]
+* [Spinner][]
 
 ### Syntax
 
@@ -43,6 +43,10 @@ Adds a semi-transparent overlay over a DOM element.
 	var myMask = new Mask();
 	var myMask = new Mask($('myElement'));
 
+### Styles
+
+The mask element is not styled, so if you don't add a css rule in your style sheets, it will be invisible. You can download the default styles here: [mask.css](http://mootools.net/releases/mootools-more-1.2.4.1/Styles/Interface/Mask/mask.css)
+
 Mask Method: toggle {#Mask:toggle}
 --------------------------------------
 
@@ -50,7 +54,7 @@ Toggles the [Mask][] visibility. If the [Mask][] is currently visible, it will h
 
 ### Syntax
 
-	myWaiter.toggle(element);
+	myMask.toggle(element);
 
 ### Arguments
 
@@ -176,7 +180,7 @@ Gets the default [Mask][] instance for the Element.
 #### Examples
 
 	el.set('mask', {onClick: function(){..etc..}});
-	el.mask(); //show the spinner
+	el.mask(); //show the mask
 	el.get('mask'); //The Mask instance.
 
 Native: Element {#Element}
@@ -214,8 +218,9 @@ Retrieves the "build-in"  instance of [Mask][] and calls its *hide* method.
 
 * (*element*) This Element
 
+[Mask]: #Mask
 [Mask.position]: #Mask:position
-[Waiter]: /more/Interface/Waiter
+[Spinner]: /more/Interface/Spinner
 [Options]: /core/Class/Class.Extras#Options
 [Events]: /core/Class/Class.Extras#Events
 [Element.setStyles]: /core/Element/Element.Style

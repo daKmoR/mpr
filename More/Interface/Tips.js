@@ -1,13 +1,27 @@
 /*
-Script: Tips.js
-	Class for creating nice tips that follow the mouse cursor when hovering an element.
+---
 
-	License:
-		MIT-style license.
+script: Tips.js
 
-	Authors:
-		Valerio Proietti
-		Christoph Pojer
+description: Class for creating nice tips that follow the mouse cursor when hovering an element.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+- Christoph Pojer
+
+requires:
+- core:1.2.4/Options
+- core:1.2.4/Events
+- core:1.2.4/Element.Event
+- core:1.2.4/Element.Style
+- core:1.2.4/Element.Dimensions
+- /MooTools.More
+
+provides: [Tips]
+
+...
 */
 
 (function(){
@@ -57,7 +71,6 @@ this.Tips = new Class({
 		return this.tip = new Element('div', {
 			'class': this.options.className,
 			styles: {
-				display: 'none',
 				position: 'absolute',
 				top: 0,
 				left: 0
@@ -125,6 +138,15 @@ this.Tips = new Class({
 	elementLeave: function(event, element){
 		$clear(this.timer);
 		this.timer = this.hide.delay(this.options.hideDelay, this, element);
+		this.fireForParent(event, element);
+	},
+
+	fireForParent: function(event, element){
+		if (!element) return;
+		parentNode = element.getParent();
+		if (parentNode == document.body) return;
+		if (parentNode.retrieve('tip:enter')) parentNode.fireEvent('mouseenter', event);
+		else this.fireForParent(parentNode, event);
 	},
 
 	elementMove: function(event, element){
@@ -151,11 +173,11 @@ this.Tips = new Class({
 	},
 
 	show: function(element){
-		this.fireEvent('show', [element]);
+		this.fireEvent('show', [this.tip, element]);
 	},
 
 	hide: function(element){
-		this.fireEvent('hide', [element]);
+		this.fireEvent('hide', [this.tip, element]);
 	}
 
 });

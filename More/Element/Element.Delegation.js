@@ -1,18 +1,27 @@
 /*
-Script: Element.Delegation.js
-	Extends the Element native object to include the delegate method for more efficient event management.
+---
 
-	Event checking based on the work of Daniel Steigerwald.
-	License: MIT-style license.
-	Copyright: Copyright (c) 2008 Daniel Steigerwald, daniel.steigerwald.cz
+script: Element.Delegation.js
 
-	License:
-		MIT-style license.
+description: Extends the Element native object to include the delegate method for more efficient event management.
 
-	Authors:
-		Aaron Newton
-		Daniel Steigerwald
+credits:
+- "Event checking based on the work of Daniel Steigerwald. License: MIT-style license.	Copyright: Copyright (c) 2008 Daniel Steigerwald, daniel.steigerwald.cz"
 
+license: MIT-style license
+
+authors:
+- Aaron Newton
+- Daniel Steigerwald
+
+requires:
+- core:1.2.4/Element.Event
+- core:1.2.4/Selectors
+- /MooTools.More
+
+provides: [Element.Delegation]
+
+...
 */
 (function(){
 	
@@ -20,7 +29,7 @@ Script: Element.Delegation.js
 		combinators = /[+>~\s]/,
 		splitType = function(type){
 			var bits = type.match(match);
-			return !bits ? {event: type } : {
+			return !bits ? {event: type} : {
 				event: bits[1],
 				selector: bits[2]
 			};

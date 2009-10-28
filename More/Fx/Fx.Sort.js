@@ -1,13 +1,23 @@
 /*
-Script: Fx.Sort.js
-	Defines Fx.Sort, a class that reorders lists with a transition.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Sort.js
 
-	Authors:
-		Aaron Newton
+description: Defines Fx.Sort, a class that reorders lists with a transition.
 
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element.Dimensions
+- /Fx.Elements
+- /Element.Measure
+
+provides: [Fx.Sort]
+
+...
 */
 
 Fx.Sort = new Class({

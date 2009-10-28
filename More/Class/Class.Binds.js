@@ -1,12 +1,22 @@
 /*
-Script: Class.Binds.js
-	Automagically binds specified methods in a class to the instance of the class.
+---
 
-	License:
-		MIT-style license.
+script: Class.Binds.js
 
-	Authors:
-		Aaron Newton
+description: Automagically binds specified methods in a class to the instance of the class.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Class
+- /MooTools.More
+
+provides: [Class.Binds]
+
+...
 */
 
 Class.Mutators.Binds = function(binds){

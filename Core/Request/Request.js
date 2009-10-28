@@ -1,9 +1,22 @@
 /*
-Script: Request.js
-	Powerful all purpose Request Class. Uses XMLHTTPRequest.
+---
 
-License:
-	MIT-style license.
+script: Request.js
+
+description: Powerful all purpose Request Class. Uses XMLHTTPRequest.
+
+license: MIT-style license.
+
+requires:
+- /Element
+- /Chain
+- /Events
+- /Options
+- /Browser
+
+provides: [Request]
+
+...
 */
 
 $require('Core/Class/Class.Extras.js');
@@ -116,7 +129,7 @@ var Request = new Class({
 
 		var old = this.options;
 		options = $extend({data: old.data, url: old.url, method: old.method}, options);
-		var data = options.data, url = options.url, method = options.method.toLowerCase();
+		var data = options.data, url = String(options.url), method = options.method.toLowerCase();
 
 		switch ($type(data)){
 			case 'element': data = document.id(data).toQueryString(); break;

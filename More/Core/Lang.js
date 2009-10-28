@@ -1,12 +1,22 @@
 /*
-Script: MooTools.Lang.js
-	Provides methods for localization.
+---
 
-	License:
-		MIT-style license.
+script: MooTools.Lang.js
 
-	Authors:
-		Aaron Newton
+description: Provides methods for localization.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Events
+- /MooTools.More
+
+provides: [MooTools.Lang]
+
+...
 */
 
 (function(){

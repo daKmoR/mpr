@@ -1,9 +1,19 @@
 /*
-Script: Function.js
-	Contains Function Prototypes like create, bind, pass, and delay.
+---
 
-License:
-	MIT-style license.
+script: Function.js
+
+description: Contains Function Prototypes like create, bind, pass, and delay.
+
+license: MIT-style license.
+
+requires:
+- /Native
+- /$util
+
+provides: [Function]
+
+...
 */
 
 $require('Core/Core/Core.js');

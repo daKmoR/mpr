@@ -1,10 +1,24 @@
 /*
-Script: Element.js
-	One of the most important items in MooTools. Contains the dollar function, the dollars function, and an handful of cross-browser,
-	time-saver methods to let you easily work with HTML Elements.
+---
 
-License:
-	MIT-style license.
+script: Element.js
+
+description: One of the most important items in MooTools. Contains the dollar function, the dollars function, and an handful of cross-browser, time-saver methods to let you easily work with HTML Elements.
+
+license: MIT-style license.
+
+requires:
+- /Window
+- /Document
+- /Array
+- /String
+- /Function
+- /Number
+- /Hash
+
+provides: [Element, Elements, $, $$, Iframe]
+
+...
 */
 
 $require('Core/Core/Browser.js');
@@ -94,7 +108,7 @@ var Elements = new Native({
 					if (uniques[el.uid]) continue;
 					uniques[el.uid] = true;
 				}
-				returned.push(el);
+				if (el) returned.push(el);
 			}
 			elements = returned;
 		}
@@ -478,7 +492,7 @@ Element.implement({
 		return walk(this, 'parentNode', null, match, true, nocash);
 	},
 	
-	getSiblings: function(match, nocash) {
+	getSiblings: function(match, nocash){
 		return this.getParent().getChildren(match, nocash).erase(this);
 	},
 

@@ -1,12 +1,24 @@
 /*
-Script: Depender.js
-	A stand alone dependency loader for the MooTools library.
+---
 
-	License:
-		MIT-style license.
+script: Depender.js
 
-	Authors:
-		Aaron Newton
+description: A stand alone dependency loader for the MooTools library.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element.Events
+- core:1.2.4/Request.JSON
+- /MooTools.More
+- /Log
+
+provides: Depender
+
+...
 */
 
 var Depender = {
@@ -25,35 +37,8 @@ var Depender = {
 		noCache: false,
 		log: false,*/
 		loadedSources: [],
-		loadedScripts: ['Core', 'Browser', 'Array', 'String', 'Function', 'Number', 'Hash', 'Element', 'Event', 'Element.Event', 'Class', 'DomReady', 'Class.Extras', 'Request', 'JSON', 'Request.JSON', 'More', 'Depender'],
+		loadedScripts: ['Core', 'Browser', 'Array', 'String', 'Function', 'Number', 'Hash', 'Element', 'Event', 'Element.Event', 'Class', 'DomReady', 'Class.Extras', 'Request', 'JSON', 'Request.JSON', 'More', 'Depender', 'Log'],
 		useScriptInjection: true
-	},
-
-	resetLog: function(){
-		this.logged.empty();
-		return this;
-	},
-
-	enableLog: function(){
-		this.log = function(){
-			console.log.apply(console, arguments);
-			return this;
-		};
-		this.log('enabling depender log.');
-		this.logged.each(function(logged){
-			this.log.apply(this, logged);
-		}, this);
-		return this.resetLog();
-	},
-
-	logged:[],
-
-	disableLog: function(){
-		this.log = function(){
-			this.logged.push(arguments);
-			return this;
-		};
-		return this;
 	},
 
 	loaded: [],
@@ -63,6 +48,7 @@ var Depender = {
 	libs: {},
 
 	include: function(libs){
+		this.log('include: ', libs);
 		this.mapLoaded = false;
 		var loader = function(data){
 			this.libs = $merge(this.libs, data);
@@ -84,7 +70,7 @@ var Depender = {
 	require: function(options){
 		var loaded = function(){
 			var scripts = this.calculateDependencies(options.scripts);
-			if (options.sources) {
+			if (options.sources){
 				options.sources.each(function(source){
 					scripts.combine(this.libs[source].files);
 				}, this);
@@ -109,7 +95,7 @@ var Depender = {
 	cleanDoubleSlash: function(str){
 		if (!str) return str;
 		var prefix = '';
-		if (str.test(/^http:\/\//)) {
+		if (str.test(/^http:\/\//)){
 			prefix = 'http://';
 			str = str.substring(7, str.length);
 		}
@@ -132,6 +118,7 @@ var Depender = {
 		}
 		this.log('loading source: ', source);
 		this.request(this.cleanDoubleSlash(source + '/scripts.json'), function(result){
+			this.log('loaded source: ', source);
 			this.libs[lib].files = result;
 			this.dataLoaded();
 		}.bind(this));
@@ -152,7 +139,7 @@ var Depender = {
 	},
 
 	calculateLoaded: function(){
-		var set = function(script) {
+		var set = function(script){
 			this.scriptsState[script] = true;
 		}.bind(this);
 		if (this.options.loadedScripts) this.options.loadedScripts.each(set);
@@ -212,7 +199,7 @@ var Depender = {
 			var chunks = this.pathMap[script].split(':');
 			var lib = this.libs[chunks[0]];
 			var dir = (lib.path || lib.scripts) + '/';
-			chunks.erase(chunks[0]);
+			chunks.shift();
 			return this.cleanDoubleSlash(dir + chunks.join('/') + '.js');
 		} catch(e){
 			return script;
@@ -256,21 +243,27 @@ var Depender = {
 		this.loading = true;
 		var scriptPath = this.getPath(script);
 		if (this.options.useScriptInjection){
+			this.log('injecting script: ', scriptPath);
+			var loaded = function(){
+				this.log('loaded script: ', scriptPath);
+				finish();
+			}.bind(this);
 			new Element('script', {
 				src: scriptPath + (this.options.noCache ? '?noCache=' + new Date().getTime() : ''),
 				events: {
-					load: function() {
-						this.log('loaded script: ', scriptPath);
-						finish();
-					}.bind(this),
+					load: loaded,
+					readystatechange: function(){
+						if (['loaded', 'complete'].contains(this.readyState)) loaded();
+					},
 					error: error
 				}
 			}).inject(this.options.target || document.head);
 		} else {
+			this.log('requesting script: ', scriptPath);
 			new Request({
 				url: scriptPath,
 				noCache: this.options.noCache,
-				onComplete: function(js) {
+				onComplete: function(js){
 					this.log('loaded script: ', scriptPath);
 					$exec(js);
 					finish();
@@ -290,6 +283,7 @@ var Depender = {
 	},
 
 	scriptLoaded: function(script){
+		this.log('loaded script: ', script);
 		this.scriptsState[script] = true;
 		this.check();
 		var loaded = this.getLoadedScripts();
@@ -330,6 +324,7 @@ var Depender = {
 
 $extend(Depender, new Events);
 $extend(Depender, new Options);
+$extend(Depender, new Log);
 
 Depender._setOptions = Depender.setOptions;
 Depender.setOptions = function(){
@@ -337,5 +332,3 @@ Depender.setOptions = function(){
 	if (this.options.log) Depender.enableLog();
 	return this;
 };
-
-Depender.disableLog();

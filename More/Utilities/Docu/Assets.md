@@ -1,11 +1,11 @@
-Hash: Assets {#Assets}
+Hash: Asset {#Asset}
 =======================
 
 Provides methods for the dynamic loading and management of JavaScript, CSS, and image files.
 
 
 
-Assets Method: javascript {#Assets:javascript}
+Asset Method: javascript {#Asset:javascript}
 ----------------------------------------------
 
 Injects a script tag into the head section of the document, pointing to the src specified.
@@ -17,7 +17,7 @@ Injects a script tag into the head section of the document, pointing to the src 
 ### Arguments:
 
 1. source     - (*string*) The location of the JavaScript file to load.
-2. properties - (*object*, optional) Additional attributes to be included into the script Element.
+2. properties - (*object*, optional) Additional attributes to be included into the script Element; this is the same as the second argument you might pass to  including the Element constructor. For instance you might specify an onload event or perhaps an id.
 
 ### Returns:
 
@@ -25,11 +25,16 @@ Injects a script tag into the head section of the document, pointing to the src 
 
 ### Examples:
 
-	var myScript = new Asset.javascript('/scripts/myScript.js', {id: 'myScript'});
+	var myScript = new Asset.javascript('/scripts/myScript.js', {
+		id: 'myScript', 
+		onload: function(){
+			alert('myScript.js is loaded!'); 
+		}
+	});
 
 
 
-Assets Method: css {#Assets:css}
+Asset Method: css {#Asset:css}
 --------------------------------
 
 Injects a css file in the page.
@@ -41,7 +46,7 @@ Injects a css file in the page.
 ### Arguments:
 
 1. source     - (*string*) The path of the CSS file.
-2. properties - (*object*) Some additional attributes you might want to add to the link Element.
+2. properties - (*object*) Some additional attributes you might want to add to the link Element; this is the same as the second argument you might pass to  including the Element constructor. For instance you might specify an onload event or perhaps an id.
 
 ### Returns:
 
@@ -53,7 +58,7 @@ Injects a css file in the page.
 
 
 
-Assets Method: image {#Assets:image}
+Asset Method: image {#Asset:image}
 ------------------------------------
 
 Preloads an image and returns the img element.
@@ -65,7 +70,7 @@ Preloads an image and returns the img element.
 ### Arguments:
 
 1. source     - (*string*) The path of the image file.
-2. properties - (*object*) Some additional attributes you might want to add to the img Element including the onload/onerror/onabout events.
+2. properties - (*object*) Some additional attributes you might want to add to the img Element including the onload/onerror/onabort events.
 
 ### Returns:
 
@@ -82,7 +87,7 @@ Preloads an image and returns the img element.
 
 
 
-Assets Method: images {#Assets:images}
+Asset Method: images {#Asset:images}
 --------------------------------------
 
 Preloads an array of images (as strings) and returns an array of img elements. does not inject them to the page.
@@ -98,7 +103,7 @@ Preloads an array of images (as strings) and returns an array of img elements. d
 
 ## Options:
 
-* properties - (*object*) Some additional attributes for all the images (same as the second argument you might bass to *Asset.image*).
+* properties - (*object*) Some additional attributes for all the images (same as the second argument you might pass to *Asset.image*).
 * onComplete/onProgress/onError - (*functions*) See events below.
 
 ### onComplete

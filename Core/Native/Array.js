@@ -1,9 +1,19 @@
 /*
-Script: Array.js
-	Contains Array Prototypes like each, contains, and erase.
+---
 
-License:
-	MIT-style license.
+script: Array.js
+
+description: Contains Array Prototypes like each, contains, and erase.
+
+license: MIT-style license.
+
+requires:
+- /$util
+- /Array.each
+
+provides: [Array]
+
+...
 */
 
 $require('Core/Core/Core.js');
@@ -25,7 +35,7 @@ Array.implement({
 		return results;
 	},
 
-	clean: function() {
+	clean: function(){
 		return this.filter($defined);
 	},
 

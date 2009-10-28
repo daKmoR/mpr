@@ -1,12 +1,24 @@
 /*
-Script: JSON.js
-	JSON encoder and decoder.
+---
 
-License:
-	MIT-style license.
+script: JSON.js
 
-See Also:
-	<http://www.json.org/>
+description: JSON encoder and decoder.
+
+license: MIT-style license.
+
+See Also: <http://www.json.org/>
+
+requires:
+- /Array
+- /String
+- /Number
+- /Function
+- /Hash
+
+provides: [JSON]
+
+...
 */
 
 $require('Core/Native/Array.js');
@@ -15,8 +27,11 @@ $require('Core/Native/Hash.js');
 $require('Core/Native/Number.js');
 $require('Core/Native/String.js');
 
-var JSON = new Hash({
-
+var JSON = new Hash(this.JSON && {
+	stringify: JSON.stringify,
+	parse: JSON.parse
+}).extend({
+	
 	$specialChars: {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\'},
 
 	$replaceChars: function(chr){

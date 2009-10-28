@@ -1,13 +1,22 @@
 /*
-Script: Element.Dimensions.js
-	Contains methods to work with size, scroll, or positioning of Elements and the window object.
+---
 
-License:
-	MIT-style license.
+script: Element.Dimensions.js
 
-Credits:
-	- Element positioning based on the [qooxdoo](http://qooxdoo.org/) code and smart browser fixes, [LGPL License](http://www.gnu.org/licenses/lgpl.html).
-	- Viewport dimensions based on [YUI](http://developer.yahoo.com/yui/) code, [BSD License](http://developer.yahoo.com/yui/license.html).
+description: Contains methods to work with size, scroll, or positioning of Elements and the window object.
+
+license: MIT-style license.
+
+credits:
+- Element positioning based on the [qooxdoo](http://qooxdoo.org/) code and smart browser fixes, [LGPL License](http://www.gnu.org/licenses/lgpl.html).
+- Viewport dimensions based on [YUI](http://developer.yahoo.com/yui/) code, [BSD License](http://developer.yahoo.com/yui/license.html).
+
+requires:
+- /Element
+
+provides: [Element.Dimensions]
+
+...
 */
 
 $require('Core/Element/Element.Style.js');
@@ -61,15 +70,18 @@ Element.implement({
 		return null;
 	},
 
-	getOffsets: function(){		
+	getOffsets: function(){
 		if (this.getBoundingClientRect){
 			var bound = this.getBoundingClientRect(),
-			html = document.id(this.getDocument().documentElement),
-			scroll = html.getScroll(),
-			isFixed = (styleString(this, 'position') == 'fixed');
+				html = document.id(this.getDocument().documentElement),
+				htmlScroll = html.getScroll(),
+				elemScrolls = this.getScrolls(),
+				elemScroll = this.getScroll(),
+				isFixed = (styleString(this, 'position') == 'fixed');
+
 			return {
-				x: parseInt(bound.left, 10) + ((isFixed) ? 0 : scroll.x) - html.clientLeft,
-				y: parseInt(bound.top, 10) +  ((isFixed) ? 0 : scroll.y) - html.clientTop
+				x: bound.left.toInt() + elemScrolls.x - elemScroll.x + ((isFixed) ? 0 : htmlScroll.x) - html.clientLeft,
+				y: bound.top.toInt()  + elemScrolls.y - elemScroll.y + ((isFixed) ? 0 : htmlScroll.y) - html.clientTop
 			};
 		}
 
@@ -106,23 +118,36 @@ Element.implement({
 
 	getPosition: function(relative){
 		if (isBody(this)) return {x: 0, y: 0};
-		var offset = this.getOffsets(), scroll = this.getScrolls();
-		var position = {x: offset.x - scroll.x, y: offset.y - scroll.y};
+		var offset = this.getOffsets(),
+				scroll = this.getScrolls();
+		var position = {
+			x: offset.x - scroll.x,
+			y: offset.y - scroll.y
+		};
 		var relativePosition = (relative && (relative = document.id(relative))) ? relative.getPosition() : {x: 0, y: 0};
 		return {x: position.x - relativePosition.x, y: position.y - relativePosition.y};
 	},
 
 	getCoordinates: function(element){
 		if (isBody(this)) return this.getWindow().getCoordinates();
-		var position = this.getPosition(element), size = this.getSize();
-		var obj = {left: position.x, top: position.y, width: size.x, height: size.y};
+		var position = this.getPosition(element),
+				size = this.getSize();
+		var obj = {
+			left: position.x,
+			top: position.y,
+			width: size.x,
+			height: size.y
+		};
 		obj.right = obj.left + obj.width;
 		obj.bottom = obj.top + obj.height;
 		return obj;
 	},
 
 	computePosition: function(obj){
-		return {left: obj.x - styleNumber(this, 'margin-left'), top: obj.y - styleNumber(this, 'margin-top')};
+		return {
+			left: obj.x - styleNumber(this, 'margin-left'),
+			top: obj.y - styleNumber(this, 'margin-top')
+		};
 	},
 
 	setPosition: function(obj){
@@ -135,7 +160,7 @@ Element.implement({
 Native.implement([Document, Window], {
 
 	getSize: function(){
-		if (Browser.Engine.presto || Browser.Engine.webkit) {
+		if (Browser.Engine.presto || Browser.Engine.webkit){
 			var win = this.getWindow();
 			return {x: win.innerWidth, y: win.innerHeight};
 		}

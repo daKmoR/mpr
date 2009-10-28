@@ -1,12 +1,25 @@
 /*
-Script: Slider.js
-	Class for creating horizontal and vertical slider controls.
+---
 
-	License:
-		MIT-style license.
+script: Slider.js
 
-	Authors:
-		Valerio Proietti
+description: Class for creating horizontal and vertical slider controls.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+
+requires:
+- core:1.2.4/Element.Dimensions
+- /Class.Binds
+- /Drag
+- /Element.Dimensions
+- /Element.Measure
+
+provides: [Slider]
+
+...
 */
 
 $require('Core/Element/Element.Dimensions.js');
@@ -28,6 +41,7 @@ var Slider = new Class({
 			if (this.options.snap) position = this.toPosition(this.step);
 			this.knob.setStyle(this.property, position);
 		},
+		initialStep: 0,
 		snap: false,
 		offset: 0,
 		range: false,
@@ -53,8 +67,12 @@ var Slider = new Class({
 				this.property = 'left';
 				offset = 'offsetWidth';
 		}
-		this.half = this.knob[offset] / 2;
-		this.full = this.element[offset] - this.knob[offset] + (this.options.offset * 2);
+		
+		this.full = this.element.measure(function(){ 
+			this.half = this.knob[offset] / 2; 
+			return this.element[offset] - this.knob[offset] + (this.options.offset * 2); 
+		}.bind(this));
+		
 		this.min = $chk(this.options.range[0]) ? this.options.range[0] : 0;
 		this.max = $chk(this.options.range[1]) ? this.options.range[1] : this.options.steps;
 		this.range = this.max - this.min;
@@ -62,7 +80,7 @@ var Slider = new Class({
 		this.stepSize = Math.abs(this.range) / this.steps;
 		this.stepWidth = this.stepSize * this.full / Math.abs(this.range) ;
 
-		this.knob.setStyle('position', 'relative').setStyle(this.property, - this.options.offset);
+		this.knob.setStyle('position', 'relative').setStyle(this.property, this.options.initialStep ? this.toPosition(this.options.initialStep) : - this.options.offset);
 		modifiers[this.axis] = this.property;
 		limit[this.axis] = [- this.options.offset, this.full - this.options.offset];
 
@@ -75,6 +93,9 @@ var Slider = new Class({
 			onBeforeStart: (function(){
 				this.isDragging = true;
 			}).bind(this),
+			onCancel: function() {
+				this.isDragging = false;
+			}.bind(this),
 			onComplete: function(){
 				this.isDragging = false;
 				this.draggedKnob();

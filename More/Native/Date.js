@@ -1,23 +1,45 @@
 /*
-Script: Date.js
-	Extends the Date native object to include methods useful in managing dates.
+---
 
-	License:
-		MIT-style license.
+script: Date.js
 
-	Authors:
-		Aaron Newton
-		Nicholas Barthelemy - https://svn.nbarthelemy.com/date-js/
-		Harald Kirshner - mail [at] digitarald.de; http://digitarald.de
-		Scott Kyle - scott [at] appden.com; http://appden.com
+description: Extends the Date native object to include methods useful in managing dates.
 
+license: MIT-style license
+
+authors:
+- Aaron Newton
+- Nicholas Barthelemy - https://svn.nbarthelemy.com/date-js/
+- Harald Kirshner - mail [at] digitarald.de; http://digitarald.de
+- Scott Kyle - scott [at] appden.com; http://appden.com
+
+requires:
+- core:1.2.4/Array
+- core:1.2.4/String
+- core:1.2.4/Number
+- core:1.2.4/Lang
+- core:1.2.4/Date.English.US
+- /MooTools.More
+
+provides: [Date]
+
+...
 */
 
 (function(){
 
+var Date = this.Date;
+
 if (!Date.now) Date.now = $time;
 
-Date.Methods = {};
+Date.Methods = {
+	ms: 'Milliseconds',
+	year: 'FullYear',
+	min: 'Minutes',
+	mo: 'Month',
+	sec: 'Seconds',
+	hr: 'Hours'
+};
 
 ['Date', 'Day', 'FullYear', 'Hours', 'Milliseconds', 'Minutes', 'Month', 'Seconds', 'Time', 'TimezoneOffset',
 	'Week', 'Timezone', 'GMTOffset', 'DayOfYear', 'LastMonth', 'LastDayOfMonth', 'UTCDate', 'UTCDay', 'UTCFullYear',
@@ -25,19 +47,8 @@ Date.Methods = {};
 	Date.Methods[method.toLowerCase()] = method;
 });
 
-$each({
-	ms: 'Milliseconds',
-	year: 'FullYear',
-	min: 'Minutes',
-	mo: 'Month',
-	sec: 'Seconds',
-	hr: 'Hours'
-}, function(value, key){
-	Date.Methods[key] = value;
-});
-
-var zeroize = function(what, length){
-	return new Array(length - what.toString().length + 1).join('0') + what;
+var pad = function(what, length){
+	return new Array(length - String(what).length + 1).join('0') + what;
 };
 
 Date.implement({
@@ -100,23 +111,10 @@ Date.implement({
 		return this.set({hr: 0, min: 0, sec: 0, ms: 0});
 	},
 
-	diff: function(d, resolution){
-		resolution = resolution || 'day';
-		if ($type(d) == 'string') d = Date.parse(d);
-
-		switch (resolution){
-			case 'year':
-				return d.get('year') - this.get('year');
-			case 'month':
-				var months = (d.get('year') - this.get('year')) * 12;
-				return months + d.get('mo') - this.get('mo');
-			default:
-				var diff = d.get('time') - this.get('time');
-				if (Date.units[resolution]() > diff.abs()) return 0;
-				return ((d.get('time') - this.get('time')) / Date.units[resolution]()).round();
-		}
-
-		return null;
+	diff: function(date, resolution){
+		if ($type(date) == 'string') date = Date.parse(date);
+		
+		return ((date - this) / Date.units[resolution || 'day'](3, 3)).toInt(); // non-leap year, 30-day month
 	},
 
 	getLastDayOfMonth: function(){
@@ -144,7 +142,7 @@ Date.implement({
 
 	getGMTOffset: function(){
 		var off = this.get('timezoneOffset');
-		return ((off > 0) ? '-' : '+') + zeroize((off.abs() / 60).floor(), 2) + zeroize(off % 60, 2);
+		return ((off > 0) ? '-' : '+') + pad((off.abs() / 60).floor(), 2) + pad(off % 60, 2);
 	},
 
 	setAMPM: function(ampm){
@@ -174,23 +172,23 @@ Date.implement({
 		f = formats[f.toLowerCase()] || f; // replace short-hand with actual format
 		var d = this;
 		return f.replace(/%([a-z%])/gi,
-			function($1, $2){
-				switch ($2){
+			function($0, $1){
+				switch ($1){
 					case 'a': return Date.getMsg('days')[d.get('day')].substr(0, 3);
 					case 'A': return Date.getMsg('days')[d.get('day')];
 					case 'b': return Date.getMsg('months')[d.get('month')].substr(0, 3);
 					case 'B': return Date.getMsg('months')[d.get('month')];
 					case 'c': return d.toString();
-					case 'd': return zeroize(d.get('date'), 2);
-					case 'H': return zeroize(d.get('hr'), 2);
+					case 'd': return pad(d.get('date'), 2);
+					case 'H': return pad(d.get('hr'), 2);
 					case 'I': return ((d.get('hr') % 12) || 12);
-					case 'j': return zeroize(d.get('dayofyear'), 3);
-					case 'm': return zeroize((d.get('mo') + 1), 2);
-					case 'M': return zeroize(d.get('min'), 2);
+					case 'j': return pad(d.get('dayofyear'), 3);
+					case 'm': return pad((d.get('mo') + 1), 2);
+					case 'M': return pad(d.get('min'), 2);
 					case 'o': return d.get('ordinal');
 					case 'p': return Date.getMsg(d.get('ampm'));
-					case 'S': return zeroize(d.get('seconds'), 2);
-					case 'U': return zeroize(d.get('week'), 2);
+					case 'S': return pad(d.get('seconds'), 2);
+					case 'U': return pad(d.get('week'), 2);
 					case 'w': return d.get('day');
 					case 'x': return d.format(Date.getMsg('shortDate'));
 					case 'X': return d.format(Date.getMsg('shortTime'));
@@ -199,7 +197,7 @@ Date.implement({
 					case 'T': return d.get('GMTOffset');
 					case 'Z': return d.get('Timezone');
 				}
-				return $2;
+				return $1;
 			}
 		);
 	},
@@ -210,6 +208,7 @@ Date.implement({
 
 });
 
+Date.alias('toISOString', 'toJSON');
 Date.alias('diff', 'compare');
 Date.alias('format', 'strftime');
 
@@ -222,6 +221,7 @@ var formats = {
 	'long': '%B %d, %Y %H:%M'
 };
 
+var parsePatterns = [];
 var nativeParse = Date.parse;
 
 var parseWord = function(type, word, num){
@@ -247,7 +247,6 @@ var parseWord = function(type, word, num){
 
 	return (num) ? translated.indexOf(ret) : ret;
 };
-
 
 Date.extend({
 
@@ -288,9 +287,9 @@ Date.extend({
 		if (!from.length) return null;
 
 		var parsed;
-		Date.parsePatterns.some(function(pattern){
-			var r = pattern.re.exec(from);
-			return (r) ? (parsed = pattern.handler(r)) : false;
+		parsePatterns.some(function(pattern){
+			var bits = pattern.re.exec(from);
+			return (bits) ? (parsed = pattern.handler(bits)) : false;
 		});
 
 		return parsed || new Date(nativeParse(from));
@@ -306,12 +305,14 @@ Date.extend({
 
 	parseUTC: function(value){
 		var localDate = new Date(value);
-		var utcSeconds = Date.UTC(localDate.get('year'), 
-		localDate.get('mo'),
-		localDate.get('date'), 
-		localDate.get('hr'), 
-		localDate.get('min'), 
-		localDate.get('sec'));
+		var utcSeconds = Date.UTC(
+			localDate.get('year'),
+			localDate.get('mo'),
+			localDate.get('date'),
+			localDate.get('hr'),
+			localDate.get('min'),
+			localDate.get('sec')
+		);
 		return new Date(utcSeconds);
 	},
 
@@ -324,13 +325,13 @@ Date.extend({
 	},
 
 	defineFormats: function(formats){
-		for (var name in formats) Date.defineFormat(name, formats[f]);
+		for (var name in formats) Date.defineFormat(name, formats[name]);
 	},
 
-	parsePatterns: [],
+	parsePatterns: parsePatterns, // this is deprecated
 	
 	defineParser: function(pattern){
-		Date.parsePatterns.push( pattern.re && pattern.handler ? pattern : build(pattern) );
+		parsePatterns.push((pattern.re && pattern.handler) ? pattern : build(pattern));
 	},
 	
 	defineParsers: function(){
@@ -338,84 +339,96 @@ Date.extend({
 	},
 	
 	define2DigitYearStart: function(year){
-		yr_start = year % 100;
-		yr_base = year - yr_start;
+		startYear = year % 100;
+		startCentury = year - startYear;
 	}
 
 });
 
-var yr_base = 1900;
-var yr_start = 70;
+var startCentury = 1900;
+var startYear = 70;
+
+var regexOf = function(type){
+	return new RegExp('(?:' + Date.getMsg(type).map(function(name){
+		return name.substr(0, 3);
+	}).join('|') + ')[a-z]*');
+};
 
 var replacers = function(key){
 	switch(key){
 		case 'x': // iso8601 covers yyyy-mm-dd, so just check if month is first
-			return (Date.orderIndex('month') == 1) ? '%m[.-/]%d([.-/]%y)?' : '%d[.-/]%m([.-/]%y)?';
+			return ((Date.orderIndex('month') == 1) ? '%m[.-/]%d' : '%d[.-/]%m') + '([.-/]%y)?';
 		case 'X':
-			return '%H([.:]%M)?([.:]%S([.:]%s)?)?\\s?%p?\\s?%T?';
-		case 'o':
-			return '[^\\d\\s]*';
+			return '%H([.:]%M)?([.:]%S([.:]%s)?)? ?%p? ?%T?';
 	}
 	return null;
 };
 
 var keys = {
-	a: /[a-z]{3,}/,
 	d: /[0-2]?[0-9]|3[01]/,
 	H: /[01]?[0-9]|2[0-3]/,
 	I: /0?[1-9]|1[0-2]/,
 	M: /[0-5]?\d/,
 	s: /\d+/,
+	o: /[a-z]*/,
 	p: /[ap]\.?m\.?/,
 	y: /\d{2}|\d{4}/,
 	Y: /\d{4}/,
 	T: /Z|[+-]\d{2}(?::?\d{2})?/
 };
 
-keys.B = keys.b = keys.A = keys.a;
 keys.m = keys.I;
 keys.S = keys.M;
 
-var lang;
+var currentLanguage;
+
+var recompile = function(language){
+	currentLanguage = language;
+	
+	keys.a = keys.A = regexOf('days');
+	keys.b = keys.B = regexOf('months');
+	
+	parsePatterns.each(function(pattern, i){
+		if (pattern.format) parsePatterns[i] = build(pattern.format);
+	});
+};
 
 var build = function(format){
-	if (!lang) return {format: format}; // wait until language is set
+	if (!currentLanguage) return {format: format};
 	
-	var parsed = [null];
-
+	var parsed = [];
 	var re = (format.source || format) // allow format to be regex
 	 .replace(/%([a-z])/gi,
-		function($1, $2){
-			return replacers($2) || $1;
+		function($0, $1){
+			return replacers($1) || $0;
 		}
 	).replace(/\((?!\?)/g, '(?:') // make all groups non-capturing
 	 .replace(/ (?!\?|\*)/g, ',? ') // be forgiving with spaces and commas
 	 .replace(/%([a-z%])/gi,
-		function($1, $2){
-			var p = keys[$2];
-			if (!p) return $2;
-			parsed.push($2);
+		function($0, $1){
+			var p = keys[$1];
+			if (!p) return $1;
+			parsed.push($1);
 			return '(' + p.source + ')';
 		}
-	);
+	).replace(/\[a-z\]/gi, '[a-z\\u00c0-\\uffff]'); // handle unicode words
 
 	return {
 		format: format,
 		re: new RegExp('^' + re + '$', 'i'),
 		handler: function(bits){
+			bits = bits.slice(1).associate(parsed);
 			var date = new Date().clearTime();
-			for (var i = 1; i < parsed.length; i++)
-				date = handle.call(date, parsed[i], bits[i]);
+			if ('d' in bits) handle.call(date, 'd', 1);
+			if ('m' in bits) handle.call(date, 'm', 1);
+			for (var key in bits) handle.call(date, key, bits[key]);
 			return date;
 		}
 	};
 };
 
 var handle = function(key, value){
-	if (!value){
-		if (key == 'm' || key == 'd') value = 1;
-		else return this;
-	}
+	if (!value) return this;
 
 	switch(key){
 		case 'a': case 'A': return this.set('day', Date.parseDay(value, true));
@@ -431,13 +444,13 @@ var handle = function(key, value){
 		case 'Y': return this.set('year', value);
 		case 'y':
 			value = +value;
-			if (value < 100) value += yr_base + (value < yr_start ? 100 : 0);
+			if (value < 100) value += startCentury + (value < startYear ? 100 : 0);
 			return this.set('year', value);
 		case 'T':
 			if (value == 'Z') value = '+00';
 			var offset = value.match(/([+-])(\d{2}):?(\d{2})?/);
 			offset = (offset[1] + '1') * (offset[2] * 60 + (+offset[3] || 0)) + this.getTimezoneOffset();
-			return this.set('time', (this * 1) - offset * 60000);
+			return this.set('time', this - offset * 60000);
 	}
 
 	return this;
@@ -448,18 +461,13 @@ Date.defineParsers(
 	'%Y%m%d(T%H(%M%S?)?)?', // "19991231", "19991231T1159", compact
 	'%x( %X)?', // "12/31", "12.31.99", "12-31-1999", "12/31/2008 11:59 PM"
 	'%d%o( %b( %Y)?)?( %X)?', // "31st", "31st December", "31 Dec 1999", "31 Dec 1999 11:59pm"
-	'%b %d%o?( %Y)?( %X)?', // Same as above with month and day switched
-	'%b %Y' // "December 1999"
+	'%b( %d%o)?( %Y)?( %X)?', // Same as above with month and day switched
+	'%Y %b( %d%o( %X)?)?', // Same as above with year coming first
+	'%o %b %d %X %T %Y' // "Thu Oct 22 08:11:23 +0000 2009"
 );
 
 MooTools.lang.addEvent('langChange', function(language){
-	if (!MooTools.lang.get('Date')) return;
-
-	lang = language;
-	Date.parsePatterns.each(function(pattern, i){
-		if (pattern.format) Date.parsePatterns[i] = build(pattern.format);
-	});
-
+	if (MooTools.lang.get('Date')) recompile(language);
 }).fireEvent('langChange', MooTools.lang.getCurrentLanguage());
 
 })();

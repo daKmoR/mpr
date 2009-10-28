@@ -1,9 +1,19 @@
 /*
-Script: Element.Event.js
-	Contains Element methods for dealing with events, and custom Events.
+---
 
-License:
-	MIT-style license.
+script: Element.Event.js
+
+description: Contains Element methods for dealing with events. This file also includes mouseenter and mouseleave custom Element Events.
+
+license: MIT-style license.
+
+requires: 
+- /Element
+- /Event
+
+provides: [Element.Event]
+
+...
 */
 
 $require('Core/Element/Element.js');

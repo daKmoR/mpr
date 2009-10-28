@@ -1,12 +1,22 @@
 /*
-Script: Fx.Accordion.js
-	An Fx.Elements extension which allows you to easily create accordion type controls.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Accordion.js
 
-	Authors:
-		Valerio Proietti
+description: An Fx.Elements extension which allows you to easily create accordion type controls.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+
+requires:
+- core:1.2.4/Element.Event
+- /Fx.Elements
+
+provides: [Fx.Accordion]
+
+...
 */
 
 $require('More/Fx/Fx.Elements.js');
@@ -17,14 +27,15 @@ var Accordion = Fx.Accordion = new Class({
 
 	options: {/*
 		onActive: $empty(toggler, section),
-		onBackground: $empty(toggler, section),*/
+		onBackground: $empty(toggler, section),
+		fixedHeight: false,
+		fixedWidth: false,
+		*/
 		display: 0,
 		show: false,
 		height: true,
 		width: false,
 		opacity: true,
-		fixedHeight: false,
-		fixedWidth: false,
 		alwaysHide: false,
 		trigger: 'click',
 		initialDisplayFx: true,
@@ -70,7 +81,9 @@ var Accordion = Fx.Accordion = new Class({
 		this.togglers.include(toggler);
 		this.elements.include(element);
 		var idx = this.togglers.indexOf(toggler);
-		toggler.addEvent(this.options.trigger, this.display.bind(this, idx));
+		var displayer = this.display.bind(this, idx);
+		toggler.store('accordion:display', displayer);
+		toggler.addEvent(this.options.trigger, displayer);
 		if (this.options.height) element.setStyles({'padding-top': 0, 'border-top': 'none', 'padding-bottom': 0, 'border-bottom': 'none'});
 		if (this.options.width) element.setStyles({'padding-left': 0, 'border-left': 'none', 'padding-right': 0, 'border-right': 'none'});
 		element.fullOpacity = 1;
@@ -83,12 +96,22 @@ var Accordion = Fx.Accordion = new Class({
 		return this;
 	},
 
+	detach: function(){
+		this.togglers.each(function(toggler) {
+			toggler.removeEvent(this.options.trigger, toggler.retrieve('accordion:display'));
+		}, this);
+	},
+
 	display: function(index, useFx){
 		if (!this.check(index, useFx)) return this;
 		useFx = $pick(useFx, true);
-		if (this.options.returnHeightToAuto) {
+		if (this.options.returnHeightToAuto){
 			var prev = this.elements[this.previous];
-			if (prev) for (var fx in this.effects) prev.setStyle(fx, prev[this.effects[fx]]);
+			if (prev && !this.selfHidden){
+				for (var fx in this.effects){
+					prev.setStyle(fx, prev[this.effects[fx]]);
+				}
+			}
 		}
 		index = ($type(index) == 'element') ? this.elements.indexOf(index) : index;
 		if ((this.timer && this.options.wait) || (index === this.previous && !this.options.alwaysHide)) return this;
@@ -96,16 +119,20 @@ var Accordion = Fx.Accordion = new Class({
 		var obj = {};
 		this.elements.each(function(el, i){
 			obj[i] = {};
-			var hide = (i != index) || 
-						(this.options.alwaysHide && ((el.offsetHeight > 0 && this.options.height) || 
-							el.offsetWidth > 0 && this.options.width));
+			var hide;
+			if (i != index){
+				hide = true;
+			} else if (this.options.alwaysHide && ((el.offsetHeight > 0 && this.options.height) || el.offsetWidth > 0 && this.options.width)){
+				hide = true;
+				this.selfHidden = true;
+			}
 			this.fireEvent(hide ? 'background' : 'active', [this.togglers[i], el]);
 			for (var fx in this.effects) obj[i][fx] = hide ? 0 : el[this.effects[fx]];
 		}, this);
 		this.internalChain.chain(function(){
-			if (this.options.returnHeightToAuto) {
+			if (this.options.returnHeightToAuto && !this.selfHidden){
 				var el = this.elements[index];
-				el.setStyle('height', 'auto');
+				if (el) el.setStyle('height', 'auto');
 			};
 		}.bind(this));
 		return useFx ? this.start(obj) : this.set(obj);

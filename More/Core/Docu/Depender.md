@@ -15,7 +15,7 @@ This is the setOptions method from [Options][]. As Depender is not a class, you 
 ### Options
 
 * target - (*mixed*) A DOM Element or its ID - the target where the scripts are to be injected. Defaults to *document.head*.
-* loadedScripts - (*array*) This is a list of scripts already loaded into the document. By default, it is an array of the scripts on which Depender depends (*Core*, *Browser*, *Array*, *String*, *Function*, *Number*, *Hash*, *Element*, *Event*, *Element.Event*, *Class*, *Class.Extras*, *Request*, *JSON*, *Request.JSON*, *More*, and *Depender*).
+* loadedScripts - (*array*) This is a list of scripts already loaded into the document. By default, it is an array of the scripts on which Depender depends (*Core*, *Browser*, *Array*, *String*, *Function*, *Number*, *Hash*, *Element*, *Event*, *Element.Event*, *Class*, *Class.Extras*, *Request*, *JSON*, *Request.JSON*, *More*, *Log*, and *Depender*).
 * loadedSources - (*array*) An array of lib keys that are loaded in their entirety. For example, if your libs.json object has a definition for 'mootools-core' and you have all of core loaded, you can just define *loadedLibs: ['mootools-core']* and all the files in that source will be marked as having been loaded.
 * noCache - (*boolean*) this setting is passed along to [Request][] to prevent caching. This is useful in development where scripts are changing often but should be left disabled for production. Defaults to *false*.
 * useScriptInjection - (*boolean*) if *false*, scripts are loaded with [Request][] and evaluated. If *true* (the default), script tags are injected into the document.head (or the target specified in the options). The advantage of using [Request][] is that the requests are asynchronous, so other activities are not blocked. The downside to using [Request][] is that errors in your external script files are hard to find (as there is no line number reported) and the scripts *must* be on the same domain as your web app (this is not the case with the [Depender Server][]).
@@ -42,7 +42,7 @@ This is the setOptions method from [Options][]. As Depender is not a class, you 
 
 ### See also
 
-You might also consider the [Depender.Client](/more/Core/Depender.Client), which integrates with the [Depender Server][]. It works very similarly to this library, but instead of loading each script individually the server side component concatenates and compresses the response into a single file. The result is a much faster experience for the user.
+You might also consider the [Depender.Client], which integrates with the [Depender Server][]. It works very similarly to this library, but instead of loading each script individually the server side component concatenates and compresses the response into a single file. The result is a much faster experience for the user.
 
 Depender Method: include {#Depender:include}
 --------------------------------------------
@@ -224,3 +224,4 @@ Example Usage {#Depender:Example}
 [Request]: /core/Request/Request
 [require]: #Depender:require
 [Depender Server]: http://github.com/anutron/mootools-depender/tree/
+[Depender Client]: http://github.com/anutron/mootools-depender/tree/

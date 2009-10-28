@@ -1,12 +1,22 @@
 /*
-Script: Fx.SmoothScroll.js
-	Class for creating a smooth scrolling effect to all internal links on the page.
+---
 
-	License:
-		MIT-style license.
+script: Fx.SmoothScroll.js
 
-	Authors:
-		Valerio Proietti
+description: Class for creating a smooth scrolling effect to all internal links on the page.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+
+requires:
+- core:1.2.4/Selectors
+- /Fx.Scroll
+
+provides: [Fx.SmoothScroll]
+
+...
 */
 
 $require('More/Fx/Fx.Scroll.js');
@@ -41,7 +51,9 @@ var SmoothScroll = Fx.SmoothScroll = new Class({
 			if (el) {
 				event.preventDefault();
 				this.anchor = anchor;
-				this.toElement(el);
+				this.toElement(el).chain(function(){
+					this.fireEvent('scrolledTo', [link, el]);
+				}.bind(this));
 				link.blur();
 			}
 		}.bind(this));

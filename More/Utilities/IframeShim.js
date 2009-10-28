@@ -1,12 +1,25 @@
 /*
-Script: IframeShim.js
-	Defines IframeShim, a class for obscuring select lists and flash objects in IE.
+---
 
-	License:
-		MIT-style license.
+script: IframeShim.js
 
-	Authors:
-		Aaron Newton
+description: Defines IframeShim, a class for obscuring select lists and flash objects in IE.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element.Event
+- core:1.2.4/Element.Style
+- core:1.2.4/Options Events
+- /Element.Position
+- /Class.Occlude
+
+provides: [IframeShim]
+
+...
 */
 
 $require('Core/Class/Class.Extras.js');
@@ -22,6 +35,7 @@ var IframeShim = new Class({
 
 	options: {
 		className: 'iframeShim',
+		src: 'javascript:false;document.write("");',
 		display: false,
 		zIndex: null,
 		margin: 0,
@@ -52,7 +66,7 @@ var IframeShim = new Class({
 			zIndex = ($chk(this.options.zIndex) && zIndex > this.options.zIndex) ? this.options.zIndex : zIndex - 1;
 			if (zIndex < 0) zIndex = 1;
 			this.shim = new Element('iframe', {
-				src:'javascript:false;document.write("");',
+				src: this.options.src,
 				scrolling: 'no',
 				frameborder: 0,
 				styles: {
@@ -68,7 +82,7 @@ var IframeShim = new Class({
 				this[this.options.display ? 'show' : 'hide']();
 				this.fireEvent('inject');
 			}).bind(this);
-			if (Browser.Engine.trident && !IframeShim.ready) window.addEvent('load', inject);
+			if (IframeShim.ready) window.addEvent('load', inject);
 			else inject();
 		} else {
 			this.position = this.hide = this.show = this.dispose = $lambda(this);
@@ -76,20 +90,20 @@ var IframeShim = new Class({
 	},
 
 	position: function(){
-		if (!IframeShim.ready) return this;
-		var size = this.element.measure(function(){ return this.getSize(); });
-		if ($type(this.options.margin)){
+		if (!IframeShim.ready || !this.shim) return this;
+		var size = this.element.measure(function(){ 
+			return this.getSize(); 
+		});
+		if (this.options.margin != undefined){
 			size.x = size.x - (this.options.margin * 2);
 			size.y = size.y - (this.options.margin * 2);
 			this.options.offset.x += this.options.margin;
 			this.options.offset.y += this.options.margin;
 		}
-		if (this.shim) {
-			this.shim.set({width: size.x, height: size.y}).position({
-				relativeTo: this.element,
-				offset: this.options.offset
-			});
-		}
+		this.shim.set({width: size.x, height: size.y}).position({
+			relativeTo: this.element,
+			offset: this.options.offset
+		});
 		return this;
 	},
 

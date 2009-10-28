@@ -1,14 +1,26 @@
 /*
-Script: Drag.js
-	The base Drag Class. Can be used to drag and resize Elements using mouse events.
+---
 
-	License:
-		MIT-style license.
+script: Drag.js
 
-	Authors:
-		Valerio Proietti
-		Tom Occhinno
-		Jan Kassens
+description: The base Drag Class. Can be used to drag and resize Elements using mouse events.
+
+license: MIT-style license
+
+authors:
+- Valerio Proietti
+- Tom Occhinno
+- Jan Kassens
+
+requires:
+- core:1.2.4/Events
+- core:1.2.4/Options
+- core:1.2.4/Element.Event
+- core:1.2.4/Element.Style
+- /MooTools.More
+
+provides: [Drag]
+
 */
 
 var Drag = new Class({
@@ -30,6 +42,7 @@ var Drag = new Class({
 		handle: false,
 		invert: false,
 		preventDefault: false,
+		stopPropagation: false,
 		modifiers: {x: 'left', y: 'top'}
 	},
 
@@ -67,7 +80,9 @@ var Drag = new Class({
 	},
 
 	start: function(event){
+		if (event.rightClick) return;
 		if (this.options.preventDefault) event.preventDefault();
+		if (this.options.stopPropagation) event.stopPropagation();
 		this.mouse.start = event.page;
 		this.fireEvent('beforeStart', this.element);
 		var limit = this.options.limit;
@@ -117,8 +132,11 @@ var Drag = new Class({
 				}
 			}
 			if (this.options.grid[z]) this.value.now[z] -= ((this.value.now[z] - (this.limit[z][0]||0)) % this.options.grid[z]);
-			if (this.options.style) this.element.setStyle(this.options.modifiers[z], this.value.now[z] + this.options.unit);
-			else this.element[this.options.modifiers[z]] = this.value.now[z];
+			if (this.options.style) {
+				this.element.setStyle(this.options.modifiers[z], this.value.now[z] + this.options.unit);
+			} else {
+				this.element[this.options.modifiers[z]] = this.value.now[z];
+			}
 		}
 		this.fireEvent('drag', [this.element, event]);
 	},

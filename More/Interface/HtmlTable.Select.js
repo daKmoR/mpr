@@ -1,13 +1,25 @@
 /*
-Script: HtmlTable.Select.js
-	Builds a stripy, sortable table with methods to add rows. Rows can be selected with the mouse or keyboard navigation.
+---
 
-	License:
-		MIT-style license.
+script: HtmlTable.Select.js
 
-	Authors:
-		Harald Kirschner
-		Aaron Newton
+description: Builds a stripy, sortable table with methods to add rows. Rows can be selected with the mouse or keyboard navigation.
+
+license: MIT-style license
+
+authors:
+- Harald Kirschner
+- Aaron Newton
+
+requires:
+- /Keyboard
+- /HtmlTable
+- /Class.refactor
+- /Element.Delegation
+
+provides: [HtmlTable.Select]
+
+...
 */
 
 HtmlTable = Class.refactor(HtmlTable, {
@@ -132,6 +144,7 @@ HtmlTable = Class.refactor(HtmlTable, {
 
 	focusRow: function(){
 		var row = arguments[1] || arguments[0]; //delegation passes the event first
+		if (!this.body.getChildren().contains(row)) return;
 		var unfocus = function(row){
 			this.selectedRows.erase(row);
 			row.removeClass(this.options.classRowSelected);

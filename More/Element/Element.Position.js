@@ -1,12 +1,22 @@
 /*
-Script: Element.Position.js
-	Extends the Element native object to include methods useful positioning elements relative to others.
+---
 
-	License:
-		MIT-style license.
+script: Element.Position.js
 
-	Authors:
-		Aaron Newton
+description: Extends the Element native object to include methods useful positioning elements relative to others.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Element.Dimensions
+- /Element.Measure
+
+provides: [Elements.Position]
+
+...
 */
 
 $require('Core/Element/Element.Dimensions.js');
@@ -23,6 +33,8 @@ Element.implement({
 		if (options && ($defined(options.x) || $defined(options.y))) return original ? original.apply(this, arguments) : this;
 		$each(options||{}, function(v, k){ if (!$defined(v)) delete options[k]; });
 		options = $merge({
+			// minimum: { x: 0, y: 0 },
+			// maximum: { x: 0, y: 0},
 			relativeTo: document.body,
 			position: {
 				x: 'center', //left, center, right
@@ -37,8 +49,8 @@ Element.implement({
 			allowNegative: false
 		}, options);
 		//compute the offset of the parent positioned element if this element is in one
-		var parentOffset = {x: 0, y: 0};
-		var parentPositioned = false;
+		var parentOffset = {x: 0, y: 0}, 
+				parentPositioned = false;
 		/* dollar around getOffsetParent should not be necessary, but as it does not return
 		 * a mootools extended element in IE, an error occurs on the call to expose. See:
 		 * http://mootools.lighthouseapp.com/projects/2706/tickets/333-element-getoffsetparent-inconsistency-between-ie-and-other-browsers */
@@ -49,7 +61,7 @@ Element.implement({
 			parentOffset = offsetParent.measure(function(){
 				return this.getPosition();
 			});
-			parentPositioned = true;
+			parentPositioned = offsetParent != document.id(options.relativeTo);
 			options.offset.x = options.offset.x - parentOffset.x;
 			options.offset.y = options.offset.y - parentOffset.y;
 		}
@@ -75,26 +87,19 @@ Element.implement({
 		}
 
 		this.setStyle('position', 'absolute');
-		var rel = document.id(options.relativeTo) || document.body;
-		var calc = rel == document.body ? window.getScroll() : rel.getPosition();
-		var top = calc.y;
-		var left = calc.x;
+		var rel = document.id(options.relativeTo) || document.body,
+				calc = rel == document.body ? window.getScroll() : rel.getPosition(),
+				top = calc.y, left = calc.x;
 
-		if (Browser.Engine.trident){
-			var scrolls = rel.getScrolls();
-			top += scrolls.y;
-			left += scrolls.x;
-		}
+		var scrolls = rel.getScrolls();
+		top += scrolls.y;
+		left += scrolls.x;
 
 		var dim = this.getDimensions({computeSize: true, styles:['padding', 'border','margin']});
-		if (options.ignoreMargins){
-			options.offset.x = options.offset.x - dim['margin-left'];
-			options.offset.y = options.offset.y - dim['margin-top'];
-		}
-		var pos = {};
-		var prefY = options.offset.y;
-		var prefX = options.offset.x;
-		var winSize = window.getSize();
+		var pos = {},
+				prefY = options.offset.y,
+				prefX = options.offset.x,
+				winSize = window.getSize();
 		switch(options.position.x){
 			case 'left':
 				pos.x = left + prefX;
@@ -117,7 +122,6 @@ Element.implement({
 				pos.y = top + ((rel == document.body ? winSize.y : rel.offsetHeight)/2) + prefY;
 				break;
 		}
-
 		if (options.edge){
 			var edgeOffset = {};
 
@@ -129,7 +133,7 @@ Element.implement({
 					edgeOffset.x = -dim.x-dim.computedRight-dim.computedLeft;
 					break;
 				default: //center
-					edgeOffset.x = -(dim.x/2);
+					edgeOffset.x = -(dim.totalWidth/2);
 					break;
 			}
 			switch(options.edge.y){
@@ -140,27 +144,47 @@ Element.implement({
 					edgeOffset.y = -dim.y-dim.computedTop-dim.computedBottom;
 					break;
 				default: //center
-					edgeOffset.y = -(dim.y/2);
+					edgeOffset.y = -(dim.totalHeight/2);
 					break;
 			}
-			pos.x = pos.x + edgeOffset.x;
-			pos.y = pos.y + edgeOffset.y;
+			pos.x += edgeOffset.x;
+			pos.y += edgeOffset.y;
 		}
 		pos = {
 			left: ((pos.x >= 0 || parentPositioned || options.allowNegative) ? pos.x : 0).toInt(),
 			top: ((pos.y >= 0 || parentPositioned || options.allowNegative) ? pos.y : 0).toInt()
 		};
+		var xy = {left: 'x', top: 'y'};
+		['minimum', 'maximum'].each(function(minmax) {
+			['left', 'top'].each(function(lr) {
+				var val = options[minmax] ? options[minmax][xy[lr]] : null;
+				if (val != null && pos[lr] < val) pos[lr] = val;
+			});
+		});
 		if (rel.getStyle('position') == 'fixed' || options.relFixedPosition){
 			var winScroll = window.getScroll();
-			pos.top = pos.top.toInt() + winScroll.y;
-			pos.left = pos.left.toInt() + winScroll.x;
+			pos.top+= winScroll.y;
+			pos.left+= winScroll.x;
 		}
 		if (options.ignoreScroll) {
 			var relScroll = rel.getScroll();
-			pos.top = pos.top - relScroll.y;
-			pos.left = pos.left - relScroll.x;
+			pos.top-= relScroll.y;
+			pos.left-= relScroll.x;
 		}
-
+		if (options.ignoreMargins) {
+			pos.left += (
+				options.edge.x == 'right' ? dim['margin-right'] : 
+				options.edge.x == 'center' ? -dim['margin-left'] + ((dim['margin-right'] + dim['margin-left'])/2) : 
+					- dim['margin-left']
+			);
+			pos.top += (
+				options.edge.y == 'bottom' ? dim['margin-bottom'] : 
+				options.edge.y == 'center' ? -dim['margin-top'] + ((dim['margin-bottom'] + dim['margin-top'])/2) : 
+					- dim['margin-top']
+			);
+		}
+		pos.left = Math.ceil(pos.left);
+		pos.top = Math.ceil(pos.top);
 		if (options.returnPos) return pos;
 		else this.setStyles(pos);
 		return this;

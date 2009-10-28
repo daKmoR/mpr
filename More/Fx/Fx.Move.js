@@ -1,13 +1,22 @@
 /*
-Script: Fx.Move.js
-	Defines Fx.Move, a class that works with Element.Position.js to transition an element from one location to another.
+---
 
-	License:
-		MIT-style license.
+script: Fx.Move.js
 
-	Authors:
-		Aaron Newton
+description: Defines Fx.Move, a class that works with Element.Position.js to transition an element from one location to another.
 
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Fx.Morph
+- /Element.Position
+
+provides: [Fx.Move]
+
+...
 */
 
 Fx.Move = new Class({
