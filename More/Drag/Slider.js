@@ -26,6 +26,7 @@ $require('Core/Element/Element.Dimensions.js');
 
 $require('More/Class/Class.Binds.js');
 $require('More/Drag/Drag.js');
+$require('More/Element/Element.Measure.js');
 
 var Slider = new Class({
 
