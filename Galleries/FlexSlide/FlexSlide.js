@@ -52,6 +52,7 @@ var FlexSlide = new Class({
 		scrollerOptions: {area: 100, velocity: 0.1},
 		mode: 'continuous', /* [continuous, reverse, random] */
 		step: 1,
+		times: 1,
 		selectTemplate: '{text}',
 		counterTemplate: '{id}/{count}',
 		descriptionTemplate: '<strong>{title}</strong><span>{text}</span>',
@@ -160,10 +161,10 @@ var FlexSlide = new Class({
 		}
 		
 		if( this.nextWrap ) {
-			this.nextWrap.addEvent('click', this.next.bind(this, this.options.step) );
+			this.nextWrap.addEvent('click', this.next.bind(this, this.options.times) );
 		}
 		if( this.previousWrap ) {
-			this.previousWrap.addEvent('click', this.previous.bind(this, this.options.step) );
+			this.previousWrap.addEvent('click', this.previous.bind(this, this.options.times) );
 		}
 		
 		this.fireEvent('onBuild');
@@ -364,9 +365,10 @@ var FlexSlide = new Class({
 		this.autotimer = this.next.delay(this.options.duration, this);
 	},
 	
-	next: function(step) {
-		var step = step || this.options.step;
-		var next = 0;
+	getNextId: function(times) {
+		var times = times || this.options.times, next = 0;
+		step = this.options.step*times;
+		
 		if ( this.options.mode === 'reverse' ) step *= -1;
 			
 		if ( this.options.mode === 'random' ) {
@@ -374,14 +376,26 @@ var FlexSlide = new Class({
 				next = $random(0, this.els.item.length-1);
 			while ( next == this.current )
 		} else {
-			if ( this.current + step < this.els.item.length ) next = this.current + step;
-			if ( this.current + step < 0 ) next = this.els.item.length-1;
+			if ( this.current + step < this.els.item.length ) 
+				next = this.current + step;
+			else
+				next = this.current + step - this.els.item.length;
+			if ( this.current + step < 0 ) 
+				next = this.els.item.length + this.current + step;
 		}
-		this.show(next, (step > 0) ? this.options.effect.up : this.options.effect.down);
+		
+		return next;
 	},
 	
-	previous: function(step) {
-		this.next( step * -1 );
+	next: function(times) {
+		var times = times || this.options.times;
+		next = this.getNextId(times);
+		this.show(next, (next > this.current) ? this.options.effect.up : this.options.effect.down);
+	},
+	
+	previous: function(times) {
+		var times = times || this.options.times;
+		this.next( times * -1 );
 	},
 	
 	// fixSizes: function() {
