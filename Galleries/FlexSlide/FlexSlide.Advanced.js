@@ -22,7 +22,7 @@ FlexSlide.Advanced = new Class({
 		ui: {
 			requestItem: { 'class': 'ui-RequestItem' },
 			inlineItem: { 'class': 'ui-InlineItem' },
-			loader: { 'class': 'ui-Loader ui-ItemItem' },
+			loader: { 'class': 'ui-Loader ui-ItemItem' }
 		},
 		container: null,
 		dynamicLoading: true,
@@ -30,7 +30,7 @@ FlexSlide.Advanced = new Class({
 		preLoading: { previous: 2, next: 2 },
 		active: true,
 		wheelListener: false,
-		keyboardListener: false,
+		keyboardListener: false
 	},
 	
 	build: function() {

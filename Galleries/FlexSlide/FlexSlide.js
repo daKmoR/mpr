@@ -13,6 +13,8 @@ $require('Galleries/FlexSlide/Resources/css/FlexSlide.css');
 $require('Core/Element/Element.Dimensions.js');
 $require('Core/Element/Element.Style.js');
 $require('Core/Utilities/Selectors.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('Core/Fx/Fx.Morph.js');
 $require('Core/Fx/Fx.Transitions.js');
 
 $require('More/Fx/Fx.Elements.js');

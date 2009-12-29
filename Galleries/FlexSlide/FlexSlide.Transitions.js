@@ -22,7 +22,7 @@ FlexSlide.implement('options', {
 			slideBottomQuart: { transition: Fx.Transitions.Quart.easeInOut },
 			slideTopBounce: { transition: Fx.Transitions.Bounce.easeOut },
 			slideBottomBounce: { transition: Fx.Transitions.Bounce.easeOut }
-		},
+		}
 	},
 	effects: {
 		slideLeft: function(current, next, currentEl, nextEl) {
