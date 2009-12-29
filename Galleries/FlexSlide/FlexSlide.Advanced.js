@@ -25,9 +25,10 @@ FlexSlide.Advanced = new Class({
 			loader: { 'class': 'ui-Loader ui-ItemItem' }
 		},
 		container: null,
+		loaderOpacity: 0.5,
 		dynamicLoading: true,
 		dynamicMode: '',  //image, request, inline
-		preLoading: { previous: 2, next: 2 },
+		preLoading: { previous: 1, next: 2 },
 		active: true,
 		wheelListener: false,
 		keyboardListener: false
@@ -54,6 +55,7 @@ FlexSlide.Advanced = new Class({
 				this.dynamicLoading(id, fx);
 			} else {
 				this._show(id, fx);
+				this.preLoading();
 			}
 		} else {
 			this.build();
@@ -61,15 +63,32 @@ FlexSlide.Advanced = new Class({
 		}
 	},
 	
-	dynamicLoading: function(id, fx) {
+	preLoading: function(id) {
+		if( this.options.dynamicLoading === true && (this.options.preLoading.next > 0 || this.options.preLoading.previous > 0) ) {
+			for( i = this.options.preLoading.previous*-1; i <= this.options.preLoading.next; i++ ) {
+				if( i != 0 ) {
+					this.preLoad( this.getNextId(i) );
+				}
+			}
+		}
+	},
+	
+	preLoad: function(id) {
+		this.dynamicLoading(id, null, true);
+	},
+	
+	dynamicLoading: function(id, fx, silent) {
+		var silent = silent || false;
 		if( this.els.item[id].get('tag') === 'a' && this.options.dynamicLoading === true ) {
 			var href = this.els.item[id].get('href');
 			this.setMode( href );
 			
 			this.els.item[id].destroy();
 			
-			this.itemWrap.grab( this.loader );
-			this.loader.fade(0.5);
+			if( !silent ) {
+				this.itemWrap.grab( this.loader );
+				this.loader.fade( this.options.loaderOpacity );
+			}
 			
 			switch( this.options.dynamicMode ) {
 				case 'image':
@@ -79,7 +98,7 @@ FlexSlide.Advanced = new Class({
 							image.addClass( this.options.ui.itemItem['class'] );
 							this.els.item[id] = this.fx.elements[id] = image;
 							this.itemWrap.grab( image );
-							this._show(id, fx);
+							if( !silent ) this.show(id, fx);
 						}.bind(this)
 					});
 					break;
@@ -91,7 +110,7 @@ FlexSlide.Advanced = new Class({
 							div.set('html', responseHTML);
 							this.els.item[id] = this.fx.elements[id] = div;
 							this.itemWrap.grab(div);
-							this._show(id, fx);
+							if( !silent ) this.show(id, fx);
 						}.bind(this)
 					}).send();
 					break;
@@ -101,7 +120,7 @@ FlexSlide.Advanced = new Class({
 					$$(href)[0].clone().setStyle('display', 'block').inject( div );
 					this.els.item[id] = this.fx.elements[id] = div;
 					this.itemWrap.grab(div);
-					this._show(id, fx);
+					if( !silent ) this.show(id, fx);
 					break;
 			}
 			
