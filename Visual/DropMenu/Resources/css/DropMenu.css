@@ -1,0 +1,7 @@
+.dropMenu { margin: 0; padding: 0; list-style: none; }
+.dropMenu ul{position:absolute; top:26px; left:10px; margin:0; padding:0; list-style:none; -webkit-box-shadow:1px 1px 5px #AAA; -moz-box-shadow:1px 1px 5px #AAA; box-shadow:1px 1px 5px #AAA; }
+	.dropMenu li { position: relative; float: left; }
+	.dropMenu ul li { float: none; padding: 0; }
+		.dropMenu ul li a{ background:#f1f1f1; padding: 3px; display: block; _float: left; }
+			.dropMenu ul li a:hover{ background: #CDCDCD; }
+		.dropMenu ul ul{ left: 137px; _left: 0; top: 0; }
