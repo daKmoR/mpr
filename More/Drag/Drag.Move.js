@@ -23,6 +23,7 @@ provides: [Drag.Move]
 ...
 */
 
+$require('Core/Element/Element.Dimensions.js');
 $require('More/Drag/Drag.js');
 
 Drag.Move = new Class({

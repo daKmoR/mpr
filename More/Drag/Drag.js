@@ -23,6 +23,10 @@ provides: [Drag]
 
 */
 
+$require('Core/Class/Class.Extras.js');
+$require('Core/Element/Element.Style.js');
+$require('Core/Element/Element.Event.js');
+
 var Drag = new Class({
 
 	Implements: [Events, Options],

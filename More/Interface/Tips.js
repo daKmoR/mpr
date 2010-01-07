@@ -24,6 +24,11 @@ provides: [Tips]
 ...
 */
 
+$require('Core/Class/Class.Extras.js');
+$require('Core/Element/Element.Event.js');
+$require('Core/Element/Element.Style.js');
+$require('Core/Element/Element.Dimensions.js');
+
 (function(){
 
 var read = function(option, element){
