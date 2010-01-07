@@ -92,10 +92,15 @@ var FlexSlide = new Class({
 	wrapFxConfig: {},
 	
 	initialize: function(wrap, options) {
+		if( !(this.wrap = $(wrap)) ) return;
 		this.setOptions(options);
 
-		this.wrap = $(wrap);
 		if( !$defined(this.options.container) ) this.options.container = this.wrap.getParent();
+		
+		if( $type(this.options.show) === 'string' && this.options.show === 'random' ) {
+			this.build();
+			this.options.show = $random(0, this.els.item.length-1);
+		}
 
 		if( this.options.show >= 0 )
 			this.show( this.options.show, this.options.initFx );
